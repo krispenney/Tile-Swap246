@@ -22,9 +22,9 @@ void Game::scramble(){
 
 //clear board and create new at the same level
 void Game::reset(){
-	delete theBoard;
+	//delete theBoard;
 	
-	theBoard = new Board(level);
+	theBoard = theBoard->init(level);
 }
 
 //combine level up and down
@@ -42,8 +42,8 @@ void Game::changeLevel(bool up){
 		level--;
 	}
 	
-	delete theBoard;
-	theBoard = new Board(level);
+	//reinitialize board
+	theBoard->init(level);
 }
 
 bool Game::levelWon(){

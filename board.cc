@@ -35,7 +35,7 @@ void init(int level, string filename = ""){
 			for(int j = 0; j < 10; j++){
 				fin >> type >> colour;
 				
-				theBoard[i][j] = new Square(colour, type, false);
+				theBoard[i][j] = new Square(colour, type, false, td);
 				td->update(i, j, colour + '0', type);
 			}
 		}
@@ -65,14 +65,14 @@ void init(int level, string filename = ""){
 }
 
 void swap(Square * s1, Square * s2){
-	int tmpColour = s1->colour;
-	int tmpType = s2->colour;
+	int tmpColour = s1->getColour();
+	int tmpType = s2->getType();
 	
-	s1->colour = s2->colour;
-	s1->type = s2->type;
+	s1->setColour(s2->getColour());
+	s1->setType(s2->getType());
 	
-	s2->colour = tmpColour;
-	s2->type = tmpType;
+	s2->setColour = tmpColour;
+	s2->setType = tmpType;
 	
 	//td->notify(); notify board
 	

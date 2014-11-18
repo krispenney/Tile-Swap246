@@ -15,6 +15,7 @@ public:
 	~Board();
 
 	friend std::ostream &operator<<(std::ostream &out, const Board &b);
+	
 };
 
 #endif
