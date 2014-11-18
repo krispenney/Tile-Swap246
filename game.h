@@ -10,14 +10,17 @@ class Game {
 	Board * theBoard;
 public:
 	
-	Game(int level = 0, int moves, Board *newBoard):
-		level(level), moves(moves), theBoard(newBoard){}
+	Game(int moves, int level = 0): // Default params need to go at the end
+		level(level), moves(moves){
+			Game::score = 0;
+			theBoard = new Board();
+		}
 	
 	~Game();
 	void hint();
-	void changeLevel();// replaces level up and down
+	void changeLevel(bool up);// replaces level up and down
 	void scramble();
-	void restart();
+	void reset();
 	static void increaseScore(int x);
 	bool levelWon();
 
