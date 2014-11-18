@@ -4,14 +4,14 @@
 #include "textdisplay.h"
 
 class Square {
-	int type;
-	int color;
+	char type;
+	int colour;
 	Square * above;
 	TextDisplay * td;
 	bool locked;
 public:
 	Square();
-	void updateTD(int x, int y, char ch);
+	void updateTD(int x, int y, int colour, char type);
 	void moveDown();
 	void draw();
 };
