@@ -9,9 +9,13 @@ class Game {
 	int moves;
 	Board * theBoard;
 public:
+	
+	Game(int level = 0, int moves, Board *newBoard):
+		level(level), moves(moves), theBoard(newBoard){}
+	
+	~Game();
 	void hint();
-	void levelUp();
-	void levelDown();
+	void changeLevel();// replaces level up and down
 	void scramble();
 	void restart();
 	static void increaseScore(int x);
