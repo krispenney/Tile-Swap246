@@ -2,9 +2,7 @@
 
 using namespace std;
 
-Board::Board(){
-	
-}
+Board::Board(): td(NULL), theBoard(NULL){}
 
 Board::~Board(){
 	delete td;
@@ -18,8 +16,15 @@ void init(int level, string filename = ""){
 	char type;
 	int colour;
 	
-	delete theBoard;
-	delete td;
+	if(theBoard != NULL){
+		delete theBoard;
+	}
+	if(td != NULL){
+		delete td;
+	}
+	
+	theBoard = new Square *[10]
+	td = new TextDisplay();
 	
 	if(level == 0){
 		ifstream fin(zeroFName);
@@ -31,7 +36,11 @@ void init(int level, string filename = ""){
 		 * Blue: 3     Unstable: b
 		 *             Psychedelic: p
 		 */
+		
 		for(int i = 0; i < 10; i++){
+			
+			theBoard[i] = new Square[10];
+			
 			for(int j = 0; j < 10; j++){
 				fin >> type >> colour;
 				
@@ -48,6 +57,13 @@ void init(int level, string filename = ""){
 			
 		}*/
 		
+		for(int i = 0; i < 10; i++){
+			theBoard[i] = new Square[10];
+			
+			for(int j = 0; j < 10; j++){
+					
+			}
+		}
 		
 		
 	}else if(level == 2){
@@ -65,8 +81,8 @@ void init(int level, string filename = ""){
 }
 
 
-// This isnt going to work because these are private fields
 void swap(Square * s1, Square * s2){
+	
 	int tmpColour = s1->getColour();
 	int tmpType = s2->getType();
 	
