@@ -8,6 +8,7 @@ class Game {
 	static int score;
 	int moves;
 	Board * theBoard;
+
 public:
 	
 	Game(int moves, int level = 0): // Default params need to go at the end
@@ -17,6 +18,10 @@ public:
 		}
 	
 	~Game();
+	
+	void swap(int x1, int y1, int x2, int y2);
+	
+	
 	void hint();
 	void changeLevel(bool up);// replaces level up and down
 	void scramble();

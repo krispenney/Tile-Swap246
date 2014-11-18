@@ -49,7 +49,23 @@ void Game::changeLevel(bool up){
 	theBoard->init(level);
 }
 
+//swap squares, update board
+void Game::swap(int x1, int y1, int x2, int y2){
+	
+	theBoard->swap(theBoard->getSquare(x1, y1), theBoard->getSquare(x2, y2));
+	
+	int colour1 = theBoard->getSquare(x1, y1)->getColour();
+	int type1 = theBoard->getSquare(x1, y1)->getType();
+	int colour2 = theBoard->getSquare(x2, y2)->getColour();
+	int type2 = theBoard->getSquare(x2, y2)->getType();
+	
+	theBoard->update(x1, y1, colour1, type1);
+	theBoard->update(x2, y2, colour2, type2);
+}
+
 bool Game::levelWon(){
+	//add other conditions
+	
 	return false;
 }
 

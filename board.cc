@@ -10,7 +10,12 @@ Board::Board(): td(NULL), theBoard(NULL){}
 
 Board::~Board(){
 	delete td;
-	delete theBoard;
+	
+	for(int i = 0; i < 10; i++){
+		delete theBoard[i];
+	}
+	
+	delete [] theBoard;
 }
 
 void Board::init(int level, string filename){
@@ -91,20 +96,28 @@ void Board::init(int level, string filename){
 	//more as levels increase
 }
 
+Square *Board::getSquare(int x, int y){
+	return &theBoard[x][y];
+}
 
-void swap(Square * s1, Square * s2){
+void Board::update(int x, int y, int colour, char ch){
+	td->update(x, y, colour, ch);
+}
+
+void Board::swap(Square * s1, Square * s2){
 	
 	int tmpColour = s1->getColour();
-	int tmpType = s2->getType();
+	int tmpType = s1->getType();
+	
+	/*cout << tmpColour <<endl;
+	cout << tmpType << endl;*/
 	
 	s1->setColour(s2->getColour());
 	s1->setType(s2->getType());
 	
 	s2->setColour(tmpColour);
 	s2->setType(tmpType);
-	
-	//td->notify(); notify board
-	
+
 }
 
 ostream &operator<<(ostream &out, const Board &b){

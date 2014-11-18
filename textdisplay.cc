@@ -18,7 +18,10 @@ TextDisplay::TextDisplay() {
 }
 
 TextDisplay::~TextDisplay() {
-
+	for(int i = 0; i < 10; i++){
+		delete theDisplay[i];
+	}
+	delete [] theDisplay;
 }
 
 void TextDisplay::update(int x, int y, int colour, char ch) {
