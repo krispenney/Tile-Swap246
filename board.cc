@@ -1,4 +1,4 @@
-#include "board.cc"
+#include "board.h"
 
 using namespace std;
 
@@ -15,6 +15,8 @@ void init(int level){
 	
 }
 
+
+// This isnt going to work because these are private fields
 void swap(Square * s1, Square * s2){
 	int tmpColour = s1->colour;
 	int tmpType = s2->colour;

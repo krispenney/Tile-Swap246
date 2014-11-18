@@ -2,7 +2,6 @@
 
 using namespace std;
 
-score = 0;
 const int MAXLEVELS = 2;
 
 //dtor
@@ -24,7 +23,8 @@ void Game::scramble(){
 void Game::reset(){
 	delete theBoard;
 	
-	theBoard = new Board(level);
+	theBoard = new Board();
+	theBoard->init(level);
 }
 
 //combine level up and down
@@ -32,7 +32,7 @@ void Game::changeLevel(bool up){
 	
 	if(up && level == MAXLEVELS){//don't change
 		return;
-	}else if(up && level == 0){
+	}else if(!up && level == 0){ //Changed this to down and level = 0
 		return;
 	}
 	
@@ -43,11 +43,12 @@ void Game::changeLevel(bool up){
 	}
 	
 	delete theBoard;
-	theBoard = new Board(level);
+	theBoard = new Board();
+	theBoard->init(level);
 }
 
 bool Game::levelWon(){
-	
+	return false;
 }
 
 //overload operator<< called to board

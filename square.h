@@ -5,7 +5,7 @@
 
 class Square {
 	int type;
-	int color;
+	int colour;
 	Square * above;
 	TextDisplay * td;
 	bool locked;

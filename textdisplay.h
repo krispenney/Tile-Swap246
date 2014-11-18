@@ -5,7 +5,6 @@
 
 class TextDisplay {
 	char **theDisplay;
-	const int gridSize;
 
 public:
 	TextDisplay();
