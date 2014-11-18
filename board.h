@@ -9,7 +9,7 @@ class Board {
 	Square **theBoard;
 public:
 	Board();
-	void init(int level);
+	void init(int level, std::string filename = "");
 
 	void swap(Square * s1, Square * s2);
 	~Board();

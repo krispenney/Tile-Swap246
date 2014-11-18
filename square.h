@@ -7,11 +7,12 @@ class Square {
 	char type;
 	int colour;	
 	Square * above;
-	TextDisplay * td;
 	bool locked;
+	TextDisplay * td;
 	
 public:
 	Square();
+	Square(int colour, char type, bool locked, TextDisplay *);
 	void updateTD(int x, int y, int colour, char type);
 	void moveDown();
 	void draw();

@@ -4,6 +4,9 @@ Square::Square(){
 	
 }
 
+Square::Square(int colour, char type, bool locked, TextDisplay * td): type(type), colour(colour), 
+locked(locked), td(td) {}
+
 void Square::updateTD(int x, int y, int colour, char type){
 	
 }
@@ -23,9 +26,9 @@ int Square::getColour(){
 	return colour;
 }
 
-void setType(char t){
+void Square::setType(char t){
 	type = t;
 }
-char getType(){
+char Square::getType(){
 	return type;
 }

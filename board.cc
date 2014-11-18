@@ -1,4 +1,8 @@
 #include "board.h"
+#include "square.h"
+#include "textdisplay.h"
+#include <string>
+#include <fstream>
 
 using namespace std;
 
@@ -9,12 +13,13 @@ Board::~Board(){
 	delete theBoard;
 }
 
-void init(int level, string filename = ""){
+void Board::init(int level, string filename){
 	
 	string zeroFName = "sequence.txt";
 	bool locked = false;
 	char type;
-	int colour;
+	char colour;
+	char lock;
 	
 	if(theBoard != NULL){
 		delete theBoard;
@@ -23,15 +28,15 @@ void init(int level, string filename = ""){
 		delete td;
 	}
 	
-	theBoard = new Square *[10]
+	theBoard = new Square *[10];
 	td = new TextDisplay();
 	
 	if(level == 0){
-		ifstream fin(zeroFName);
+		ifstream fin(zeroFName.c_str());
 		
 		/* colours:    Squares:
 		 * White: 0    Basic: _
-		 * Red: 1      Lateral: h
+		 * Red: 1      Lateral: h 	
 		 * Green: 2    Upright: v
 		 * Blue: 3     Unstable: b
 		 *             Psychedelic: p
@@ -42,10 +47,16 @@ void init(int level, string filename = ""){
 			theBoard[i] = new Square[10];
 			
 			for(int j = 0; j < 10; j++){
-				fin >> type >> colour;
+				fin >> lock >> type >> colour;
 				
-				theBoard[i][j] = new Square(colour, type, false, td);
-				td->update(i, j, colour + '0', type);
+				Square * sq = new Square(colour, type, locked, td);
+
+				theBoard[i][j] = *sq;
+
+				// cerr << lock << type << colour << endl;
+
+				td->update(i, j, colour, type);
+				// fin >> lock;
 			}
 		}
 		
@@ -89,14 +100,15 @@ void swap(Square * s1, Square * s2){
 	s1->setColour(s2->getColour());
 	s1->setType(s2->getType());
 	
-	s2->setColour = tmpColour;
-	s2->setType = tmpType;
+	s2->setColour(tmpColour);
+	s2->setType(tmpType);
 	
 	//td->notify(); notify board
 	
 }
 
 ostream &operator<<(ostream &out, const Board &b){
-	out << b.td;
+	// std::cerr << "here in board.cc" << std::endl;
+	out << *b.td;
 	return out;
 }

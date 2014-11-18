@@ -1,7 +1,9 @@
 #include "game.h"
+#include "board.h"
 
 using namespace std;
 
+int Game::score = 0;
 const int MAXLEVELS = 2;
 
 //dtor
@@ -56,6 +58,7 @@ ostream &operator<<(std::ostream &out, const Game &g){
 	
 	//write header output
 	
-	out << g.theBoard;
+	// std::cerr << "here in game.cc" << std::endl;
+	out << *g.theBoard;
 	return out;
 }

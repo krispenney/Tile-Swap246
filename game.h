@@ -12,8 +12,8 @@ public:
 	
 	Game(int moves, int level = 0): // Default params need to go at the end
 		level(level), moves(moves){
-			Game::score = 0;
 			theBoard = new Board();
+			theBoard->init(this->level);
 		}
 	
 	~Game();
