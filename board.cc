@@ -104,6 +104,7 @@ void Board::update(int x, int y, int colour, char ch){
 	td->update(x, y, colour, ch);
 }
 
+//swaps the colour and type of s1 and s2, need to check for match and account for moves
 void Board::swap(Square * s1, Square * s2){
 	
 	int tmpColour = s1->getColour();

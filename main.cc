@@ -24,7 +24,7 @@ int main() {
 		cin >> cmd;
 		if(cin.eof()){
 			break;
-		}else if(cmd == "switch"){
+		}else if(cmd == "switch"){//needs to check for match
 			cin >> x >> y >> dir;
 			
 			if(dir == 0){//north
@@ -54,6 +54,8 @@ int main() {
 				}
 			}
 		
+		}else if(cmd == "reset"){
+			theGame->reset();
 		}
 		cout << *theGame << endl;
 		
