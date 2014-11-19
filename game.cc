@@ -1,5 +1,6 @@
 #include "game.h"
 #include "board.h"
+#include <iomanip>
 
 using namespace std;
 
@@ -61,6 +62,8 @@ void Game::swap(int x1, int y1, int x2, int y2){
 	
 	theBoard->update(x1, y1, colour1, type1, false);
 	theBoard->update(x2, y2, colour2, type2, false);
+	
+	moves--;
 }
 
 int Game::getLevel(){
@@ -74,9 +77,15 @@ bool Game::levelWon(){
 }
 
 //overload operator<< called to board
-ostream &operator<<(std::ostream &out, const Game &g){
+ostream &operator<<(ostream &out, const Game &g){
 	
 	//write header output
+	out << setw(18) << left << "Level:" << right << g.level << endl;
+	out << setw(18) << left << "Score:" << right << g.score << endl;
+	out << setw(18) << left << "Moves Remaining:" << right << g.moves << endl;
+	out << setw(18) << left << "High Score:" << right << 0 << endl;//change to high score
+	out << "------------------" << endl << endl;
+	
 	
 	// std::cerr << "here in game.cc" << std::endl;
 	out << *g.theBoard;
