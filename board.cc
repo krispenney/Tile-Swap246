@@ -219,7 +219,10 @@ void Board::swap(Square * s1, Square * s2){
 	
 	s2->setColour(tmpColour);
 	s2->setType(tmpType);
+}
 
+bool Board::checkMatch() {
+	return false; //Change this to actually check when I dont feel sick
 }
 
 ostream &operator<<(ostream &out, const Board &b){

@@ -16,6 +16,8 @@ public:
 	void update(int x, int y, int colour, char ch, bool locked);
 	void swap(Square * s1, Square * s2);
 	
+	bool checkMatch();
+
 	~Board();
 
 	friend std::ostream &operator<<(std::ostream &out, const Board &b);
