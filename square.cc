@@ -13,7 +13,7 @@ void Square::updateTD(int x, int y, int colour, char type){
 
 void Square::moveDown(){
 	if (above != NULL) {
-		std::cerr << "x: " << x << " y: " << y << std::endl;
+		// std::cerr << "x: " << x << " y: " << y << std::endl;
 		int aboveType = above->getType();
 		int aboveColour = above->getColour();
 

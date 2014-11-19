@@ -76,6 +76,10 @@ bool Game::levelWon(){
 	return false;
 }
 
+bool Game::checkMatch() {
+	return theBoard->checkMatch();
+}
+
 //overload operator<< called to board
 ostream &operator<<(ostream &out, const Game &g){
 	

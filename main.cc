@@ -27,24 +27,28 @@ int main() {
 			break;
 		}else if(cmd == "switch"){//needs to check for match
 			cin >> x >> y >> dir;
+			bool match = false;
 			
 			if(dir == 0){//north
 				if(x-1 < 0){
 					cout << "Invalid switch!" << endl;
 				}else{
 					theGame->swap(x, y, x-1, y);
+					match = theGame->checkMatch();
 				}
 			}else if(dir == 1){//south
 				if(x+1 > 9){
 					cout << "Invalid switch!" << endl;
 				}else{
 					theGame->swap(x, y, x+1, y);
+					match = theGame->checkMatch();
 				}
 			}else if(dir == 2){//west
 				if(y-1 < 0){
 					cout << "Invalid switch!" << endl;
 				}else{
 					theGame->swap(x, y, x, y-1);
+					match = theGame->checkMatch();
 				}
 				
 			}else if(dir == 3){//east
@@ -52,7 +56,18 @@ int main() {
 					cout << "Invalid switch!" << endl;
 				}else{
 					theGame->swap(x, y, x, y+1);
+					match = theGame->checkMatch();
 				}
+			}
+
+			if (match) {
+				while (match) {
+
+					match = theGame->checkMatch();
+				}
+			} else {
+				// cerr << "no match made plz" << endl;
+				// NO MATCH MADE, revert last move
 			}
 		
 		}else if(cmd == "levelup"){
