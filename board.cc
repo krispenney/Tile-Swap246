@@ -54,17 +54,21 @@ void Board::init(int level, string filename){
 			for(int j = 0; j < 10; j++){
 				fin >> lock >> type >> colour;
 				
-				Square * sq = new Square(colour, type, locked, td);
+				Square * sq = new Square(i, j, colour, type, locked, td);
+				if (i != 0) {
+					sq->setAbove(&theBoard[i-1][j]);
+				} else {
+					sq->setAbove(NULL);
+				}
 
 				theBoard[i][j] = *sq;
 
-				// cerr << lock << type << colour << endl;
-
 				td->update(i, j, colour, type);
-				// fin >> lock;
 			}
 		}
 		
+		theBoard[5][5].moveDown();
+
 	}else if(level == 1){
 		
 		/*if(filename != ""){ add in scriptfile later
@@ -89,8 +93,6 @@ void Board::init(int level, string filename){
 		 }else{
 			
 		 }*/
-		
-		
 		
 	}
 	//more as levels increase

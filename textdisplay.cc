@@ -34,7 +34,6 @@ ostream &operator<<(ostream &out, const TextDisplay &td) {
 	for (int x = 0; x < 10; x++) {
 		for (int y = 0; y < 10; y++) {
 			for (int c = 0; c < 3; c++) {
-				// out << td.theDisplay[0][0];
 				out << td.theDisplay[x][(y*3) + c];
 			}
 			out << " ";

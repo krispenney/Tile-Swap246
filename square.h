@@ -4,6 +4,8 @@
 #include "textdisplay.h"
 
 class Square {
+	int x;
+	int y;
 	char type;
 	int colour;	
 	Square * above;
@@ -12,11 +14,13 @@ class Square {
 	
 public:
 	Square();
-	Square(int colour, char type, bool locked, TextDisplay *);
+	Square(int x, int y, int colour, char type, bool locked, TextDisplay *);
 	void updateTD(int x, int y, int colour, char type);
 	void moveDown();
 	void draw();
 	
+	void setAbove(Square * above);
+
 	void setColour(int colour);
 	int getColour();
 	
