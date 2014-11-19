@@ -3,12 +3,13 @@
 #include <iostream>
 #include <cstdlib>
 #include <string>
+#include <sstream>
 #include <unistd.h>
 #include "window.h"
 
 using namespace std;
 
-Xwindow::Xwindow(int width, int height) {
+Xwindow::Xwindow(int width, int height): width(width), height(height) {
 
   d = XOpenDisplay(NULL);
   if (d == NULL) {
@@ -31,12 +32,16 @@ Xwindow::Xwindow(int width, int height) {
   // Set up colours.
   XColor xcolour;
   Colormap cmap;
-  char color_vals[7][10]={"white", "black", "red", "green", "blue"};
+  char color_vals[10][10]={"white", "black", "red", "green", "blue", "cyan", "yellow", "magenta", "orange", "brown"};
 
   cmap=DefaultColormap(d,DefaultScreen(d));
-  for(int i=0; i < 5; ++i) {
-      XParseColor(d,cmap,color_vals[i],&xcolour);
-      XAllocColor(d,cmap,&xcolour);
+  for(int i=0; i < 10; ++i) {
+      if (!XParseColor(d,cmap,color_vals[i],&xcolour)) {
+         cerr << "Bad colour: " << color_vals[i] << endl;
+      }
+      if (!XAllocColor(d,cmap,&xcolour)) {
+         cerr << "Bad colour: " << color_vals[i] << endl;
+      }
       colours[i]=xcolour.pixel;
   }
 
@@ -69,7 +74,40 @@ void Xwindow::fillRectangle(int x, int y, int width, int height, int colour) {
   XSetForeground(d, gc, colours[Black]);
 }
 
-void Xwindow::drawString(int x, int y, string msg) {
-  XDrawString(d, w, DefaultGC(d, s), x, y, msg.c_str(), msg.length());
+void Xwindow::drawString(int x, int y, string msg, int colour) {
+  XSetForeground(d, gc, colours[colour]);
+  Font f = XLoadFont(d, "6x13");
+  XTextItem ti;
+  ti.chars = const_cast<char*>(msg.c_str());
+  ti.nchars = msg.length();
+  ti.delta = 0;
+  ti.font = f;
+  XDrawText(d, w, gc, x, y, &ti, 1);
+  XSetForeground(d, gc, colours[Black]);
+  XFlush(d);
 }
 
+
+void Xwindow::drawBigString(int x, int y, string msg, int colour) {
+  XSetForeground(d, gc, colours[colour]);
+  // Font f = XLoadFont(d, "-*-helvetica-bold-r-normal--*-240-*-*-*-*-*");
+  ostringstream name;
+  name << "-*-helvetica-bold-r-*-*-*-240-" << width/5 << "-" << height/5 << "-*-*-*-*";
+
+  XFontStruct * f = XLoadQueryFont(d, name.str().c_str());
+  XTextItem ti;
+  ti.chars = const_cast<char*>(msg.c_str());
+  ti.nchars = msg.length();
+  ti.delta = 0;
+  ti.font = f->fid;
+  XDrawText(d, w, gc, x, y, &ti, 1);
+  XSetForeground(d, gc, colours[Black]);
+  XFlush(d);
+}
+
+void Xwindow::showAvailableFonts() {
+  int count;
+  char** fnts = XListFonts(d, "*", 10000, &count);
+
+  for (int i = 0; i < count; ++i) cout << fnts[i] << endl;
+}
