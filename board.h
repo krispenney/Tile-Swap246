@@ -13,7 +13,7 @@ public:
 	
 	Square *getSquare(int x, int y);
 	
-	void update(int x, int y, int colour, char ch);
+	void update(int x, int y, int colour, char ch, bool locked);
 	void swap(Square * s1, Square * s2);
 	
 	~Board();

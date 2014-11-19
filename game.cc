@@ -59,8 +59,12 @@ void Game::swap(int x1, int y1, int x2, int y2){
 	int colour2 = theBoard->getSquare(x2, y2)->getColour();
 	int type2 = theBoard->getSquare(x2, y2)->getType();
 	
-	theBoard->update(x1, y1, colour1, type1);
-	theBoard->update(x2, y2, colour2, type2);
+	theBoard->update(x1, y1, colour1, type1, false);
+	theBoard->update(x2, y2, colour2, type2, false);
+}
+
+int Game::getLevel(){
+	return level;
 }
 
 bool Game::levelWon(){

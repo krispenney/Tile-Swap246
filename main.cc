@@ -15,6 +15,7 @@ int main() {
 	int x;
 	int y;
 	int dir;
+	const int MAXLEVELS = 2;
 	
 	// std::cerr << "here" << std::endl;
 	cout << *theGame << endl;
@@ -54,6 +55,24 @@ int main() {
 				}
 			}
 		
+		}else if(cmd == "levelup"){
+			if(theGame->getLevel() != MAXLEVELS){
+				theGame->changeLevel(true);
+				
+			}else{
+				cout << "No more levels" << endl;
+			}
+			cout << "Playing level: " << theGame->getLevel() << endl;
+			
+		}else if(cmd == "leveldown"){
+			if(theGame->getLevel() > 0){
+				theGame->changeLevel(false);
+				
+			}else{
+				cout << "No More levels" << endl;
+			}
+			cout << "Playing level: " << theGame->getLevel() << endl;
+			
 		}else if(cmd == "reset"){
 			theGame->reset();
 		}

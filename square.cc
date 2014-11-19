@@ -20,7 +20,7 @@ void Square::moveDown(){
 		this->setType(aboveType);
 		this->setColour(aboveColour);
 
-		td->update(x,y,colour,type);
+		td->update(x,y,colour,type, false);
 
 		above->moveDown();
 	} else {
