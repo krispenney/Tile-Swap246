@@ -3,6 +3,9 @@
 
 #include "square.h"
 #include "textdisplay.h"
+#include <cstdlib>
+#include <ctime>
+
 
 class Board {
 	TextDisplay * td;

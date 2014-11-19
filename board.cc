@@ -3,8 +3,6 @@
 #include "textdisplay.h"
 #include <string>
 #include <fstream>
-#include <cstdlib>
-#include <ctime>
 
 using namespace std;
 

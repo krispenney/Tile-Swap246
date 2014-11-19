@@ -29,42 +29,17 @@ int main() {
 			cin >> x >> y >> dir;
 			bool match = false;
 			
-			if(dir == 0){//north
-				if(x-1 < 0){
-					cout << "Invalid switch!" << endl;
-				}else{
-					theGame->swap(x, y, x-1, y);
-					match = theGame->checkMatch();
-				}
-			}else if(dir == 1){//south
-				if(x+1 > 9){
-					cout << "Invalid switch!" << endl;
-				}else{
-					theGame->swap(x, y, x+1, y);
-					match = theGame->checkMatch();
-				}
-			}else if(dir == 2){//west
-				if(y-1 < 0){
-					cout << "Invalid switch!" << endl;
-				}else{
-					theGame->swap(x, y, x, y-1);
-					match = theGame->checkMatch();
-				}
-				
-			}else if(dir == 3){//east
-				if(y+1 > 9){
-					cout << "Invalid switch!" << endl;
-				}else{
-					theGame->swap(x, y, x, y+1);
-					match = theGame->checkMatch();
-				}
+			if(theGame->checkSwap(x, y, dir)){
+				match = theGame->checkMatch();
 			}
-
+			
 			if (match) {
 				while (match) {
 
 					match = theGame->checkMatch();
+					
 				}
+				theGame->decMoves();
 			} else {
 				// cerr << "no match made plz" << endl;
 				// NO MATCH MADE, revert last move
@@ -88,6 +63,15 @@ int main() {
 			}
 			cout << "Playing level: " << theGame->getLevel() << endl;
 			
+		}else if(cmd == "hint"){
+			
+		}else if(cmd == "scramble"){
+			//check for no moves
+			if(!theGame->hint()){
+				theGame->scramble();
+			}else{
+				cout << "There are still moves avaliable" << endl;
+			}
 		}else if(cmd == "reset"){
 			theGame->reset();
 		}

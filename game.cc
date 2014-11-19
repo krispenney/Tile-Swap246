@@ -13,12 +13,30 @@ Game::~Game(){
 }
 
 //later
-void Game::hint(){
-	return;
+bool Game::hint(){
+	return false;//will return false if no hint
 }
 
 //will rely on hint
 void Game::scramble(){
+	
+	//check if no moves left 
+	
+	srand(time(NULL));
+	
+	for(int i = 0; i < 10; i++){
+		for(int j = 0; j < 10; j++){
+			int randX = rand()%10;
+			int randY = rand()%10;
+			while(randX != i && randY != j){//ensure don't select the same
+				randX = rand()%10;
+				randY = rand()%10;
+			}
+			swap(i, j, randX, randY);
+			
+		}
+	}
+	
 	return;
 }
 
@@ -60,12 +78,49 @@ void Game::swap(int x1, int y1, int x2, int y2){
 	int colour2 = theBoard->getSquare(x2, y2)->getColour();
 	int type2 = theBoard->getSquare(x2, y2)->getType();
 	
-	theBoard->update(x1, y1, colour1, type1, false);
+	theBoard->update(x1, y1, colour1, type1, false);//doesn't affect locked state
 	theBoard->update(x2, y2, colour2, type2, false);
 	
-	moves--;
+	
 }
 
+//cleans up swap
+bool Game::checkSwap(int x, int y, int dir){
+	if(dir == 0){//north
+		if(x-1 < 0){
+			cout << "Invalid switch!" << endl;
+		}else{
+			swap(x, y, x-1, y);
+			return true;
+		}
+	}else if(dir == 1){//south
+		if(x+1 > 9){
+			cout << "Invalid switch!" << endl;
+		}else{
+			swap(x, y, x+1, y);
+			return true;
+		}
+	}else if(dir == 2){//west
+		if(y-1 < 0){
+			cout << "Invalid switch!" << endl;
+		}else{
+			swap(x, y, x, y-1);
+			return true;
+		}
+		
+	}else if(dir == 3){//east
+		if(y+1 > 9){
+			cout << "Invalid switch!" << endl;
+		}else{
+			swap(x, y, x, y+1);
+			return true;
+		}
+	}
+	
+	return false;
+}
+
+//returns current level
 int Game::getLevel(){
 	return level;
 }
@@ -78,6 +133,11 @@ bool Game::levelWon(){
 
 bool Game::checkMatch() {
 	return theBoard->checkMatch();
+}
+
+//decrement moves
+void Game::decMoves(){
+	moves--;
 }
 
 //overload operator<< called to board

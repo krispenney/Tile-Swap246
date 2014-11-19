@@ -19,12 +19,14 @@ public:
 	
 	~Game();
 	
+	bool checkSwap(int x, int y, int dir);
 	void swap(int x1, int y1, int x2, int y2);
 	
 	int getLevel();
-	void hint();
+	bool hint();
 	void changeLevel(bool up);// replaces level up and down
 	void scramble();
+	void decMoves();
 	void reset();
 	static void increaseScore(int x);
 	bool levelWon();
