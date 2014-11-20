@@ -23,6 +23,7 @@ public:
 	bool checkH(int x, int y, int matchingColour);
 	bool checkU(int x, int y, int matchingColour);
 	int checkPsy(int x, int y, int matchingColour);
+	int checkBasic(int x, int y, int matchingColour);
 	
 	bool checkMatch(int chain);
 
