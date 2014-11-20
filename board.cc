@@ -46,6 +46,8 @@ void Board::init(int level, string filename){
 		 * Green: 2    Upright: v
 		 * Blue: 3     Unstable: b
 		 *             Psychedelic: p
+		 *			   Capital letter means used special tile (in matching only)
+		 *			   Destroyed tile (to be replaced): D
 		 */
 		
 		for(int i = 0; i < 10; i++){
@@ -267,60 +269,368 @@ bool Board::checkMatch(int chain) {
 						theBoard[x][y+1].setType('D');
 						theBoard[x][y+2].setType('D');
 					} else if (true) {
-						// 3 match in the middle
+						// vertical 3 match in the middle
+					} else if () {
+						// vertical 3 match at the top
+					} else if () {
+						// horizontal 3 match at the left
 					}
 				} else if (y == 8) {
-
+					if () {
+						// L up and right
+					} else if () {
+						// vertical 4, third from the top
+					} else if () {
+						// vertical 3, in the middle
+					} else if () {
+						// vertical 3, at the bottom
+					} else if () {
+						// horzontal 3, at the left
+					}
 				} else if (y == 9) {
-
+					if () {
+						// L up and right
+					} else if () {
+						// horizontal 3, at the left
+					} else if () {
+						// vertical 3, at the bottom
+					}
 				} else  {
-
+					if () {
+						// vertical 5
+					} else if () {
+						// L, up and right
+					} else if () {
+						// L down and right
+					} else if () {
+						// vertical 4, second from the top
+					} else if () {
+						// vertical 4, third from the top
+					} else if () {
+						// vertical 3, at the top
+					} else if () {
+						// vertical 3, in the middle
+					} else if () {
+						// vertical 3, at the bottom
+					} else if () {
+						// horizontal 3, at the left
+					}
 				}
 			} else if (x == 2) {
 				if (y == 0) {
-
+					if () {
+						// L right and down
+					} else if () {
+						// horizontal 4, second from the left
+					} else if () {
+						// horizontal 3, at the left
+					} else if () {
+						// horizontal 3, in the middle
+					} else if () {
+						// vertical 3, at the top
+					}
 				} else if (y == 1) {
-
+					if () {
+						// L right and down
+					} else if () {
+						// horizontal 4, second from the left
+					} else if () {
+						// vertical 4, second from the top
+					} else if () {
+						// horizontal 3, at the left
+					} else if () {
+						// horizontal 3, in the middle
+					} else if () {
+						// vertical 3, at the top
+					} else if () {
+						// vertical 3, in the middle
+					}
 				} else if (y == 8) {
-
+					if () {
+						// L right and up
+					} else if () {
+						// horizontal 4, second from the left
+					} else if () {
+						// vertical 4, second from the bottom
+					} else if () {
+						// horizontal 3, at the left
+					} else if () {
+						// horizontal 3, in the middle
+					} else if () {
+						// vertical 3, in the middle
+					} else if () {
+						// vertical 3, at the bottom
+					}
 				} else if (y == 9) {
-
+					if () {
+						// L right and up
+					} else if () {
+						// horizontal 4, second from the left
+					} else if () {
+						// horizontal 3, at the left
+					} else if () {
+						// horizontal 3, in the middle
+					} else if () {
+						// vertical 3, at the bottom
+					}
 				} else {
-					
+					if () {
+						// Vertical 5
+					} else if () {
+						// L up and right
+					} else if () {
+						// L down and right
+					} else if () {
+						// horizontal 4, second from the left
+					} else if () {
+						// vertical 4, second from the top
+					} else if () {
+						// vertical 4, third from the top
+					} else if () {
+						// horizontal 3, at the left
+					} else if () {
+						// horizontal 3, in the middle
+					} else if () {
+						// veritcal 3, at the top
+					} else if () {
+						// vertical 3, in the middle
+					} else if () {
+						// vertical 3, at the bottom
+					}
 				}
 			} else if (x == 8) {
 				if (y == 0) {
-
+					if () {
+						// L left and down
+					} else if () {
+						// horizontal 4, third from the left
+					} else if () {
+						// horizontal 3, in the middle
+					} else if () {
+						// horizontal 3, at the right
+					} else if () {
+						// vertical 3, at the top
+					}
 				} else if (y == 1) {
-
+					if () {
+						// L left and down
+					} else if () {
+						// horizontal 4, third from the left
+					} else if () {
+						// vertical 4, second from the top
+					} else if () {
+						// horizontal 3, in the middle
+					} else if () {
+						// horizontal 3, at the right
+					} else if () {
+						// vertical 3, at the top
+					} else if () {
+						// vertical 3, in the middle
+					}
 				} else if (y == 8) {
-
+					if () {
+						// L left and up
+					} else if () {
+						// horizontal 3, third from the left
+					} else if () {
+						// vertical 4, third from the top
+					} else if () {
+						// horizontal 3, in the middle
+					} else if () {
+						// horizontal 3, at the right
+					} else if () {
+						// vertical 3, in the middle
+					} else if () {
+						// vertical 3, at the bottom
+					}
 				} else if (y == 9) {
-
+					if () {
+						// L left and up
+					} else if () {
+						// horizontal 4, third from the left
+					} else if () {
+						// horizontal 3, in the middle
+					} else if () {
+						// horizontal 3, at the right
+					} else if () {
+						// vertical 3, at the bottom
+					}
 				} else {
-					
+					if () {
+						// vertical 5
+					} else if () {
+						// L left and up
+					} else if () {
+						// L left and down
+					} else if () {
+						// horizontal 4, third from the left
+					} else if () {
+						// vertical 4, second from the top
+					} else if () {
+						// vertical 4, third from the top
+					} else if () {
+						// horizontal 3, in the middle
+					} else if () {
+						// horizontal 3, at the right
+					} else if () {
+						// vertical 3, at the top
+					} else if () {
+						// vertical 3, in the middle
+					} else if () {
+						// vertical 3, at the bottom
+					}
 				}
 			} else if (x == 9) {
 				if (y == 0) {
-
+					if () {
+						// L left and down
+					} else if () {
+						// horizontal 3, at the right
+					} else if () {
+						// vertical 3, at the top
+					}
 				} else if (y == 1) {
-
+					if () {
+						// L left and down
+					} else if () {
+						// vertical 4, second from the top
+					} else if () {
+						// horizontal 3, at the right
+					} else if () {
+						// vertical 3, at the top
+					} else if () {
+						// vertical 3, in the middle
+					}
 				} else if (y == 8) {
-
+					if () {
+						// L left and up
+					} else if () {
+						// vertical 4, third from the top
+					} else if () {
+						// horizontal 3, at the right
+					} else if () {
+						// vertical 3, in the middle
+					} else if () {
+						// vertical 3, at the bottom
+					}
 				} else if (y == 9) {
-
+					if () {
+						// L left and up
+					} else if () {
+						// horizontal 3, at the right
+					} else if () {
+						// vertical 3, at the bottom
+					}
 				} else {
-					
+					if () {
+						// vertical 5
+					} else if () {
+						// L left and down
+					} else if () {
+						// L left and up
+					} else if () {
+						// vertical 4, second from the top
+					} else if () {
+						// vertical 4, third from the top
+					} else if () {
+						// horizontal 3, at the right
+					} else if () {
+						// vertical 3, at the top
+					} else if () {
+						// vertical 3, in the middle
+					} else if () {
+						// vertical 3, at the bottom
+					}
 				}
 			} else {
 				if (y == 0) {
-
+					if () {
+						// Horizontal  5
+					} else if () {
+						// L left and down
+					} else if () {
+						// L right and down
+					} else if () {
+						// Horizontal 4, second from the left
+					} else if () {
+						// Horizontal 4, third from the left
+					} else if () {
+						// horizontal 3, at the right
+					} else if () {
+						// horizontal 3, in the middle
+					} else if () {
+						// horizontal 3, at the left
+					} else if () {
+						// vertical 3, at the top
+					}
 				} else if (y == 1) {
-
+					if () {
+						// Horizontal  5
+					} else if () {
+						// L left and down
+					} else if () {
+						// L right and down
+					} else if () {
+						// Horizontal 4, second from the left
+					} else if () {
+						// Horizontal 4, third from the left
+					} else if () {
+						// vertical 4, second from the top
+					} else if () {
+						// horizontal 3, at the right
+					} else if () {
+						// horizontal 3, in the middle
+					} else if () {
+						// horizontal 3, at the left
+					} else if () {
+						// vertical 3, at the top
+					} else if () {
+						// vertical 3, in the middle
+					}
 				} else if (y == 8) {
-
+					if () {
+						// Horizontal 5
+					} else if () {
+						// L left and up
+					} else if () {
+						// L right and up
+					} else if () {
+						// Horizontal 4, second from the left
+					} else if () {
+						// Horizontal 4, third from the left
+					} else if () {
+						// vertical 4, third from the top
+					} else if () {
+						// horizontal 3, at the right
+					} else if () {
+						// horizontal 3, in the middle
+					} else if () {
+						// horizontal 3, at the left
+					} else if () {
+						// vertical 3, in the middle
+					} else if () {
+						// vertical 3, at the bottom
+					}	
 				} else if (y == 9) {
-
+					if () {
+						// Horizontal  5
+					} else if () {
+						// L left and up
+					} else if () {
+						// L right and up
+					} else if () {
+						// Horizontal 4, second from the left
+					} else if () {
+						// Horizontal 4, third from the left
+					} else if () {
+						// horizontal 3, at the right
+					} else if () {
+						// horizontal 3, in the middle
+					} else if () {
+						// horizontal 3, at the left
+					} else if () {
+						// vertical 3, at the bottom
+					}
 				} else {
 					if (theBoard[x+2][y].getColour() == matchingColour and theBoard[x+1][y].getColour() == matchingColour
 						and theBoard[x-1][y].getColour() == matchingColour and theBoard[x-2][y].getColour() == matchingColour) {
@@ -349,6 +659,33 @@ bool Board::checkMatch(int chain) {
 						theBoard[x][y].setType('D');
 						theBoard[x][y-1].setType('D');
 						theBoard[x][y-2].setType('D');
+					} else if (theBoard[x-2][y].getColour() == matchingColour and theBoard[x-1][y].getColour() == matchingColour
+						and theBoard[x][y+1].getColour() == matchingColour and theBoard[x][y+2].getColour() == matchingColour) {
+						// left and down L
+						match = true;
+						theBoard[x-2][y].setType('D');
+						theBoard[x-1][y].setType('D');
+						theBoard[x][y].setType('D');
+						theBoard[x][y+1].setType('D');
+						theBoard[x][y+2].setType('D');
+					} else if (theBoard[x+2][y].getColour() == matchingColour and theBoard[x+1][y].getColour() == matchingColour
+						and  theBoard[x][y-2].getColour() == matchingColour and theBoard[x][y-1].getColour() == matchingColour) {
+						// right and up L
+						match = true;
+						theBoard[x+2][y].setType('D');
+						theBoard[x+1][y].setType('D');
+						theBoard[x][y].setType('D');
+						theBoard[x][y-1].setType('D');
+						theBoard[x][y-2].setType('D');
+					} else if (theBoard[x+2][y].getColour() == matchingColour and theBoard[x+1][y].getColour() == matchingColour
+						and theBoard[x][y+1].getColour() == matchingColour and theBoard[x][y+2].getColour() == matchingColour) {
+						// right and down L
+						match = true;
+						theBoard[x+2][y].setType('D');
+						theBoard[x+1][y].setType('D');
+						theBoard[x][y].setType('D');
+						theBoard[x][y+1].setType('D');
+						theBoard[x][y+2].setType('D');
 					} else if (theBoard[x-1][y].getColour() == matchingColour and theBoard[x+1][y].getColour() == matchingColour
 						and theBoard[x+2][y].getColour() == matchingColour) {
 						// Horizontal match of 4, x y second from the left
@@ -381,6 +718,42 @@ bool Board::checkMatch(int chain) {
 						theBoard[x][y+1].setType('D');
 						theBoard[x][y].setType('D');
 						theBoard[x][y-1].setType('D');
+					} else if (theBoard[x][y-2].getColour() == matchingColour and theBoard[x][y-1].getColour() == matchingColour) {
+						// vertical 3 match, x y at top
+						match == true;
+						theBoard[x][y-2].setType('D');
+						theBoard[x][y-1].setType('D');
+						theBoard[x][y].setType('D');
+					} else if (theBoard[x][y-1].getColour() == matchingColour and theBoard[x][y+1].getColour() == matchingColour) {
+						// vertical 3 match, x y in middle
+						match = true;
+						theBoard[x][y-1].setType('D');
+						theBoard[x][y].setType('D');
+						theBoard[x][y+1].setType('D');
+					} else if (theBoard[x][y+1].getColour() == matchingColour and theBoard[x][y+2].getColour() == matchingColour) {
+						// vertical 3 match, x y at bottom
+						match = true;
+						theBoard[x][y+2].setType('D');
+						theBoard[x][y+1].setType('D');
+						theBoard[x][y].setType('D');
+					} else if (theBoard[x+1][y].getColour() == matchingColour and theBoard[x+2][y].getColour() == matchingColour) {
+						// horizontal 3 match, x y at left
+						match = true;
+						theBoard[x][y].setType('D');
+						theBoard[x+1][y].setType('D');
+						theBoard[x+2][y].setType('D');
+					} else if (theBoard[x-1][y].getColour() == matchingColour and theBoard[x+1][y].getColour() == matchingColour) {
+						// horizontal 3 match, x y in middle
+						match = true;
+						theBoard[x-1][y].setType('D');
+						theBoard[x][y].setType('D');
+						theBoard[x+1][y].setType('D');
+					} else if (theBoard[x-1][y].getColour() == matchingColour and theBoard[x-2][y].getColour() == matchingColour) {
+						// horizontal 3 match, x y at right
+						match = true;
+						theBoard[x-2][y].setType('D');
+						theBoard[x-1][y].setType('D');
+						theBoard[x][y].setType('D');
 					}
 				}
 			}
@@ -390,7 +763,16 @@ bool Board::checkMatch(int chain) {
 	if (match) {
 		for (int x = 0; x < 10; x++) {
 			for (int y = 0; y < 10; y++) {
+				// Use all matched special blocks
+			}
+		}
+	}
+
+	if (match) {
+		for (int x = 0; x < 10; x++) {
+			for (int y = 0; y < 10; y++) {
 				if (theBoard[x][y].getType() == 'D') {
+					// Replace all destroyed tiles
 					theBoard[x][y].moveDown();
 				}
 			}
