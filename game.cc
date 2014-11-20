@@ -14,7 +14,10 @@ Game::~Game(){
 
 //later
 bool Game::hint(){
-	return false;//will return false if no hint
+	
+	
+	
+	return false;//will return false if no hint -> no moves left
 }
 
 //will rely on hint
@@ -37,7 +40,6 @@ void Game::scramble(){
 		}
 	}
 	
-	return;
 }
 
 //clear board and create new at the same level
