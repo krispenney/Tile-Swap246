@@ -230,13 +230,7 @@ bool valid(int x, int y){
 	return false;
 }
 
-/*Note: staying consistent with direction
- * 0 - north
- * 1 - south
- * 2 - west
- * 3 - east
- */
-
+//check for L
 int Board::checkL(int x, int y, int matchingColour){
 	
 	if(valid(x+1, y) && valid(x+2, y) && valid(x, y+1) && valid(x, y+2) &&
@@ -245,7 +239,8 @@ int Board::checkL(int x, int y, int matchingColour){
 	   theBoard[x][y+1].getColour() == matchingColour &&
 	   theBoard[x][y+2].getColour() == matchingColour){//right and down
 		return 0;
-	}else if(valid(x+1, y) && valid(x+2, y) && valid(x+2, y+1) && valid(x+2, y+2) &&
+	}else if(valid(x+1, y) && valid(x+2, y) && valid(x+2, y+1) && valid(x+2, y+2)
+			&&
 			 theBoard[x+1][y].getColour() == matchingColour &&
 			 theBoard[x+2][y].getColour() == matchingColour &&
 			 theBoard[x+2][y+1].getColour() == matchingColour &&
@@ -335,6 +330,11 @@ bool Board::checkMatch(int chain) {
 
 	for (int x = 0; x < 10; x++) {
 		for (int y = 0; y < 10; y++) {
+			
+			if(theBoard[x][y].getType() == 'D'){
+				continue;
+			}
+			
 			int matchingColour = theBoard[x][y].getColour();
 			int matchVal = checkPsy(x, y, matchingColour);
 			/*if (x == 0) {
@@ -876,7 +876,7 @@ bool Board::checkMatch(int chain) {
 					theBoard[x+1][y].setType('D');
 					theBoard[x+2][y].setType('p');
 					theBoard[x+3][y].setType('D');
-					theBoard[x+4][y].setType('d');
+					theBoard[x+4][y].setType('D');
 					
 				}else if(matchVal == 2){//horizontal
 					cerr << "horizontal" << endl;
@@ -912,7 +912,9 @@ bool Board::checkMatch(int chain) {
 				continue;
 			}
 			
+			
 			matchVal = checkL(x, y, matchingColour);//L
+			
 			if(matchVal != -1){
 				cerr << "Unstable square" << endl;
 				
@@ -953,8 +955,10 @@ bool Board::checkMatch(int chain) {
 				continue;
 			}
 			
+			
 			matchVal = checkBasic(x, y, matchingColour);//basic
-			if(matchVal != -1){
+			
+			if(theBoard[x][y].getType() == '_' && matchVal != -1){
 				cerr << "Basic match" << endl;
 				
 				if(matchVal == 0){
@@ -974,7 +978,10 @@ bool Board::checkMatch(int chain) {
 				}
 				match = true;
 			}
-			
+			/*if(match){
+				cout << x << " " << y << endl;
+				match = false;
+			}*/
 		}
 	}
 	
