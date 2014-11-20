@@ -19,6 +19,11 @@ public:
 	void update(int x, int y, int colour, char ch, bool locked);
 	void swap(Square * s1, Square * s2);
 	
+	int checkL(int x, int y, int matchingColour);
+	bool checkH(int x, int y, int matchingColour);
+	bool checkU(int x, int y, int matchingColour);
+	int checkPsy(int x, int y, int matchingColour);
+	
 	bool checkMatch(int chain);
 
 	~Board();

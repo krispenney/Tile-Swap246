@@ -27,7 +27,7 @@ void Square::moveDown(){
 
 		above->moveDown();
 	} else {
-		int colour;
+		int colour = 0;
 		int randColour = 0;
 		//Generate new stuff for that square
 		if (level == 0) {

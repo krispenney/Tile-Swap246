@@ -40,12 +40,12 @@ int main() {
 					match = theGame->checkMatch(chain);
 					chain++;
 				}
-				theGame->decMoves();
+				
 			} else {
 				// cerr << "no match made plz" << endl;
 				// NO MATCH MADE, revert last move
 			}
-		
+			theGame->decMoves();
 		}else if(cmd == "levelup"){
 			if(theGame->getLevel() != MAXLEVELS){
 				theGame->changeLevel(true);
