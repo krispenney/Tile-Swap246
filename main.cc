@@ -28,16 +28,17 @@ int main() {
 		}else if(cmd == "switch"){//needs to check for match
 			cin >> x >> y >> dir;
 			bool match = false;
+			int chain = 1;
 			
 			if(theGame->checkSwap(x, y, dir)){
-				match = theGame->checkMatch();
+				match = theGame->checkMatch(chain);
 			}
 			
 			if (match) {
 				while (match) {
-
-					match = theGame->checkMatch();
-					
+					cerr << "I HAVE A LOOPING MATCH~~~" << endl;
+					match = theGame->checkMatch(chain);
+					chain++;
 				}
 				theGame->decMoves();
 			} else {

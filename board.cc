@@ -67,9 +67,7 @@ void Board::init(int level, string filename){
 				update(i, j, colour, type, locked);
 			}
 		}
-		
-		theBoard[5][5].moveDown();
-
+	
 	}else if(level == 1){
 		
 		int specialCount = 1;
@@ -181,6 +179,8 @@ void Board::init(int level, string filename){
 					sq->setAbove(NULL);
 				}
 				
+				sq->setLevel(level);
+
 				theBoard[i][j] = *sq;
 				
 				update(i, j, colour, type, lock);
@@ -219,9 +219,188 @@ void Board::swap(Square * s1, Square * s2){
 	s2->setType(tmpType);
 }
 
-bool Board::checkMatch() {
-	return false; //Change this to actually check when I dont feel sick
+bool Board::checkMatch(int chain) {
+	bool match = false;
+
+	for (int x = 0; x < 10; x++) {
+		for (int y = 0; y < 10; y++) {
+			int matchingColour = theBoard[x][y].getColour();
+			if (x == 0) {
+				if (y == 0) {
+					if (theBoard[x+1][y].getColour() == matchingColour and theBoard[x+2][y].getColour() == matchingColour 
+						and theBoard[x][y+1].getColour() == matchingColour and theBoard[x][y+2].getColour() == matchingColour) {
+						// L SHAPE right and down
+						match = true;
+						theBoard[x][y].setType('b');
+						theBoard[x+1][y].setType('D');
+						theBoard[x+2][y].setType('D');
+						theBoard[x][y+1].setType('D');
+						theBoard[x][y+2].setType('D');
+					} else if (theBoard[x][y+1].getColour() == matchingColour and theBoard[x][y+2].getColour() == matchingColour){
+						// 3 match down with x y at top
+						match = true;
+						theBoard[x][y].setType('D');
+						theBoard[x][y+1].setType('D');
+						theBoard[x][y+2].setType('D');
+					} else if (theBoard[x+1][y].getColour() == matchingColour and theBoard[x+2][y].getColour() == matchingColour) {
+						// 3 match sideways with x y and left end
+						match = true;
+						theBoard[x][y].setType('D');
+						theBoard[x+1][y].setType('D');
+						theBoard[x+2][y].setType('D');
+					}
+				} else if (y == 1) {
+					if (theBoard[x+1][y].getColour() == matchingColour and theBoard[x+2][y].getColour() == matchingColour 
+						and theBoard[x][y+1].getColour() == matchingColour and theBoard[x][y+2].getColour() == matchingColour) {
+						// L SHAPE right and down
+						match = true;
+						theBoard[x][y].setType('b');
+						theBoard[x+1][y].setType('D');
+						theBoard[x+2][y].setType('D');
+						theBoard[x][y+1].setType('D');
+						theBoard[x][y+2].setType('D');
+					} else if (theBoard[x][y-1].getColour() == matchingColour and theBoard[x][y+1].getColour() == matchingColour
+						and theBoard[x][y+2].getColour() == matchingColour) {
+						// 4 match with x y being the second one
+						theBoard[x][y-1].setType('D');
+						theBoard[x][y].setType('h');
+						theBoard[x][y+1].setType('D');
+						theBoard[x][y+2].setType('D');
+					} else if (true) {
+						// 3 match in the middle
+					}
+				} else if (y == 8) {
+
+				} else if (y == 9) {
+
+				} else  {
+
+				}
+			} else if (x == 2) {
+				if (y == 0) {
+
+				} else if (y == 1) {
+
+				} else if (y == 8) {
+
+				} else if (y == 9) {
+
+				} else {
+					
+				}
+			} else if (x == 8) {
+				if (y == 0) {
+
+				} else if (y == 1) {
+
+				} else if (y == 8) {
+
+				} else if (y == 9) {
+
+				} else {
+					
+				}
+			} else if (x == 9) {
+				if (y == 0) {
+
+				} else if (y == 1) {
+
+				} else if (y == 8) {
+
+				} else if (y == 9) {
+
+				} else {
+					
+				}
+			} else {
+				if (y == 0) {
+
+				} else if (y == 1) {
+
+				} else if (y == 8) {
+
+				} else if (y == 9) {
+
+				} else {
+					if (theBoard[x+2][y].getColour() == matchingColour and theBoard[x+1][y].getColour() == matchingColour
+						and theBoard[x-1][y].getColour() == matchingColour and theBoard[x-2][y].getColour() == matchingColour) {
+						// Horizontal match of 5
+						match = true;
+						theBoard[x+2][y].setType('D');
+						theBoard[x+1][y].setType('D');
+						theBoard[x][y].setType('p');
+						theBoard[x-1][y].setType('D');
+						theBoard[x-2][y].setType('D');
+					} else if (theBoard[x][y+2].getColour() == matchingColour and theBoard[x][y+1].getColour() == matchingColour
+						and theBoard[x][y-1].getColour() == matchingColour and theBoard[x][y-1].getColour() == matchingColour) {
+						//Vertical match of 5
+						match = true;
+						theBoard[x][y+2].setType('D');
+						theBoard[x][y+1].setType('D');
+						theBoard[x][y].setType('p');
+						theBoard[x][y-1].setType('D');
+						theBoard[x][y-2].setType('D');
+					} else if (theBoard[x-2][y].getColour() == matchingColour and theBoard[x-1][y].getColour() == matchingColour
+						and theBoard[x][y-2].getColour() == matchingColour and theBoard[x][y-1].getColour() == matchingColour) {
+						// left and up L
+						match = true;
+						theBoard[x-2][y].setType('D');
+						theBoard[x-1][y].setType('D');
+						theBoard[x][y].setType('D');
+						theBoard[x][y-1].setType('D');
+						theBoard[x][y-2].setType('D');
+					} else if (theBoard[x-1][y].getColour() == matchingColour and theBoard[x+1][y].getColour() == matchingColour
+						and theBoard[x+2][y].getColour() == matchingColour) {
+						// Horizontal match of 4, x y second from the left
+						match = true;
+						theBoard[x+1][y].setType('D');
+						theBoard[x][y].setType('h');
+						theBoard[x-1][y].setType('D');
+						theBoard[x-2][y].setType('D');
+					} else if (theBoard[x+2][y].getColour() == matchingColour and theBoard[x+1][y].getColour() == matchingColour
+						and theBoard[x-1][y].getColour() == matchingColour) {
+						//Horizontal match of 4, x y second from the right
+						match = true;
+						theBoard[x+2][y].setType('D');
+						theBoard[x+1][y].setType('D');
+						theBoard[x][y].setType('D');
+						theBoard[x-1][y].setType('D');
+					} else if (theBoard[x][y-1].getColour() == matchingColour and theBoard[x][y+1].getColour() == matchingColour
+						and theBoard[x][y+2].getColour() == matchingColour) {
+						// Vertical match of 4, x y second from the top
+						match = true;
+						theBoard[x][y+1].setType('D');
+						theBoard[x][y].setType('D');
+						theBoard[x][y-1].setType('D');
+						theBoard[x][y-2].setType('D');
+					} else if (theBoard[x][y-2].getColour() == matchingColour and theBoard[x][y-1].getColour() == matchingColour
+						and theBoard[x][y+1].getColour() == matchingColour) {
+						// Vertical match of 4, x y third from the top
+						match = true;
+						theBoard[x][y+2].setType('D');
+						theBoard[x][y+1].setType('D');
+						theBoard[x][y].setType('D');
+						theBoard[x][y-1].setType('D');
+					}
+				}
+			}
+		}
+	}
+
+	if (match) {
+		for (int x = 0; x < 10; x++) {
+			for (int y = 0; y < 10; y++) {
+				if (theBoard[x][y].getType() == 'D') {
+					theBoard[x][y].moveDown();
+				}
+			}
+		}
+	}
+
+
+	return match; //Change this to actually check when I dont feel sick
 }
+
 
 ostream &operator<<(ostream &out, const Board &b){
 	// std::cerr << "here in board.cc" << std::endl;

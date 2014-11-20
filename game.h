@@ -30,7 +30,7 @@ public:
 	void reset();
 	static void increaseScore(int x);
 	bool levelWon();
-	bool checkMatch();
+	bool checkMatch(int chain);
 
 
 	friend std::ostream &operator<<(std::ostream &out, const Game &g);

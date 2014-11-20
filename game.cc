@@ -131,8 +131,8 @@ bool Game::levelWon(){
 	return false;
 }
 
-bool Game::checkMatch() {
-	return theBoard->checkMatch();
+bool Game::checkMatch(int chain) {
+	return theBoard->checkMatch(chain);
 }
 
 //decrement moves
