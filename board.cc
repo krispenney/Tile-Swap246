@@ -245,23 +245,23 @@ int Board::checkL(int x, int y, int matchingColour){
 	   theBoard[x][y+1].getColour() == matchingColour &&
 	   theBoard[x][y+2].getColour() == matchingColour){//right and down
 		return 0;
-	}else if(valid(x-1, y) && valid(x-2, y) && valid(x, y+1) && valid(x, y+2) &&
-			 theBoard[x-1][y].getColour() == matchingColour &&
-			 theBoard[x-2][y].getColour() == matchingColour &&
-			 theBoard[x][y+1].getColour() == matchingColour &&
-			 theBoard[x][y+2].getColour() == matchingColour){//right and up
-		return 1;
-	}else if(valid(x+1, y) && valid(x+2, y) && valid(x, y-1) && valid(x, y-2) &&
+	}else if(valid(x+1, y) && valid(x+2, y) && valid(x+2, y+1) && valid(x+2, y+2) &&
 			 theBoard[x+1][y].getColour() == matchingColour &&
 			 theBoard[x+2][y].getColour() == matchingColour &&
-			 theBoard[x][y-1].getColour() == matchingColour &&
-			 theBoard[x][y-2].getColour() == matchingColour){//down and left
+			 theBoard[x+2][y+1].getColour() == matchingColour &&
+			 theBoard[x+2][y+2].getColour() == matchingColour){//right and up
+		return 1;
+	}else if(valid(x+1, y+2) && valid(x+2, y+2) && valid(x, y+1) && valid(x, y+2) &&
+			 theBoard[x+1][y+2].getColour() == matchingColour &&
+			 theBoard[x+2][y+2].getColour() == matchingColour &&
+			 theBoard[x][y+1].getColour() == matchingColour &&
+			 theBoard[x][y+2].getColour() == matchingColour){//down and left
 		return 2;
-	}else if(valid(x-1, y) && valid(x-2, y) && valid(x, y-1) && valid(x, y-2) &&
-			 theBoard[x-1][y].getColour() == matchingColour &&
-			 theBoard[x-2][y].getColour() == matchingColour &&
-			 theBoard[x][y-1].getColour() == matchingColour &&
-			 theBoard[x][y-2].getColour() == matchingColour){//up and left
+	}else if(valid(x-1, y+2) && valid(x-2, y+2) && valid(x, y+1) && valid(x, y+2) &&
+			 theBoard[x-1][y+2].getColour() == matchingColour &&
+			 theBoard[x-2][y+2].getColour() == matchingColour &&
+			 theBoard[x][y+1].getColour() == matchingColour &&
+			 theBoard[x][y+2].getColour() == matchingColour){//up and left
 		return 3;
 	}
 	
@@ -272,10 +272,10 @@ int Board::checkL(int x, int y, int matchingColour){
 //Lateral Square
 //implement edge check to ensure not part of psychadelic
 bool Board::checkH(int x, int y, int matchingColour){
-	if(valid(x, y-1) && valid(x, y+1) && valid(x, y+2) &&
-	   theBoard[x][y-1].getColour() == matchingColour &&
+	if(valid(x, y+1) && valid(x, y+2) && valid(x, y+3) &&
 	   theBoard[x][y+1].getColour() == matchingColour &&
-	   theBoard[x][y+2].getColour() == matchingColour){
+	   theBoard[x][y+2].getColour() == matchingColour &&
+	   theBoard[x][y+3].getColour() == matchingColour){
 		return true;
 	}
 	return false;
@@ -285,10 +285,10 @@ bool Board::checkH(int x, int y, int matchingColour){
 //upright square
 //implement edge check to ensure not part of psychadelic
 bool Board::checkU(int x, int y, int matchingColour){
-	if(valid(x-1, y) && valid(x+1, y) && valid(x+2, y) &&
-	   theBoard[x-1][y].getColour() == matchingColour &&
+	if(valid(x+1, y) && valid(x+2, y) && valid(x+3, y) &&
 	   theBoard[x+1][y].getColour() == matchingColour &&
-	   theBoard[x+2][y].getColour() == matchingColour){
+	   theBoard[x+2][y].getColour() == matchingColour &&
+	   theBoard[x+3][y].getColour() == matchingColour){
 		return true;
 	}
 	
@@ -297,17 +297,17 @@ bool Board::checkU(int x, int y, int matchingColour){
 
 //psychadelic
 int Board::checkPsy(int x, int y, int matchingColour){
-	if(valid(x-2, y) && valid(x-1, y) && valid(x+1, y) && valid(x+2, y) &&
-	   theBoard[x-2][y].getColour() == matchingColour &&
-	   theBoard[x-1][y].getColour() == matchingColour &&
+	if(valid(x+1, y) && valid(x+2, y) && valid(x+3, y) && valid(x+4, y) &&
 	   theBoard[x+1][y].getColour() == matchingColour &&
-	   theBoard[x+2][y].getColour() == matchingColour){//vertical
+	   theBoard[x+2][y].getColour() == matchingColour &&
+	   theBoard[x+3][y].getColour() == matchingColour &&
+	   theBoard[x+4][y].getColour() == matchingColour){//vertical
 		return 1;
-	}else if(valid(x, y-2) && valid(x, y-1) && valid(x, y+1) && valid(x, y+2) &&
-			 theBoard[x][y-2].getColour() == matchingColour &&
-			 theBoard[x][y-1].getColour() == matchingColour &&
+	}else if(valid(x, y+1) && valid(x, y+2) && valid(x, y+3) && valid(x, y+4) &&
 			 theBoard[x][y+1].getColour() == matchingColour &&
-			 theBoard[x][y+2].getColour() == matchingColour){//horizontal
+			 theBoard[x][y+2].getColour() == matchingColour &&
+			 theBoard[x][y+3].getColour() == matchingColour &&
+			 theBoard[x][y+4].getColour() == matchingColour){//horizontal
 		return 2;
 	}
 	return -1;
@@ -316,19 +316,20 @@ int Board::checkPsy(int x, int y, int matchingColour){
 //basic
 //check to ensure not part of others
 int Board::checkBasic(int x, int y, int matchingColour){
-	if(valid(x-1, y) && valid(x+1, y) &&
-	   theBoard[x-1][y].getColour() == matchingColour &&
-	   theBoard[x+1][y].getColour() == matchingColour){//vertical
+	if(valid(x+1, y) && valid(x+2, y) &&
+	   theBoard[x+1][y].getColour() == matchingColour &&
+	   theBoard[x+2][y].getColour() == matchingColour){//vertical
 		return 0;
-	}else if(valid(x, y-1) && valid(x, y+1) &&
-			 theBoard[x][y-1].getColour() == matchingColour &&
-			 theBoard[x][y+1].getColour() == matchingColour){//horizontal
+	}else if(valid(x, y+1) && valid(x, y+2) &&
+			 theBoard[x][y+1].getColour() == matchingColour &&
+			 theBoard[x][y+2].getColour() == matchingColour){//horizontal
 		return 1;
 	}
 	
 	return -1;
 }
 
+//changed so that match is found on edge closest to origin
 bool Board::checkMatch(int chain) {
 	bool match = false;
 
@@ -871,19 +872,19 @@ bool Board::checkMatch(int chain) {
 				
 				if(matchVal == 1){//vertical
 					cerr << "vertical" << endl;
-					theBoard[x][y-2].setType('D');
-					theBoard[x][y-1].setType('D');
-					theBoard[x][y+1].setType('D');
-					theBoard[x][y+2].setType('D');
-					theBoard[x][y].setType('p');
+					theBoard[x][y].setType('D');
+					theBoard[x+1][y].setType('D');
+					theBoard[x+2][y].setType('p');
+					theBoard[x+3][y].setType('D');
+					theBoard[x+4][y].setType('d');
 					
 				}else if(matchVal == 2){//horizontal
 					cerr << "horizontal" << endl;
-					theBoard[x-2][y].setType('D');
-					theBoard[x-1][y].setType('D');
-					theBoard[x+1][y].setType('D');
-					theBoard[x+2][y].setType('D');
-					theBoard[x][y].setType('p');
+					theBoard[x][y].setType('D');
+					theBoard[x][y+1].setType('D');
+					theBoard[x][y+2].setType('p');
+					theBoard[x][y+3].setType('D');
+					theBoard[x][y+4].setType('D');
 				}
 				
 				match = true;
@@ -891,10 +892,10 @@ bool Board::checkMatch(int chain) {
 			}else if(checkH(x, y, matchingColour)){//lateral
 				cerr << "lateral square" << endl;
 				
-				theBoard[x][y-1].setType('D');
-				theBoard[x][y+1].setType('D');
+				theBoard[x][y].setType('D');
+				theBoard[x][y+1].setType('h');//could add random to select either middle
 				theBoard[x][y+2].setType('D');
-				theBoard[x][y].setType('h');
+				theBoard[x][y+3].setType('D');
 				
 				match = true;
 				continue;
@@ -902,10 +903,10 @@ bool Board::checkMatch(int chain) {
 			}else if(checkU(x, y, matchingColour)){//Upright
 				cerr << "upright square" << endl;
 				
-				theBoard[x-1][y].setType('D');
-				theBoard[x+1][y].setType('D');
+				theBoard[x][y].setType('D');
+				theBoard[x+1][y].setType('v');
 				theBoard[x+2][y].setType('D');
-				theBoard[x][y].setType('v');
+				theBoard[x+3][y].setType('D');
 				
 				match = true;
 				continue;
@@ -924,27 +925,27 @@ bool Board::checkMatch(int chain) {
 					theBoard[x][y].setType('b');
 				}else if(matchVal == 1){//up and right
 					cerr << "up and right" << endl;
-					theBoard[x-1][y].setType('D');
-					theBoard[x-2][y].setType('D');
-					theBoard[x][y+1].setType('D');
-					theBoard[x][y+2].setType('D');
-					theBoard[x][y].setType('b');
+					theBoard[x][y].setType('D');
+					theBoard[x+1][y].setType('D');
+					theBoard[x+2][y].setType('b');
+					theBoard[x+2][y+1].setType('D');
+					theBoard[x+1][y+2].setType('D');
 					
 				}else if(matchVal == 2){//down and left
 					cerr << "down and left" << endl;
-					theBoard[x+1][y].setType('D');
-					theBoard[x+2][y].setType('D');
-					theBoard[x][y-1].setType('D');
-					theBoard[x][y-2].setType('D');
-					theBoard[x][y].setType('b');
+					theBoard[x][y].setType('D');
+					theBoard[x][y+1].setType('D');
+					theBoard[x][y+2].setType('b');
+					theBoard[x+1][y+2].setType('D');
+					theBoard[x+2][y+2].setType('D');
 					
 				}else if(matchVal == 3){//up and left
 					cerr << "up and left" << endl;
-					theBoard[x-1][y].setType('D');
-					theBoard[x-2][y].setType('D');
-					theBoard[x][y-1].setType('D');
-					theBoard[x][y-2].setType('D');
-					theBoard[x][y].setType('b');
+					theBoard[x][y].setType('D');
+					theBoard[x][y+1].setType('D');
+					theBoard[x][y+2].setType('b');
+					theBoard[x+1][y+2].setType('D');
+					theBoard[x+2][y+2].setType('D');
 					
 				}
 				
@@ -958,16 +959,16 @@ bool Board::checkMatch(int chain) {
 				
 				if(matchVal == 0){
 					cerr << "vertical" << endl;
-					theBoard[x-1][y].setType('D');
 					theBoard[x][y].setType('D');
 					theBoard[x+1][y].setType('D');
+					theBoard[x+2][y].setType('D');
 					
 					
 				}else if(matchVal == 1){
 					cerr << "horizontal" << endl;
-					theBoard[x][y-1].setType('D');
 					theBoard[x][y].setType('D');
 					theBoard[x][y+1].setType('D');
+					theBoard[x][y+2].setType('D');
 					
 					
 				}
