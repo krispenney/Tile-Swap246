@@ -8,7 +8,7 @@ class Game {
 	static int score;
 	int moves;
 	Board * theBoard;
-
+	bool checkAll(int x, int y, int matchingColour);
 public:
 	
 	Game(int moves, int level = 0): // Default params need to go at the end
@@ -23,7 +23,7 @@ public:
 	void swap(int x1, int y1, int x2, int y2);
 	
 	int getLevel();
-	bool hint();
+	bool hint(bool print);
 	void changeLevel(bool up);// replaces level up and down
 	void scramble();
 	void decMoves();

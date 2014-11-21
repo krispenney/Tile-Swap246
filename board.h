@@ -18,6 +18,7 @@ public:
 	
 	void update(int x, int y, int colour, char ch, bool locked);
 	void swap(Square * s1, Square * s2);
+	bool valid(int x, int y);
 	
 	int checkL(int x, int y, int matchingColour);
 	bool checkH(int x, int y, int matchingColour);
