@@ -9,7 +9,7 @@ using namespace std;
 
 Game * theGame = new Game(10);
 
-int main() {
+int main(int argc, char *argv[]) {
 	
 	string cmd;
 	int x;
@@ -20,6 +20,7 @@ int main() {
 	// std::cerr << "here" << std::endl;
 	cout << *theGame << endl;
 	
+	//enters game
 	while(1){
 		
 		cin >> cmd;
