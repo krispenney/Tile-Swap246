@@ -16,6 +16,10 @@ public:
 	
 	Square *getSquare(int x, int y);
 	
+
+	void explode(int x, int y, char type);
+
+	
 	void update(int x, int y, int colour, char ch, bool locked);
 	void swap(Square * s1, Square * s2);
 	bool valid(int x, int y);
