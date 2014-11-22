@@ -19,7 +19,7 @@ Board::~Board(){
 	delete [] theBoard;
 }
 
-void Board::init(int level, string filename){
+void Board::init(int level, string filename, int seed){
 	
 	string zeroFName = "sequence.txt";
 	bool locked = false;
@@ -72,7 +72,7 @@ void Board::init(int level, string filename){
 		
 		int specialCount = 1;
 		locked = false;
-		srand(time(NULL));
+		srand(seed);
 		/*if(filename != ""){ add in scriptfile later
 		
 		}else{
