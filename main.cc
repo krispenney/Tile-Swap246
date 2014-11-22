@@ -3,6 +3,7 @@
 // #include "board.h"
 #include "game.h"
 #include <ctime>
+#include <cstring>
 // #include "square.h"
 // #include "textdisplay.h"
 
