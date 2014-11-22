@@ -198,22 +198,87 @@ void Board::init(int level, string filename){
 // Upright: v
 // Unstable: b
 // Psychedelic: p
-void Board::explode(int x, int y, char type) {
-	if (type == 'D') {
-		theBoard[x][y].moveDown();
-	} else if (type == 'h') {
+void Board::explode(int x, int y, char type, int size) {
+	cerr << "In explode, with x: " << x << " and y: " << y << " and type: " << type << endl;
+	char oldType = theBoard[x][y].getType();
+
+	if (oldType == '_') {
+		theBoard[x][y].setType('_');
+	} else if (oldType == 'h') {
+		theBoard[x][y].setType('_');
+
+		cerr << "In oldtype h" << endl;
+
 		for (int i = 0; i < 10; i++) {
 			if (i != x) {
-				explode(i,y, 'D');
+				if (valid(i,y)) {
+					explode(i, y, 'D');
+				}
 			}
 		}
-	} else if () {
+	} else if (oldType == 'v') {
 		// upright
-	} else if () {
-		//unstable
-	} else if () {
+		theBoard[x][y].setType('_');
+
+		for (int i = 0; i < 10; i++) {
+			if (i != y) {
+				if (valid(x,i)) {
+					explode(x, i, 'D');
+				}
+			}
+		}
+	} else if (oldType == 'b') {
+		// unstable
+		// unstable makes a different sized hole depending on what kind of match it was in
+		// Default is 3, but can be passed as a 4th parameter
+		theBoard[x][y].setType('_');
+
+		if (size == 3) {
+			for (int i = -1; i < 2; i++) {
+				for (int j = -1; j < 2; j++) {
+					if (i != x and j != y) {
+						if (valid(x + i, y + j)) {
+							explode(x + i, y + j, 'D');
+						}
+					}
+				}
+			}
+		} else {
+			for (int i = -2; i < 3; i++) {
+				for (int j = -2; j < 3; j++) {
+					if (i != x and j != y) {
+						if (valid(x + i, y + j)) {
+							explode(x + i, y + j, 'D');
+						}
+					}
+				}
+			}
+		}
+	} else if (oldType == 'p') {
 		// Psychedelic
+		int psyCol = theBoard[x][y].getColour();
+		theBoard[x][y].setType('_');
+
+		for (int i = 0; i < 10; i++) {
+			for (int j = 0; j < 10; j++) {
+				if (x != i and y != j and valid(i,j)) {
+					if (theBoard[i][j].getColour() == psyCol) {
+						explode(i,j,'D');
+					}
+				}
+			}
+		}
 	}
+
+	if (type != 'D') {
+		theBoard[x][y].setType(type);
+		theBoard[x][y].updateTD(x,y,theBoard[x][y].getColour(), type);
+	} else {
+		theBoard[x][y].setType('_');
+		theBoard[x][y].moveDown();
+	}
+
+
 }
 
 

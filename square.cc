@@ -15,6 +15,8 @@ void Square::updateTD(int x, int y, int colour, char type){
 }
 
 void Square::moveDown(){
+		std::cerr << "In Movedown" << std::endl;
+
 	if (above != NULL) {
 		// std::cerr << "x: " << x << " y: " << y << std::endl;
 		int aboveType = above->getType();
@@ -42,6 +44,7 @@ void Square::moveDown(){
 				colour = '3';
 			}
 		}
+		
 		this->setType('_');
 		this->setColour(colour);
 		updateTD(x,y, colour, '_');

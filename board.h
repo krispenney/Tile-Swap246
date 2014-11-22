@@ -17,7 +17,7 @@ public:
 	Square *getSquare(int x, int y);
 	
 
-	void explode(int x, int y, char type);
+	void explode(int x, int y, char type, int size = 3);
 
 	
 	void update(int x, int y, int colour, char ch, bool locked);
