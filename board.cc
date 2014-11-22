@@ -19,7 +19,7 @@ Board::~Board(){
 	delete [] theBoard;
 }
 
-void Board::init(int level, string filename){
+void Board::init(int level, string filename, int seed){
 	
 	string zeroFName = "sequence.txt";
 	bool locked = false;
@@ -72,7 +72,7 @@ void Board::init(int level, string filename){
 		
 		int specialCount = 1;
 		locked = false;
-		srand(time(NULL));
+		srand(seed);
 		/*if(filename != ""){ add in scriptfile later
 		
 		}else{
@@ -207,8 +207,6 @@ void Board::explode(int x, int y, char type, int size) {
 	} else if (oldType == 'h') {
 		theBoard[x][y].setType('_');
 
-		cerr << "In oldtype h" << endl;
-
 		for (int i = 0; i < 10; i++) {
 			if (i != x) {
 				if (valid(i,y)) {
@@ -277,9 +275,8 @@ void Board::explode(int x, int y, char type, int size) {
 		theBoard[x][y].setType('_');
 		theBoard[x][y].moveDown();
 	}
-
-
 }
+
 
 
 //get square at x, y
@@ -340,11 +337,11 @@ int Board::checkL(int x, int y, int matchingColour){
 			 theBoard[x][y+1].getColour() == matchingColour &&
 			 theBoard[x][y+2].getColour() == matchingColour){//down and left
 		return 2;
-	}else if(valid(x-1, y+2) && valid(x-2, y+2) && valid(x, y+1) && valid(x, y+2) &&
-			 theBoard[x-1][y+2].getColour() == matchingColour &&
-			 theBoard[x-2][y+2].getColour() == matchingColour &&
-			 theBoard[x][y+1].getColour() == matchingColour &&
-			 theBoard[x][y+2].getColour() == matchingColour){//up and left
+	}else if(valid(x+1, y) && valid(x+2, y) && valid(x+2, y-1) && valid(x+2, y-2) &&
+			 theBoard[x+1][y].getColour() == matchingColour &&
+			 theBoard[x+2][y].getColour() == matchingColour &&
+			 theBoard[x+2][y-1].getColour() == matchingColour &&
+			 theBoard[x+2][y-2].getColour() == matchingColour){//up and left
 		return 3;
 	}
 	
@@ -496,11 +493,12 @@ bool Board::checkMatch(int chain) {
 					
 				}else if(matchVal == 3){//up and left
 					cerr << "up and left" << endl;
+
 					explode(x, y, 'D');
-					explode(x, y+1, 'D');
-					explode(x, y+2, 'b');
-					explode(x+1, y+2, 'D');
-					explode(x+2, y+2, 'D');
+					explode(x+1, y, 'D');
+					explode(x+2, y, 'b');
+					explode(x+2, y-1, 'D');
+					explode(x+2, y-2, 'D');
 					
 				}
 				

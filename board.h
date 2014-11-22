@@ -4,15 +4,16 @@
 #include "square.h"
 #include "textdisplay.h"
 #include <cstdlib>
-#include <ctime>
+
 
 
 class Board {
 	TextDisplay * td;
 	Square **theBoard;
+	
 public:
 	Board();
-	void init(int level, std::string filename = "");
+	void init(int level, std::string filename, int seed);
 	
 	Square *getSquare(int x, int y);
 	
