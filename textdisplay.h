@@ -8,7 +8,7 @@ class TextDisplay {
 
 public:
 	TextDisplay();
-	void update(int x, int y, int colour, char ch);
+	void update(int x, int y, int colour, char ch, bool locked);
 
 	~TextDisplay();
 

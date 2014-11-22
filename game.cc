@@ -1,5 +1,6 @@
 #include "game.h"
 #include "board.h"
+#include <iomanip>
 
 using namespace std;
 
@@ -11,13 +12,122 @@ Game::~Game(){
 	delete theBoard;
 }
 
-//later
-void Game::hint(){
-	return;
+//hint helper
+bool Game::checkAll(int x, int y, int matchingColour){//checks for a match
+	if (theBoard->checkL(x, y, matchingColour) != -1 ||
+		theBoard->checkH(x, y, matchingColour) ||
+		theBoard->checkU(x, y, matchingColour) ||
+		theBoard->checkPsy(x, y, matchingColour) != -1||
+		theBoard->checkBasic(x, y, matchingColour) != -1){
+		return true;
+	}
+	return false;
+}
+
+//displays the first match
+bool Game::hint(bool print){
+	
+	int x = 0;
+	int y = 0;
+	int dir = 0;
+	bool match = false;
+	
+	for(int i = 0; i < 10; i++){
+		for(int j = 0; j < 10; j++){
+			
+			if(theBoard->valid(i, j-1)){//west
+				swap(i, j, i, j-1);
+				if (checkAll(i, j, theBoard->getSquare(i, j)->getColour())){//check for match
+					cerr << "west" << endl;
+					x = i;
+					y = j;
+					dir = 2;
+					match = true;
+				}
+				swap(i, j, i, j-1);//swap back
+				
+				if(match){
+					break;
+				}
+			}else if(theBoard->valid(i-1, j)){//north
+				swap(i, j, i-1, j);
+				if (checkAll(i, j, theBoard->getSquare(i, j)->getColour())){//check for match
+					cerr << "north" << endl;
+					x = i;
+					y = j;
+					dir = 0;
+					match = true;
+					
+				}
+				swap(i, j, i-1, j);//swap back
+				
+				if(match){
+					break;
+				}
+			}else if(theBoard->valid(i, j+1)){//east
+				swap(i, j, i, j+1);
+				if (checkAll(i, j, theBoard->getSquare(i, j)->getColour())){//check for match
+					cerr << "east" << endl;
+					x = i;
+					y = j;
+					dir = 3;
+					match = true;
+				}
+				
+				swap(i, j, i, j+1);//swap back
+				
+				if(match){
+					break;
+				}
+			}else if(theBoard->valid(i+1, j+1)){//south
+				swap(i, j, i+1, j+1);
+				if (checkAll(i, j, theBoard->getSquare(i, j)->getColour())){//check for match
+					cerr << "south" << endl;
+					x = i;
+					y = j;
+					dir = 1;
+					match = true;
+				}
+				swap(i, j, i+1, j+1);//swap back
+				
+				if(match){
+					break;
+				}
+			}
+			
+		}
+		
+		if(match){
+			if(print){
+				cout << x << " " << y << " " << dir << endl;//prints if match found and print set
+			}
+			return true;
+		}
+	}
+	
+	return false;//will return false if no hint
 }
 
 //will rely on hint
 void Game::scramble(){
+	
+	//check if no moves left 
+	
+	srand(time(NULL));
+	
+	for(int i = 0; i < 10; i++){
+		for(int j = 0; j < 10; j++){
+			int randX = rand()%10;
+			int randY = rand()%10;
+			while(randX != i && randY != j){//ensure don't select the same
+				randX = rand()%10;
+				randY = rand()%10;
+			}
+			swap(i, j, randX, randY);
+			
+		}
+	}
+	
 	return;
 }
 
@@ -26,7 +136,7 @@ void Game::reset(){
 	delete theBoard;
 	
 	theBoard = new Board();
-	theBoard->init(level);
+	theBoard->init(level, scriptfile, seed);
 }
 
 //combine level up and down
@@ -46,7 +156,7 @@ void Game::changeLevel(bool up){
 	
 	delete theBoard;
 	theBoard = new Board();
-	theBoard->init(level);
+	theBoard->init(level, scriptfile, seed);
 }
 
 //swap squares, update board
@@ -59,8 +169,51 @@ void Game::swap(int x1, int y1, int x2, int y2){
 	int colour2 = theBoard->getSquare(x2, y2)->getColour();
 	int type2 = theBoard->getSquare(x2, y2)->getType();
 	
-	theBoard->update(x1, y1, colour1, type1);
-	theBoard->update(x2, y2, colour2, type2);
+	theBoard->update(x1, y1, colour1, type1, false);//doesn't affect locked state
+	theBoard->update(x2, y2, colour2, type2, false);
+	
+	
+}
+
+//cleans up swap
+bool Game::checkSwap(int x, int y, int dir){
+	if(dir == 0){//north
+		if(x-1 < 0){
+			cout << "Invalid switch!" << endl;
+		}else{
+			swap(x, y, x-1, y);
+			return true;
+		}
+	}else if(dir == 1){//south
+		if(x+1 > 9){
+			cout << "Invalid switch!" << endl;
+		}else{
+			swap(x, y, x+1, y);
+			return true;
+		}
+	}else if(dir == 2){//west
+		if(y-1 < 0){
+			cout << "Invalid switch!" << endl;
+		}else{
+			swap(x, y, x, y-1);
+			return true;
+		}
+		
+	}else if(dir == 3){//east
+		if(y+1 > 9){
+			cout << "Invalid switch!" << endl;
+		}else{
+			swap(x, y, x, y+1);
+			return true;
+		}
+	}
+	
+	return false;
+}
+
+//returns current level
+int Game::getLevel(){
+	return level;
 }
 
 bool Game::levelWon(){
@@ -69,10 +222,25 @@ bool Game::levelWon(){
 	return false;
 }
 
+bool Game::checkMatch(int chain) {
+	return theBoard->checkMatch(chain);
+}
+
+//decrement moves
+void Game::decMoves(){
+	moves--;
+}
+
 //overload operator<< called to board
-ostream &operator<<(std::ostream &out, const Game &g){
+ostream &operator<<(ostream &out, const Game &g){
 	
 	//write header output
+	out << setw(18) << left << "Level:" << right << g.level << endl;
+	out << setw(18) << left << "Score:" << right << g.score << endl;
+	out << setw(18) << left << "Moves Remaining:" << right << g.moves << endl;
+	out << setw(18) << left << "High Score:" << right << 0 << endl;//change to high score
+	out << "------------------" << endl << endl;
+	
 	
 	// std::cerr << "here in game.cc" << std::endl;
 	out << *g.theBoard;

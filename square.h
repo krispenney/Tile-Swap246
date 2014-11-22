@@ -8,6 +8,7 @@ class Square {
 	int y;
 	char type;
 	int colour;	
+	int level;
 	Square * above;
 	bool locked;
 	TextDisplay * td;
@@ -26,6 +27,8 @@ public:
 	
 	void setType(char t);
 	char getType();
+
+	void setLevel(int l);
 };
 
 #endif

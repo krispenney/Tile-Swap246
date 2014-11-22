@@ -24,7 +24,12 @@ TextDisplay::~TextDisplay() {
 	delete [] theDisplay;
 }
 
-void TextDisplay::update(int x, int y, int colour, char ch) {
+void TextDisplay::update(int x, int y, int colour, char ch, bool locked) {
+//	cerr << "locked: " << locked << endl;
+	if(locked){//set locked bit
+//		cerr << "locking " << x << " " << y << endl;
+		theDisplay[x][y*3] = 'l';
+	}
 	theDisplay[x][(y*3) + 1] = ch;
 	theDisplay[x][(y*3) + 2] = colour;
 }
