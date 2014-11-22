@@ -4,22 +4,34 @@
 #include "square.h"
 #include "textdisplay.h"
 #include <cstdlib>
-#include <ctime>
+
 
 
 class Board {
 	TextDisplay * td;
 	Square **theBoard;
+	
 public:
 	Board();
-	void init(int level, std::string filename = "");
+	void init(int level, std::string filename, int seed);
 	
 	Square *getSquare(int x, int y);
 	
+
+	void explode(int x, int y, char type, int size = 3);
+
+	
 	void update(int x, int y, int colour, char ch, bool locked);
 	void swap(Square * s1, Square * s2);
+	bool valid(int x, int y);
 	
-	bool checkMatch();
+	int checkL(int x, int y, int matchingColour);
+	bool checkH(int x, int y, int matchingColour);
+	bool checkU(int x, int y, int matchingColour);
+	int checkPsy(int x, int y, int matchingColour);
+	int checkBasic(int x, int y, int matchingColour);
+	
+	bool checkMatch(int chain);
 
 	~Board();
 
