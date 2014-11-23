@@ -1,5 +1,6 @@
 #include "board.h"
 #include "square.h"
+#include "game.h"
 #include "textdisplay.h"
 #include <string>
 #include <fstream>
@@ -259,6 +260,9 @@ void Board::explode(int x, int y, char type, int size) {
 	//cerr << "In explode, with x: " << x << " and y: " << y << " and type: " << type << endl;
 	char oldType = theBoard[x][y].getType();
 
+
+	this->destroyed++; //increases the number of tiles this match destroyed for scoring purposes
+
 	if (oldType == '_') {
 		theBoard[x][y].setType('_');
 	} else if (oldType == 'h') {
@@ -466,6 +470,7 @@ int Board::checkBasic(int x, int y, int matchingColour){
 //changed so that match is found on edge closest to origin
 //everything seems to be working now
 bool Board::checkMatch(int chain) {
+	this->destroyed = 0;
 	bool match = false;
 
 	for (int x = 0; x < 10; x++) {
@@ -587,6 +592,16 @@ bool Board::checkMatch(int chain) {
 				match = true;
 			}
 		}
+	}
+
+	if (this->destroyed == 3) {
+		Game::increaseScore(3 * 2^chain);
+	} else if (this->destroyed == 4) {
+		Game::increaseScore(2 * 4 * 2^chain);
+	} else if (this->destroyed == 5) {
+		Game::increaseScore(3 * 5 * 2^chain);
+	} else {
+		Game::increaseScore(4 * this->destroyed * 2^chain);
 	}
 
 	return match;

@@ -33,10 +33,10 @@ public:
 	void scramble();
 	void decMoves();
 	void reset();
-	static void increaseScore(int x);
 	bool levelWon();
 	bool checkMatch(int chain);
 
+	static void increaseScore(int x);
 
 	friend std::ostream &operator<<(std::ostream &out, const Game &g);
 
