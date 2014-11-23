@@ -9,18 +9,17 @@ class Game {
 	int moves;
 	Board * theBoard;
 	bool checkAll(int x, int y, int matchingColour);
-	
+
 	//command line fields
 	bool graphics;
 	int seed;
-	std::string scriptfile;
 	
 public:
 	
-	Game(int moves, int level, int seed, std::string scriptfile, bool graphics): // Default params need to go at the end
-		level(level), moves(moves), graphics(graphics),seed(seed),scriptfile(scriptfile){
+	Game(int moves, int level, int seed, std::ifstream *fin, bool graphics, bool customScript): // Default params need to go at the end
+		level(level), moves(moves), graphics(graphics),seed(seed){
 			theBoard = new Board();
-			theBoard->init(level, scriptfile, seed);
+			theBoard->init(level, seed, fin, customScript);
 		}
 	
 	~Game();

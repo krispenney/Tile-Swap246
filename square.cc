@@ -14,7 +14,7 @@ void Square::updateTD(int x, int y, int colour, char type){
 	td->update(x, y, colour, type, false);
 }
 
-void Square::moveDown(){
+void Square::moveDown(char c){
 		std::cerr << "In Movedown" << std::endl;
 
 	if (above != NULL) {
@@ -27,12 +27,12 @@ void Square::moveDown(){
 
 		td->update(x,y,colour,type, false);
 
-		above->moveDown();
+		above->moveDown(c);
 	} else {
 		int colour = 0;
 		int randColour = 0;
 		//Generate new stuff for that square
-		if (level == 0) {
+		if (c == '\0' && level == 1) {
 			randColour = rand()%6;
 			if(randColour == 0 || randColour == 1){//1/3 for white
 				colour = '0';
@@ -43,6 +43,19 @@ void Square::moveDown(){
 			}else if(randColour == 5){//1/6 for blue
 				colour = '3';
 			}
+		}else if(c == '\0' && level == 2){
+			randColour = rand()%4;
+			if(randColour == 0){
+				colour = '0';
+			}else if(randColour == 1){
+				colour = '1';
+			}else if(randColour == 2){
+				colour = '2';
+			}else if(randColour == 3){
+				colour = '3';
+			}
+		}else if(c != '\0'){
+			colour = c;
 		}
 		
 		this->setType('_');

@@ -135,7 +135,7 @@ void Game::reset(){
 	delete theBoard;
 	
 	theBoard = new Board();
-	theBoard->init(level, scriptfile, seed);
+	theBoard->init(level, seed, NULL);
 }
 
 //combine level up and down
@@ -155,7 +155,7 @@ void Game::changeLevel(bool up){
 	
 	delete theBoard;
 	theBoard = new Board();
-	theBoard->init(level, scriptfile, seed);
+	theBoard->init(level, seed, NULL);
 }
 
 //swap squares, update board

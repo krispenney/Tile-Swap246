@@ -4,6 +4,7 @@
 #include "game.h"
 #include <ctime>
 #include <cstring>
+#include <fstream>
 // #include "square.h"
 // #include "textdisplay.h"
 
@@ -19,10 +20,11 @@ int main(int argc, char *argv[]) {
 	int dir;
 	const int MAXLEVELS = 2;
 	bool graphics = true;
+	bool customScript = false;
 	int seed = time(NULL);
 	int startlevel = 0;
-	string scriptfile = "";
-	
+	string scriptfile = "sequence.txt";
+	ifstream *fin = NULL;
 	//get command line arguments
 	const char *text = "-text";
 	const char *nSeed = "-seed";
@@ -36,7 +38,8 @@ int main(int argc, char *argv[]) {
 			seed = atoi(argv[i+1]);
 			i++;
 		}else if(strcmp(argv[i], sFile) == 0){//scriptfile
-			scriptfile = argv[i+1];
+			fin = new ifstream(argv[i+1]);
+			customScript = true;
 			i++;
 		}else if(strcmp(argv[i], sLevel) == 0){//startlevel
 			startlevel = atoi(argv[i+1]);
@@ -53,7 +56,12 @@ int main(int argc, char *argv[]) {
 	cerr << startlevel << endl;
 	cerr <<"------------" << endl;*/
 	
-	Game *theGame = new Game(10, startlevel, seed, scriptfile, graphics);
+	if(fin == NULL){//sequence.txt
+		
+		fin = new ifstream(scriptfile.c_str());
+	}
+	
+	Game *theGame = new Game(10, startlevel, seed, fin, graphics, customScript);
 	
 	// std::cerr << "here" << std::endl;
 	cout << *theGame << endl;
