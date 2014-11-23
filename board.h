@@ -4,16 +4,22 @@
 #include "square.h"
 #include "textdisplay.h"
 #include <cstdlib>
-
-
+#include <sstream>
+#include <fstream>
 
 class Board {
 	TextDisplay * td;
 	Square **theBoard;
 	
+	std::ifstream *source;
+	std::string extra;
+	std::istringstream *extras;
+	
+	void readFromFile();
+	bool checkNeighbours(int x, int y, char colour);
 public:
 	Board();
-	void init(int level, std::string filename, int seed);
+	void init(int level, int seed, std::ifstream *fin, bool customScript = false);
 	
 	Square *getSquare(int x, int y);
 	
