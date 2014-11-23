@@ -509,7 +509,7 @@ bool Board::checkMatch(int chain) {
 			
 			matchVal = checkBasic(x, y, matchingColour);//basic
 			
-			if(theBoard[x][y].getType() == '_' && matchVal != -1){
+			if(/*theBoard[x][y].getType() == '_' &&*/ matchVal != -1){
 				cerr << "Basic match" << endl;
 				
 				if(matchVal == 0){
