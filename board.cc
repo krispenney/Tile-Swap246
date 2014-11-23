@@ -21,6 +21,7 @@ Board::~Board(){
 	delete [] theBoard;
 }
 
+//reads in a valid board from a file
 void Board::readFromFile(){
 	/* colours:    Squares:
 	 * White: 0    Basic: _
@@ -54,6 +55,7 @@ void Board::readFromFile(){
 	}
 }
 
+//initialize the current board at a level
 void Board::init(int level, int seed, std::ifstream *fin, bool customScript){
 	
 	string zeroFName = "sequence.txt";
@@ -77,7 +79,7 @@ void Board::init(int level, int seed, std::ifstream *fin, bool customScript){
 	
 	if(level == 0){
 	    
-		readFromFile();
+		readFromFile();//read board from file
 		while(!source->eof()){
 			*source >> extra;
 		}
@@ -87,11 +89,11 @@ void Board::init(int level, int seed, std::ifstream *fin, bool customScript){
 	}else if(level == 1){
 		
 		if(!customScript){
-			cerr << "random level 1" << endl;
+	//		cerr << "random level 1" << endl;
 			int specialCount = 1;
 			locked = false;
 			srand(seed);
-			
+			extras = NULL;
 			for(int i = 0; i < 10; i++){
 				theBoard[i] = new Square[10];
 				int randColour = 0;
@@ -149,7 +151,7 @@ void Board::init(int level, int seed, std::ifstream *fin, bool customScript){
 				}
 			}
 		}else{
-			cerr << "scripted level 1" << endl;
+	//		cerr << "scripted level 1" << endl;
 			readFromFile();
 			while(!source->eof()){
 				*source >> extra;
@@ -164,7 +166,7 @@ void Board::init(int level, int seed, std::ifstream *fin, bool customScript){
 	}else if(level == 2){
 		
 		if(!customScript){
-			cerr << "enter random level 2" << endl;
+	//		cerr << "enter random level 2" << endl;
 			int totalLocked = 20;//20% locked
 			srand(seed);
 			type = '_';
@@ -364,7 +366,7 @@ int Board::checkL(int x, int y, int matchingColour){
 	   theBoard[x+2][y].getColour() == matchingColour &&
 	   theBoard[x][y+1].getColour() == matchingColour &&
 	   theBoard[x][y+2].getColour() == matchingColour){//right and down
-		cerr << x << " " << y << " right and down" << endl;
+	//	cerr << x << " " << y << " right and down" << endl;
 		return 0;
 	}else if(valid(x+1, y) && valid(x+2, y) && valid(x+2, y+1) && valid(x+2, y+2)
 			&&
