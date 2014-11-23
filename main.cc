@@ -77,9 +77,9 @@ int main(int argc, char *argv[]) {
 			bool match = false;
 			int chain = 1;
 			
-			if(theGame->checkSwap(x, y, dir)){
+	//		if(theGame->checkSwap(x, y, dir)){
 				match = theGame->checkMatch(chain);
-			}
+	//		}
 			
 			if (match) {
 				while (match) {

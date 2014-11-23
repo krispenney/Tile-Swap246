@@ -160,7 +160,7 @@ void Game::changeLevel(bool up){
 
 //swap squares, update board
 void Game::swap(int x1, int y1, int x2, int y2){
-	
+	cerr << "Entering Swap" << endl;
 	theBoard->swap(theBoard->getSquare(x1, y1), theBoard->getSquare(x2, y2));
 	
 	int colour1 = theBoard->getSquare(x1, y1)->getColour();

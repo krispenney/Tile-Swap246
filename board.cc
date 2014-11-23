@@ -133,7 +133,7 @@ void Board::init(int level, int seed, std::ifstream *fin, bool customScript){
 						type = '_';
 						specialCount++;
 					}
-					cerr << i << " " << j << " " << type << endl;
+				//	cerr << i << " " << j << " " << type << endl;
 					Square * sq = new Square(i, j, colour, type, locked, td);
 					if (i != 0) {
 						sq->setAbove(&theBoard[i-1][j]);
@@ -231,7 +231,7 @@ void Board::init(int level, int seed, std::ifstream *fin, bool customScript){
 // Unstable: b
 // Psychedelic: p
 void Board::explode(int x, int y, char type, int size) {
-	cerr << "In explode, with x: " << x << " and y: " << y << " and type: " << type << endl;
+	//cerr << "In explode, with x: " << x << " and y: " << y << " and type: " << type << endl;
 	char oldType = theBoard[x][y].getType();
 
 	if (oldType == '_') {
@@ -453,7 +453,8 @@ bool Board::checkMatch(int chain) {
 
 	for (int x = 0; x < 10; x++) {
 		for (int y = 0; y < 10; y++) {
-			
+		//	cerr << "Check Match" << endl;
+		//	cerr << "X: " << x << " Y: " << y << endl;
 			int matchingColour = theBoard[x][y].getColour();
 			int matchVal = checkPsy(x, y, matchingColour);
 			

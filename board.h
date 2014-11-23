@@ -5,7 +5,7 @@
 #include "textdisplay.h"
 #include <cstdlib>
 #include <sstream>
-
+#include <fstream>
 
 class Board {
 	TextDisplay * td;
