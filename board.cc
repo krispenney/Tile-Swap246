@@ -83,7 +83,7 @@ void Board::init(int level, int seed, std::ifstream *fin, bool customScript){
 		}
 		extras = new istringstream(extra);
 		delete source;
-		source = new ifstream(zeroFName);
+		source = new ifstream(zeroFName.c_str());
 	}else if(level == 1){
 		
 		if(!customScript){
@@ -140,6 +140,8 @@ void Board::init(int level, int seed, std::ifstream *fin, bool customScript){
 					} else {
 						sq->setAbove(NULL);
 					}
+					
+					sq->setLevel(level);
 					
 					theBoard[i][j] = *sq;
 					
