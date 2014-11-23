@@ -477,26 +477,26 @@ bool Board::checkMatch(int chain) {
 					explode(x, y+2, 'D');
 				}else if(matchVal == 1){//up and right
 					cerr << "up and right" << endl;
-					explode(x, y, 'D');
+					explode(x, y, 'b');
 					explode(x+1, y, 'D');
-					explode(x+2, y, 'b');
+					explode(x+2, y, 'D');
 					explode(x+2, y+1, 'D');
 					explode(x+1, y+2, 'D');
 					
 				}else if(matchVal == 2){//down and left
 					cerr << "down and left" << endl;
-					explode(x, y, 'D');
+					explode(x, y, 'b');
 					explode(x, y+1, 'D');
-					explode(x, y+2, 'b');
+					explode(x, y+2, 'D');
 					explode(x+1, y+2, 'D');
 					explode(x+2, y+2, 'D');
 					
 				}else if(matchVal == 3){//up and left
 					cerr << "up and left" << endl;
 
-					explode(x, y, 'D');
+					explode(x, y, 'b');
 					explode(x+1, y, 'D');
-					explode(x+2, y, 'b');
+					explode(x+2, y, 'D');
 					explode(x+2, y-1, 'D');
 					explode(x+2, y-2, 'D');
 					

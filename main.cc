@@ -77,6 +77,7 @@ int main(int argc, char *argv[]) {
 				while (match) {
 					cerr << "I HAVE A LOOPING MATCH~~~" << endl;
 					match = theGame->checkMatch(chain);
+					// match = false;
 					chain++;
 				}
 				
