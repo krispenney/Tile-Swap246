@@ -16,7 +16,7 @@ class Board {
 	std::istringstream *extras;
 	
 	void readFromFile();
-	
+	bool checkNeighbours(int x, int y, char colour);
 public:
 	Board();
 	void init(int level, int seed, std::ifstream *fin, bool customScript = false);

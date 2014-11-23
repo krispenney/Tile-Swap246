@@ -55,6 +55,26 @@ void Board::readFromFile(){
 	}
 }
 
+//checks if valid cooridinates
+bool Board::valid(int x, int y){
+	if(x >= 0 && x < 10 && y >= 0 && y < 10){
+		return true;
+	}
+	
+	return false;
+}
+
+//checks to ensure no matches are made in initialization
+bool Board::checkNeighbours(int x, int y, char colour){
+
+	if((!valid(x-1, y) || colour != theBoard[x-1][y].getColour()) && (!valid(x, y-1) || colour != theBoard[x][y-1].getColour())){
+		return false;
+	}
+	return true;
+
+	
+}
+
 //initialize the current board at a level
 void Board::init(int level, int seed, std::ifstream *fin, bool customScript){
 	
@@ -102,25 +122,24 @@ void Board::init(int level, int seed, std::ifstream *fin, bool customScript){
 				for(int j = 0; j < 10; j++){
 					
 					//generate colour
-					
-					randColour = rand()%6;//generate for colour
-					
-					if(randColour == 0 || randColour == 1){//1/3 for white
-						colour = '0';
-					}else if(randColour == 2 || randColour == 3){//1/3 for red
-						colour = '1';
-					}else if(randColour == 4){//1/6 for green
-						colour = '2';
-					}else if(randColour == 5){//1/6 for blue
-						colour = '3';
-					}
-					
+					do{
+			//			cerr << "loop" << endl;
+						randColour = rand()%6;//generate for colour
+						if(randColour == 0 || randColour == 1){//1/3 for white
+							colour = '0';
+						}else if(randColour == 2 || randColour == 3){//1/3 for red
+							colour = '1';
+						}else if(randColour == 4){//1/6 for green
+							colour = '2';
+						}else if(randColour == 5){//1/6 for blue
+							colour = '3';
+						}
+					}while(checkNeighbours(i, j, colour));
+						
 					if(specialCount == 5){//every 5th is special
 						randType = rand()%5;
 						
-						if(randType == 0){//basic
-							type = '_';
-						}else if(randType == 1){//lateral
+						if(randType == 1){//lateral
 							type = 'h';
 						}else if(randType == 2){//upright
 							type = 'v';
@@ -177,7 +196,6 @@ void Board::init(int level, int seed, std::ifstream *fin, bool customScript){
 				
 				for(int j = 0; j < 10; j++){
 					bool lock = rand()%2;
-					randColour = rand()%4;//generate for colour
 					
 					if(lock && totalLocked > 0){
 				//		cerr << "locked:" << i << " " << j << endl;
@@ -188,16 +206,19 @@ void Board::init(int level, int seed, std::ifstream *fin, bool customScript){
 						lock = false;
 					}
 					//generate colour
+					do{
+						randColour = rand()%4;//generate for colour
 					
-					if(randColour == 0){//1/3 for white
-						colour = '0';
-					}else if(randColour == 1){//1/3 for red
-						colour = '1';
-					}else if(randColour == 2){//1/6 for green
-						colour = '2';
-					}else if(randColour == 3){//1/6 for blue
-						colour = '3';
-					}
+						if(randColour == 0){//1/3 for white
+							colour = '0';
+						}else if(randColour == 1){//1/3 for red
+							colour = '1';
+						}else if(randColour == 2){//1/6 for green
+							colour = '2';
+						}else if(randColour == 3){//1/6 for blue
+							colour = '3';
+						}
+					}while(checkNeighbours(i, j, colour));
 					Square * sq = new Square(i, j, colour, '_', lock, td);
 					if (i != 0) {
 						sq->setAbove(&theBoard[i-1][j]);
@@ -349,14 +370,6 @@ void Board::swap(Square * s1, Square * s2){
 	s2->setType(tmpType);
 }
 
-//checks if valid cooridinates
-bool Board::valid(int x, int y){
-	if(x >= 0 && x < 10 && y >= 0 && y < 10){
-		return true;
-	}
-	
-	return false;
-}
 
 //check for L
 int Board::checkL(int x, int y, int matchingColour){
