@@ -16,7 +16,7 @@ void Square::updateTD(int x, int y, int colour, char type){
 
 void Square::moveDown(char c){
 //		std::cerr << "In Movedown" << std::endl;
-//	std::cerr<< "Char c: " << c << std::endl;
+	//std::cerr<< "Char c: " << (c == '\0') << std::endl;
 	if (above != NULL) {
 	//=	 std::cerr << "x: " << x << " y: " << y << std::endl;
 		int aboveType = above->getType();
@@ -46,6 +46,7 @@ void Square::moveDown(char c){
 				colour = '3';
 			}
 		}else if(c == '\0' && level == 2){
+		//	std::cerr << "generating for level 2" << std::endl;
 			randColour = rand()%4;
 			if(randColour == 0){
 				colour = '0';

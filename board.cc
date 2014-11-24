@@ -187,11 +187,12 @@ void Board::init(int level, int seed, std::ifstream *fin, bool customScript){
 	}else if(level == 2){
 		
 		if(!customScript){
-	//		cerr << "enter random level 2" << endl;
+			cerr << "enter random level 2" << endl;
 			int totalLocked = 20;//20% locked
 			srand(seed);
 			type = '_';
-	
+			extras = NULL;
+			
 			for(int i = 0; i < 10; i++){
 				theBoard[i] = new Square[10];
 				int randColour = 0;
@@ -236,7 +237,7 @@ void Board::init(int level, int seed, std::ifstream *fin, bool customScript){
 				}
 			}
 		}else{
-		//	cerr << "enter scripted level 2" << endl;
+			cerr << "enter scripted level: " << level << endl;
 			readFromFile(level);
 			while(!source->eof()){
 				*source >> extra;
@@ -258,12 +259,12 @@ void Board::init(int level, int seed, std::ifstream *fin, bool customScript){
 // Unstable: b
 // Psychedelic: p
 void Board::explode(int x, int y, char type, int size) {
-	//cerr << "In explode, with x: " << x << " and y: " << y << " and type: " << type << endl;
+	cerr << "In explode, with x: " << x << " and y: " << y << " and type: " << type << endl;
 	char oldType = theBoard[x][y].getType();
 
 	if (oldType == '_') {
 		theBoard[x][y].setType('_');
-	} else if (oldType == 'h') {
+	} else if (oldType == 'v') {
 		theBoard[x][y].setType('_');
 
 		for (int i = 0; i < 10; i++) {
@@ -273,7 +274,7 @@ void Board::explode(int x, int y, char type, int size) {
 				}
 			}
 		}
-	} else if (oldType == 'v') {
+	} else if (oldType == 'h') {
 		// upright
 		theBoard[x][y].setType('_');
 
@@ -334,12 +335,17 @@ void Board::explode(int x, int y, char type, int size) {
 		theBoard[x][y].setType('_');
 		char c = '\0';
 		if(extra != ""){
+			cerr << extras->eof() << endl;
+			*extras >> c;
 			if(extras->eof()){
+				cerr << "here" << endl;
 				delete extras;
 				extras = new istringstream(extra);
+				*extras >> c;
 			}
-			*extras >> c;
+			
 		}
+		cerr << "colour: " << c << endl;
 		theBoard[x][y].moveDown(c);
 	}
 }
