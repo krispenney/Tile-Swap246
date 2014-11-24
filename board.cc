@@ -139,15 +139,15 @@ void Board::init(int level, int seed, std::ifstream *fin, bool customScript){
 					}while(checkNeighbours(i, j, colour));
 						
 					if(specialCount == 5){//every 5th is special
-						randType = rand()%5;
+						randType = rand()%4;
 						
-						if(randType == 1){//lateral
+						if(randType == 0){//lateral
 							type = 'h';
-						}else if(randType == 2){//upright
+						}else if(randType == 1){//upright
 							type = 'v';
-						}else if(randType == 3){//unstable
+						}else if(randType == 2){//unstable
 							type = 'b';
-						}else if(randType == 4){//psychadelic
+						}else if(randType == 3){//psychadelic
 							type = 'p';
 						}
 						
