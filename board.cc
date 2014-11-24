@@ -237,7 +237,7 @@ void Board::init(int level, int seed, std::ifstream *fin, bool customScript){
 				}
 			}
 		}else{
-			cerr << "enter scripted level: " << level << endl;
+		//	cerr << "enter scripted level: " << level << endl;
 			readFromFile(level);
 			while(!source->eof()){
 				*source >> extra;
@@ -259,17 +259,25 @@ void Board::init(int level, int seed, std::ifstream *fin, bool customScript){
 // Unstable: b
 // Psychedelic: p
 void Board::explode(int x, int y, char type, int size) {
-	cerr << "In explode, with x: " << x << " and y: " << y << " and type: " << type << endl;
-	char oldType = theBoard[x][y].getType();
-
+	//cerr << "In explode, with x: " << x << " and y: " << y << " and type: " << type << endl;
+	char oldType;
+	if(valid(x, y)){
+		oldType = theBoard[x][y].getType();
+	}else{
+		return;
+	}
+	
+//	cerr << "oldtype: " << oldType << endl;
+	//cerr << *this;
 	if (oldType == '_') {
 		theBoard[x][y].setType('_');
 	} else if (oldType == 'v') {
 		theBoard[x][y].setType('_');
-
+	//	cerr << "exploding upright" << endl;
 		for (int i = 0; i < 10; i++) {
 			if (i != x) {
 				if (valid(i,y)) {
+			//		cerr << "calling explode: " << i << " " << y << " " << oldType << endl;
 					explode(i, y, 'D');
 				}
 			}
@@ -277,10 +285,11 @@ void Board::explode(int x, int y, char type, int size) {
 	} else if (oldType == 'h') {
 		// upright
 		theBoard[x][y].setType('_');
-
+	//	cerr << "exploding lateral" << endl;
 		for (int i = 0; i < 10; i++) {
 			if (i != y) {
 				if (valid(x,i)) {
+				//	cerr << "calling explode: " << x << " " << i << " " << oldType << endl;
 					explode(x, i, 'D');
 				}
 			}
@@ -290,12 +299,13 @@ void Board::explode(int x, int y, char type, int size) {
 		// unstable makes a different sized hole depending on what kind of match it was in
 		// Default is 3, but can be passed as a 4th parameter
 		theBoard[x][y].setType('_');
-
+	//	cerr << "exploding unstable square" << endl;
 		if (size == 3) {
 			for (int i = -1; i < 2; i++) {
 				for (int j = -1; j < 2; j++) {
 					if (i != x and j != y) {
 						if (valid(x + i, y + j)) {
+					//		cerr << "calling explode: " << x+i << " " << y+j << " " << oldType << endl;
 							explode(x + i, y + j, 'D');
 						}
 					}
@@ -306,6 +316,7 @@ void Board::explode(int x, int y, char type, int size) {
 				for (int j = -2; j < 3; j++) {
 					if (i != x and j != y) {
 						if (valid(x + i, y + j)) {
+				//			cerr << "calling explode: " << x+i << " " << y+j << " " << oldType << endl;
 							explode(x + i, y + j, 'D');
 						}
 					}
@@ -316,11 +327,12 @@ void Board::explode(int x, int y, char type, int size) {
 		// Psychedelic
 		int psyCol = theBoard[x][y].getColour();
 		theBoard[x][y].setType('_');
-
+//cerr << "exploding psychedelic" << endl;
 		for (int i = 0; i < 10; i++) {
 			for (int j = 0; j < 10; j++) {
 				if (x != i and y != j and valid(i,j)) {
 					if (theBoard[i][j].getColour() == psyCol) {
+					//	cerr << "calling explode: " << i << " " << j << " " << oldType << endl;
 						explode(i,j,'D');
 					}
 				}
@@ -332,20 +344,21 @@ void Board::explode(int x, int y, char type, int size) {
 		theBoard[x][y].setType(type);
 		theBoard[x][y].updateTD(x,y,theBoard[x][y].getColour(), type);
 	} else {
+	
 		theBoard[x][y].setType('_');
 		char c = '\0';
 		if(extra != ""){
-			cerr << extras->eof() << endl;
+	//		cerr << extras->eof() << endl;
 			*extras >> c;
 			if(extras->eof()){
-				cerr << "here" << endl;
+			//	cerr << "here" << endl;
 				delete extras;
 				extras = new istringstream(extra);
 				*extras >> c;
 			}
 			
 		}
-		cerr << "colour: " << c << endl;
+	//	cerr << "colour: " << c << endl;
 		theBoard[x][y].moveDown(c);
 	}
 }
