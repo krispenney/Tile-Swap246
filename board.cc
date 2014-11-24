@@ -257,16 +257,16 @@ void Board::init(int level, int seed, std::ifstream *fin, bool customScript){
 // Unstable: b
 // Psychedelic: p
 void Board::explode(int x, int y, char type, int size) {
-	//cerr << "In explode, with x: " << x << " and y: " << y << " and type: " << type << endl;
+	cerr << "In explode, with x: " << x << " and y: " << y << " and type: " << type << endl;
 	char oldType = theBoard[x][y].getType();
 
 
 	this->destroyed++; //increases the number of tiles this match destroyed for scoring purposes
 
 	if (oldType == '_') {
-		theBoard[x][y].setType('_');
+		theBoard[x][y].setType('D');
 	} else if (oldType == 'h') {
-		theBoard[x][y].setType('_');
+		theBoard[x][y].setType('D');
 
 		for (int i = 0; i < 10; i++) {
 			if (i != x) {
@@ -277,7 +277,7 @@ void Board::explode(int x, int y, char type, int size) {
 		}
 	} else if (oldType == 'v') {
 		// upright
-		theBoard[x][y].setType('_');
+		theBoard[x][y].setType('D');
 
 		for (int i = 0; i < 10; i++) {
 			if (i != y) {
@@ -290,7 +290,7 @@ void Board::explode(int x, int y, char type, int size) {
 		// unstable
 		// unstable makes a different sized hole depending on what kind of match it was in
 		// Default is 3, but can be passed as a 4th parameter
-		theBoard[x][y].setType('_');
+		theBoard[x][y].setType('D');
 
 		if (size == 3) {
 			for (int i = -1; i < 2; i++) {
@@ -316,7 +316,7 @@ void Board::explode(int x, int y, char type, int size) {
 	} else if (oldType == 'p') {
 		// Psychedelic
 		int psyCol = theBoard[x][y].getColour();
-		theBoard[x][y].setType('_');
+		theBoard[x][y].setType('D');
 
 		for (int i = 0; i < 10; i++) {
 			for (int j = 0; j < 10; j++) {
@@ -333,16 +333,7 @@ void Board::explode(int x, int y, char type, int size) {
 		theBoard[x][y].setType(type);
 		theBoard[x][y].updateTD(x,y,theBoard[x][y].getColour(), type);
 	} else {
-		theBoard[x][y].setType('_');
-		char c = '\0';
-		if(extra != ""){
-			if(extras->eof()){
-				delete extras;
-				extras = new istringstream(extra);
-			}
-			*extras >> c;
-		}
-		theBoard[x][y].moveDown(c);
+		theBoard[x][y].setType('D');
 	}
 }
 
@@ -469,14 +460,14 @@ int Board::checkBasic(int x, int y, int matchingColour){
 
 //changed so that match is found on edge closest to origin
 //everything seems to be working now
-bool Board::checkMatch(int chain) {
-	this->destroyed = 0;
+bool Board::checkMatch(int chain) { 
 	bool match = false;
 
 	for (int x = 0; x < 10; x++) {
 		for (int y = 0; y < 10; y++) {
-		//	cerr << "Check Match" << endl;
-		//	cerr << "X: " << x << " Y: " << y << endl;
+			this->destroyed = 0;
+			//	cerr << "Check Match" << endl;
+			//	cerr << "X: " << x << " Y: " << y << endl;
 			int matchingColour = theBoard[x][y].getColour();
 			int matchVal = checkPsy(x, y, matchingColour);
 			
@@ -485,19 +476,19 @@ bool Board::checkMatch(int chain) {
 				
 				if(matchVal == 1){//vertical
 					cerr << "vertical" << endl;
-					explode(x, y, 'D');
-					explode(x+1, y, 'D');
-					explode(x+2, y, 'p');
-					explode(x+3, y, 'D');
-					explode(x+4, y, 'D');
+					if (theBoard[x][y].getType() != 'D') explode(x, y, 'D');
+					if (theBoard[x + 1][y].getType() != 'D') explode(x+1, y, 'D');
+					if (theBoard[x + 2][y].getType() != 'D') explode(x+2, y, 'p');
+					if (theBoard[x + 3][y].getType() != 'D') explode(x+3, y, 'D');
+					if (theBoard[x + 4][y].getType() != 'D') explode(x+4, y, 'D');
 					
 				}else if(matchVal == 2){//horizontal
 					cerr << "horizontal" << endl;
-					explode(x, y, 'D');
-					explode(x, y+1, 'D');
-					explode(x, y+2, 'p');
-					explode(x, y+3, 'D');
-					explode(x, y+4, 'D');
+					if (theBoard[x][y].getType() != 'D') explode(x, y, 'D');
+					if (theBoard[x][y+1].getType() != 'D') explode(x, y+1, 'D');
+					if (theBoard[x][y+2].getType() != 'D') explode(x, y+2, 'p');
+					if (theBoard[x][y+3].getType() != 'D')explode(x, y+3, 'D');
+					if (theBoard[x][y+4].getType() != 'D')explode(x, y+4, 'D');
 				}
 				
 				match = true;
@@ -505,10 +496,10 @@ bool Board::checkMatch(int chain) {
 			}else if(checkH(x, y, matchingColour)){//lateral
 				cerr << "lateral square" << endl;
 				
-				explode(x, y, 'D');
-				explode(x, y+1, 'h');//could add random to select x+1 or x+2
-				explode(x, y+2, 'D');
-				explode(x, y+3, 'D');
+				if (theBoard[x][y].getType() != 'D') explode(x, y, 'D');
+				if (theBoard[x][y+1].getType() != 'D') explode(x, y+1, 'h');//could add random to select x+1 or x+2
+				if (theBoard[x][y+3].getType() != 'D') explode(x, y+2, 'D');
+				if (theBoard[x][y+4].getType() != 'D') explode(x, y+3, 'D');
 				
 				match = true;
 				continue;
@@ -516,10 +507,10 @@ bool Board::checkMatch(int chain) {
 			}else if(checkU(x, y, matchingColour)){//Upright
 				cerr << "upright square" << endl;
 				
-				explode(x, y, 'D');
-				explode(x+1, y, 'v');//could add random to select x+1 or x+2
-				explode(x+2, y, 'D');
-				explode(x+3, y, 'D');
+				if (theBoard[x][y].getType() != 'D') explode(x, y, 'D');
+				if (theBoard[x+1][y].getType() != 'D') explode(x+1, y, 'v');//could add random to select x+1 or x+2
+				if (theBoard[x+2][y].getType() != 'D') explode(x+2, y, 'D');
+				if (theBoard[x+3][y].getType() != 'D') explode(x+3, y, 'D');
 				
 				match = true;
 				continue;
@@ -533,35 +524,35 @@ bool Board::checkMatch(int chain) {
 				
 				if(matchVal == 0){//down and right
 					cerr << "Down and right" << endl;
-					explode(x, y, 'b');
-					explode(x+1, y, 'D');
-					explode(x+2, y, 'D');
-					explode(x, y+1, 'D');
-					explode(x, y+2, 'D');
+					if (theBoard[x][y].getType() != 'D') explode(x, y, 'b');
+					if (theBoard[x+1][y].getType() != 'D') explode(x+1, y, 'D');
+					if (theBoard[x+2][y].getType() != 'D') explode(x+2, y, 'D');
+					if (theBoard[x][y+1].getType() != 'D') explode(x, y+1, 'D');
+					if (theBoard[x][y+2].getType() != 'D') explode(x, y+2, 'D');
 				}else if(matchVal == 1){//up and right
 					cerr << "up and right" << endl;
-					explode(x, y, 'D');
-					explode(x+1, y, 'D');
-					explode(x+2, y, 'b');
-					explode(x+2, y+1, 'D');
-					explode(x+1, y+2, 'D');
+					if (theBoard[x][y].getType() != 'D') explode(x, y, 'D');
+					if (theBoard[x+1][y].getType() != 'D') explode(x+1, y, 'D');
+					if (theBoard[x+2][y].getType() != 'D') explode(x+2, y, 'b');
+					if (theBoard[x+2][y+1].getType() != 'D') explode(x+2, y+1, 'D');
+					if (theBoard[x+1][y+2].getType() != 'D') explode(x+1, y+2, 'D');
 					
 				}else if(matchVal == 2){//down and left
 					cerr << "down and left" << endl;
-					explode(x, y, 'D');
-					explode(x, y+1, 'D');
-					explode(x, y+2, 'b');
-					explode(x+1, y+2, 'D');
-					explode(x+2, y+2, 'D');
+					if (theBoard[x][y].getType() != 'D') explode(x, y, 'D');
+					if (theBoard[x][y+1].getType() != 'D') explode(x, y+1, 'D');
+					if (theBoard[x][y+2].getType() != 'D') explode(x, y+2, 'b');
+					if (theBoard[x+1][y+2].getType() != 'D') explode(x+1, y+2, 'D');
+					if (theBoard[x+2][y+2].getType() != 'D') explode(x+2, y+2, 'D');
 					
 				}else if(matchVal == 3){//up and left
 					cerr << "up and left" << endl;
 
-					explode(x, y, 'D');
-					explode(x+1, y, 'D');
-					explode(x+2, y, 'b');
-					explode(x+2, y-1, 'D');
-					explode(x+2, y-2, 'D');
+					if (theBoard[x][y].getType() != 'D') explode(x, y, 'D');
+					if (theBoard[x+1][y].getType() != 'D') explode(x+1, y, 'D');
+					if (theBoard[x+2][y].getType() != 'D') explode(x+2, y, 'b');
+					if (theBoard[x+2][y-1].getType() != 'D') explode(x+2, y-1, 'D');
+					if (theBoard[x+2][y-2].getType() != 'D') explode(x+2, y-2, 'D');
 					
 				}
 				
@@ -577,31 +568,46 @@ bool Board::checkMatch(int chain) {
 				
 				if(matchVal == 0){
 					cerr << "vertical" << endl;
-					explode(x,y,'D');
-					explode(x+1, y,'D');
-					explode(x+2,y,'D');
+					if (theBoard[x][y].getType() != 'D') explode(x,y,'D');
+					if (theBoard[x+1][y].getType() != 'D') explode(x+1, y,'D');
+					if (theBoard[x+2][y].getType() != 'D') explode(x+2,y,'D');
 					
 					
 				}else if(matchVal == 1){
 					cerr << "horizontal" << endl;
-					explode(x,y,'D');
-					explode(x,y+1,'D');
-					explode(x,y+2,'D');
+					if (theBoard[x][y].getType() != 'D') explode(x,y,'D');
+					if (theBoard[x][y+1].getType() != 'D') explode(x,y+1,'D');
+					if (theBoard[x][y+2].getType() != 'D') explode(x,y+2,'D');
 					
 				}
 				match = true;
 			}
+
+			if (this->destroyed == 3) {
+				Game::increaseScore(3 * 2^chain);
+			} else if (this->destroyed == 4) {
+				Game::increaseScore(2 * 4 * 2^chain);
+			} else if (this->destroyed == 5) {
+				Game::increaseScore(3 * 5 * 2^chain);
+			} else {
+				Game::increaseScore(4 * this->destroyed * 2^chain);
+			}
+
 		}
 	}
 
-	if (this->destroyed == 3) {
-		Game::increaseScore(3 * 2^chain);
-	} else if (this->destroyed == 4) {
-		Game::increaseScore(2 * 4 * 2^chain);
-	} else if (this->destroyed == 5) {
-		Game::increaseScore(3 * 5 * 2^chain);
-	} else {
-		Game::increaseScore(4 * this->destroyed * 2^chain);
+	for (int x = 0; x < 10; x++) {
+		for (int y = 0; y < 10; y++) {
+			char c = '\0';
+			if(extra != ""){
+				if(extras->eof()){
+					delete extras;
+					extras = new istringstream(extra);
+				}
+				*extras >> c;
+			}
+			theBoard[x][y].moveDown(c);
+		}
 	}
 
 	return match;
