@@ -22,7 +22,7 @@ Board::~Board(){
 }
 
 //reads in a valid board from a file
-void Board::readFromFile(){
+void Board::readFromFile(int level){
 	/* colours:    Squares:
 	 * White: 0    Basic: _
 	 * Red: 1      Lateral: h
@@ -47,6 +47,8 @@ void Board::readFromFile(){
 			} else {
 				sq->setAbove(NULL);
 			}
+			
+			sq->setLevel(level);
 			
 			theBoard[i][j] = *sq;
 			
@@ -99,13 +101,13 @@ void Board::init(int level, int seed, std::ifstream *fin, bool customScript){
 	
 	if(level == 0){
 	    
-		readFromFile();//read board from file
+		readFromFile(level);//read board from file
 		while(!source->eof()){
 			*source >> extra;
 		}
-		extras = new istringstream(extra);
+		extras = new istringstream(extra);//set colours line
 		delete source;
-		source = new ifstream(zeroFName.c_str());
+		source = new ifstream(zeroFName.c_str());//set back to default
 	}else if(level == 1){
 		
 		if(!customScript){
@@ -171,7 +173,7 @@ void Board::init(int level, int seed, std::ifstream *fin, bool customScript){
 			}
 		}else{
 	//		cerr << "scripted level 1" << endl;
-			readFromFile();
+			readFromFile(level);
 			while(!source->eof()){
 				*source >> extra;
 			}
@@ -234,8 +236,8 @@ void Board::init(int level, int seed, std::ifstream *fin, bool customScript){
 				}
 			}
 		}else{
-			cerr << "enter scripted level 2" << endl;
-			readFromFile();
+		//	cerr << "enter scripted level 2" << endl;
+			readFromFile(level);
 			while(!source->eof()){
 				*source >> extra;
 			}
@@ -408,10 +410,22 @@ int Board::checkL(int x, int y, int matchingColour){
 
 //Lateral Square
 bool Board::checkH(int x, int y, int matchingColour){
-	if(valid(x, y+1) && valid(x, y+2) && valid(x, y+3) &&
+	if((valid(x, y+1) && valid(x, y+2) && valid(x, y+3) &&//left
 	   theBoard[x][y+1].getColour() == matchingColour &&
 	   theBoard[x][y+2].getColour() == matchingColour &&
-	   theBoard[x][y+3].getColour() == matchingColour){
+	   theBoard[x][y+3].getColour() == matchingColour) ||
+	   (valid(x, y-1) && valid(x, y+1) && valid(x, y+2) &&//2nd
+		theBoard[x][y-1].getColour() == matchingColour &&
+		theBoard[x][y+1].getColour() == matchingColour &&
+		theBoard[x][y+2].getColour() == matchingColour) ||
+	   (valid(x, y-2) && valid(x, y-1) && valid(x, y+1) &&//3rd
+		theBoard[x][y-2].getColour() == matchingColour &&
+		theBoard[x][y-1].getColour() == matchingColour &&
+		theBoard[x][y+1].getColour() == matchingColour) ||
+	   (valid(x, y-3) && valid(x, y-2) && valid(x, y-1) &&//right
+		theBoard[x][y-3].getColour() == matchingColour &&
+		theBoard[x][y-2].getColour() == matchingColour &&
+		theBoard[x][y-1].getColour() == matchingColour)){
 		return true;
 	}
 	return false;
@@ -420,10 +434,22 @@ bool Board::checkH(int x, int y, int matchingColour){
 
 //upright square
 bool Board::checkU(int x, int y, int matchingColour){
-	if(valid(x+1, y) && valid(x+2, y) && valid(x+3, y) &&
+	if((valid(x+1, y) && valid(x+2, y) && valid(x+3, y) &&//top
 	   theBoard[x+1][y].getColour() == matchingColour &&
 	   theBoard[x+2][y].getColour() == matchingColour &&
-	   theBoard[x+3][y].getColour() == matchingColour){
+	   theBoard[x+3][y].getColour() == matchingColour) ||
+	   (valid(x-1, y) && valid(x+1, y) && valid(x+2, y) &&//2nd
+		theBoard[x-1][y].getColour() == matchingColour &&
+		theBoard[x+1][y].getColour() == matchingColour &&
+		theBoard[x+2][y].getColour() == matchingColour) ||
+	   (valid(x-2, y) && valid(x-1, y) && valid(x+1, y) &&//3rd
+		theBoard[x-2][y].getColour() == matchingColour &&
+		theBoard[x-1][y].getColour() == matchingColour &&
+		theBoard[x+1][y].getColour() == matchingColour) ||
+	   (valid(x-3, y) && valid(x-2, y) && valid(x-1, y) &&//bottom
+		theBoard[x-1][y].getColour() == matchingColour &&
+		theBoard[x-2][y].getColour() == matchingColour &&
+		theBoard[x-3][y].getColour() == matchingColour)){
 		return true;
 	}
 	
@@ -432,17 +458,57 @@ bool Board::checkU(int x, int y, int matchingColour){
 
 //psychadelic
 int Board::checkPsy(int x, int y, int matchingColour){
-	if(valid(x+1, y) && valid(x+2, y) && valid(x+3, y) && valid(x+4, y) &&
+	if((valid(x+1, y) && valid(x+2, y) && valid(x+3, y) && valid(x+4, y) &&
 	   theBoard[x+1][y].getColour() == matchingColour &&
 	   theBoard[x+2][y].getColour() == matchingColour &&
 	   theBoard[x+3][y].getColour() == matchingColour &&
-	   theBoard[x+4][y].getColour() == matchingColour){//vertical
+	   theBoard[x+4][y].getColour() == matchingColour) ||
+	   (valid(x-1, y) && valid(x+1, y) && valid(x+2, y) && valid(x+3, y) &&
+		theBoard[x-1][y].getColour() == matchingColour &&
+		theBoard[x+1][y].getColour() == matchingColour &&
+		theBoard[x+2][y].getColour() == matchingColour &&
+		theBoard[x+3][y].getColour() == matchingColour) ||
+	   (valid(x-2, y) && valid(x-1, y) && valid(x+1, y) && valid(x+2, y) &&
+		theBoard[x-2][y].getColour() == matchingColour &&
+		theBoard[x-1][y].getColour() == matchingColour &&
+		theBoard[x+1][y].getColour() == matchingColour &&
+		theBoard[x+2][y].getColour() == matchingColour) ||
+	   (valid(x-3, y) && valid(x-2, y) && valid(x-1, y) && valid(x+1, y) &&
+		theBoard[x-3][y].getColour() == matchingColour &&
+		theBoard[x-2][y].getColour() == matchingColour &&
+		theBoard[x-1][y].getColour() == matchingColour &&
+		theBoard[x+1][y].getColour() == matchingColour) ||
+	   (valid(x-4, y) && valid(x-3, y) && valid(x-2, y) && valid(x-1, y) &&
+		theBoard[x-4][y].getColour() == matchingColour &&
+		theBoard[x-3][y].getColour() == matchingColour &&
+		theBoard[x-2][y].getColour() == matchingColour &&
+		theBoard[x-1][y].getColour() == matchingColour)){//vertical
 		return 1;
-	}else if(valid(x, y+1) && valid(x, y+2) && valid(x, y+3) && valid(x, y+4) &&
+	}else if((valid(x, y+1) && valid(x, y+2) && valid(x, y+3) && valid(x, y+4) &&
 			 theBoard[x][y+1].getColour() == matchingColour &&
 			 theBoard[x][y+2].getColour() == matchingColour &&
 			 theBoard[x][y+3].getColour() == matchingColour &&
-			 theBoard[x][y+4].getColour() == matchingColour){//horizontal
+			 theBoard[x][y+4].getColour() == matchingColour) ||
+			 (valid(x, y-1) && valid(x, y+1) && valid(x, y+2) && valid(x, y+3) &&
+			  theBoard[x][y-1].getColour() == matchingColour &&
+			  theBoard[x][y+1].getColour() == matchingColour &&
+			  theBoard[x][y+2].getColour() == matchingColour &&
+			  theBoard[x][y+3].getColour() == matchingColour) ||
+			 (valid(x, y-2) && valid(x, y-1) && valid(x, y+1) && valid(x, y+2) &&
+			  theBoard[x][y-2].getColour() == matchingColour &&
+			  theBoard[x][y-1].getColour() == matchingColour &&
+			  theBoard[x][y+1].getColour() == matchingColour &&
+			  theBoard[x][y+2].getColour() == matchingColour) ||
+			 (valid(x, y-3) && valid(x, y-2) && valid(x, y-1) && valid(x, y+1) &&
+			  theBoard[x][y-3].getColour() == matchingColour &&
+			  theBoard[x][y-2].getColour() == matchingColour &&
+			  theBoard[x][y-1].getColour() == matchingColour &&
+			  theBoard[x][y+1].getColour() == matchingColour) ||
+			 (valid(x, y-4) && valid(x, y-3) && valid(x, y-2) && valid(x, y-1) &&
+			  theBoard[x][y-1].getColour() == matchingColour &&
+			  theBoard[x][y-2].getColour() == matchingColour &&
+			  theBoard[x][y-3].getColour() == matchingColour &&
+			  theBoard[x][y-4].getColour() == matchingColour)){//horizontal
 		return 2;
 	}
 	return -1;
@@ -450,13 +516,25 @@ int Board::checkPsy(int x, int y, int matchingColour){
 
 //basic
 int Board::checkBasic(int x, int y, int matchingColour){
-	if(valid(x+1, y) && valid(x+2, y) &&
+	if((valid(x+1, y) && valid(x+2, y) &&//top
 	   theBoard[x+1][y].getColour() == matchingColour &&
-	   theBoard[x+2][y].getColour() == matchingColour){//vertical
+	   theBoard[x+2][y].getColour() == matchingColour) ||
+	   (valid(x+1, y) && valid(x-1, y) &&//middle
+		theBoard[x+1][y].getColour() == matchingColour &&
+		theBoard[x-1][y].getColour() == matchingColour) ||
+	   (valid(x-2, y) && valid(x-1, y) &&//bottom
+		theBoard[x-1][y].getColour() == matchingColour &&
+		theBoard[x-2][y].getColour() == matchingColour)){//vertical
 		return 0;
-	}else if(valid(x, y+1) && valid(x, y+2) &&
-			 theBoard[x][y+1].getColour() == matchingColour &&
-			 theBoard[x][y+2].getColour() == matchingColour){//horizontal
+	}else if((valid(x, y+1) && valid(x, y+2) &&
+			 theBoard[x][y+1].getColour() == matchingColour &&//left
+			 theBoard[x][y+2].getColour() == matchingColour) ||
+			 (valid(x, y+1) && valid(x, y-1) &&//middle
+			  theBoard[x][y+1].getColour() == matchingColour &&
+			  theBoard[x][y-1].getColour() == matchingColour) ||
+			 (valid(x, y-1) && valid(x, y-2) &&//right
+			  theBoard[x][y-1].getColour() == matchingColour &&
+			  theBoard[x][y-2].getColour() == matchingColour)){//horizontal
 		return 1;
 	}
 	

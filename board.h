@@ -15,7 +15,7 @@ class Board {
 	std::string extra;
 	std::istringstream *extras;
 	
-	void readFromFile();
+	void readFromFile(int level);
 	bool checkNeighbours(int x, int y, char colour);
 public:
 	Board();

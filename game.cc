@@ -99,7 +99,7 @@ bool Game::hint(bool print){
 		
 		if(match){
 			if(print){
-		//		cout << x << " " << y << " " << dir << endl;//prints if match found and print set
+				cout << x << " " << y << " " << dir << endl;//prints if match found and print set
 			}
 			return true;
 		}
