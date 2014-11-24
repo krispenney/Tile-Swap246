@@ -38,7 +38,7 @@ bool Game::hint(bool print){
 			if(theBoard->valid(i, j-1)){//west
 				swap(i, j, i, j-1);
 				if (checkAll(i, j, theBoard->getSquare(i, j)->getColour())){//check for match
-					cerr << "west" << endl;
+					//cerr << "west" << endl;
 					x = i;
 					y = j;
 					dir = 2;
@@ -52,7 +52,7 @@ bool Game::hint(bool print){
 			}else if(theBoard->valid(i-1, j)){//north
 				swap(i, j, i-1, j);
 				if (checkAll(i, j, theBoard->getSquare(i, j)->getColour())){//check for match
-					cerr << "north" << endl;
+				//	cerr << "north" << endl;
 					x = i;
 					y = j;
 					dir = 0;
@@ -67,7 +67,7 @@ bool Game::hint(bool print){
 			}else if(theBoard->valid(i, j+1)){//east
 				swap(i, j, i, j+1);
 				if (checkAll(i, j, theBoard->getSquare(i, j)->getColour())){//check for match
-					cerr << "east" << endl;
+				//	cerr << "east" << endl;
 					x = i;
 					y = j;
 					dir = 3;
@@ -82,7 +82,7 @@ bool Game::hint(bool print){
 			}else if(theBoard->valid(i+1, j+1)){//south
 				swap(i, j, i+1, j+1);
 				if (checkAll(i, j, theBoard->getSquare(i, j)->getColour())){//check for match
-					cerr << "south" << endl;
+		//			cerr << "south" << endl;
 					x = i;
 					y = j;
 					dir = 1;
@@ -135,7 +135,7 @@ void Game::reset(){
 	delete theBoard;
 	
 	theBoard = new Board();
-	theBoard->init(level, scriptfile, seed);
+	theBoard->init(level, seed, NULL);
 }
 
 //combine level up and down
@@ -155,12 +155,12 @@ void Game::changeLevel(bool up){
 	
 	delete theBoard;
 	theBoard = new Board();
-	theBoard->init(level, scriptfile, seed);
+	theBoard->init(level, seed, NULL);
 }
 
 //swap squares, update board
 void Game::swap(int x1, int y1, int x2, int y2){
-	
+//	cerr << "Entering Swap" << endl;
 	theBoard->swap(theBoard->getSquare(x1, y1), theBoard->getSquare(x2, y2));
 	
 	int colour1 = theBoard->getSquare(x1, y1)->getColour();
