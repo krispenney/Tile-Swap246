@@ -86,7 +86,7 @@ int main(int argc, char *argv[]) {
 				while (match) {
 					chain++;
 					match = theGame->checkMatch(chain);
-					// cerr << "I HAVE A LOOPING MATCH~~~" << endl;
+					cerr << "I HAVE A LOOPING MATCH~~~" << endl;
 				}
 			} else {
 				cerr << "No match made - Please try again" << endl;

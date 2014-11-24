@@ -4,6 +4,7 @@
 #include "textdisplay.h"
 #include <string>
 #include <fstream>
+#include <cmath>
 
 using namespace std;
 
@@ -584,13 +585,14 @@ bool Board::checkMatch(int chain) {
 			}
 
 			if (this->destroyed == 3) {
-				Game::increaseScore(3 * 2^chain);
+				Game::increaseScore(3 * pow(2,chain));
+				// cerr << pow(2,chain) << endl;
 			} else if (this->destroyed == 4) {
-				Game::increaseScore(2 * 4 * 2^chain);
+				Game::increaseScore(2 * 4 * pow(2,chain));
 			} else if (this->destroyed == 5) {
-				Game::increaseScore(3 * 5 * 2^chain);
+				Game::increaseScore(3 * 5 * pow(2,chain));
 			} else {
-				Game::increaseScore(4 * this->destroyed * 2^chain);
+				Game::increaseScore(4 * this->destroyed * pow(2,chain));
 			}
 
 		}
@@ -598,15 +600,17 @@ bool Board::checkMatch(int chain) {
 
 	for (int x = 0; x < 10; x++) {
 		for (int y = 0; y < 10; y++) {
-			char c = '\0';
-			if(extra != ""){
-				if(extras->eof()){
-					delete extras;
-					extras = new istringstream(extra);
+			if (theBoard[x][y].getType() == 'D') {
+				char c = '\0';
+				if(extra != ""){
+					if(extras->eof()){
+						delete extras;
+						extras = new istringstream(extra);
+					}
+					*extras >> c;
 				}
-				*extras >> c;
+				theBoard[x][y].moveDown(c);
 			}
-			theBoard[x][y].moveDown(c);
 		}
 	}
 
