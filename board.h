@@ -7,7 +7,9 @@
 #include <sstream>
 #include <fstream>
 
-class Board {
+class Board { 
+	int destroyed;
+
 	TextDisplay * td;
 	Square **theBoard;
 	

@@ -72,27 +72,26 @@ int main(int argc, char *argv[]) {
 		cin >> cmd;
 		if(cin.eof()){
 			break;
-		}else if(cmd == "switch"){//needs to check for match
+		}else if(cmd == "switch"){  //needs to check for match
 			cin >> x >> y >> dir;
 			bool match = false;
-			int chain = 1;
+			int chain = 0;
 			
 			if(theGame->checkSwap(x, y, dir)){
 				match = theGame->checkMatch(chain);
 			}
 			
 			if (match) {
+				theGame->decMoves();
 				while (match) {
-					cerr << "I HAVE A LOOPING MATCH~~~" << endl;
-					match = theGame->checkMatch(chain);
 					chain++;
+					match = theGame->checkMatch(chain);
+					// cerr << "I HAVE A LOOPING MATCH~~~" << endl;
 				}
-				
 			} else {
-				// cerr << "no match made plz" << endl;
-				// NO MATCH MADE, revert last move
+				cerr << "No match made - Please try again" << endl;
+				theGame->checkSwap(x, y, dir);
 			}
-			theGame->decMoves();
 		}else if(cmd == "levelup"){
 			if(theGame->getLevel() != MAXLEVELS){
 				theGame->changeLevel(true);

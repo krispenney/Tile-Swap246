@@ -1,5 +1,6 @@
 #include "board.h"
 #include "square.h"
+#include "game.h"
 #include "textdisplay.h"
 #include <string>
 #include <fstream>
@@ -260,6 +261,7 @@ void Board::init(int level, int seed, std::ifstream *fin, bool customScript){
 // Psychedelic: p
 void Board::explode(int x, int y, char type, int size) {
 	//cerr << "In explode, with x: " << x << " and y: " << y << " and type: " << type << endl;
+
 	char oldType;
 	if(valid(x, y)){
 		oldType = theBoard[x][y].getType();
@@ -269,6 +271,8 @@ void Board::explode(int x, int y, char type, int size) {
 	
 //	cerr << "oldtype: " << oldType << endl;
 	//cerr << *this;
+	this->destroyed++; //increases the number of tiles this match destroyed for scoring purposes
+
 	if (oldType == '_') {
 		theBoard[x][y].setType('_');
 	} else if (oldType == 'v') {
@@ -563,6 +567,7 @@ int Board::checkBasic(int x, int y, int matchingColour){
 //changed so that match is found on edge closest to origin
 //everything seems to be working now
 bool Board::checkMatch(int chain) {
+	this->destroyed = 0;
 	bool match = false;
 
 	for (int x = 0; x < 10; x++) {
@@ -573,10 +578,10 @@ bool Board::checkMatch(int chain) {
 			int matchVal = checkPsy(x, y, matchingColour);
 			
 			if(matchVal != -1){//psychadelic
-				cerr << "psychadelic square" << endl;
+			//	cerr << "psychadelic square" << endl;
 				
 				if(matchVal == 1){//vertical
-					cerr << "vertical" << endl;
+			//		cerr << "vertical" << endl;
 					explode(x, y, 'D');
 					explode(x+1, y, 'D');
 					explode(x+2, y, 'p');
@@ -584,7 +589,7 @@ bool Board::checkMatch(int chain) {
 					explode(x+4, y, 'D');
 					
 				}else if(matchVal == 2){//horizontal
-					cerr << "horizontal" << endl;
+			//		cerr << "horizontal" << endl;
 					explode(x, y, 'D');
 					explode(x, y+1, 'D');
 					explode(x, y+2, 'p');
@@ -595,7 +600,7 @@ bool Board::checkMatch(int chain) {
 				match = true;
 				continue;
 			}else if(checkH(x, y, matchingColour)){//lateral
-				cerr << "lateral square" << endl;
+		//		cerr << "lateral square" << endl;
 				
 				explode(x, y, 'D');
 				explode(x, y+1, 'h');//could add random to select x+1 or x+2
@@ -606,7 +611,7 @@ bool Board::checkMatch(int chain) {
 				continue;
 				
 			}else if(checkU(x, y, matchingColour)){//Upright
-				cerr << "upright square" << endl;
+		//		cerr << "upright square" << endl;
 				
 				explode(x, y, 'D');
 				explode(x+1, y, 'v');//could add random to select x+1 or x+2
@@ -621,17 +626,17 @@ bool Board::checkMatch(int chain) {
 			matchVal = checkL(x, y, matchingColour);//L
 			
 			if(matchVal != -1){
-				cerr << "Unstable square" << endl;
+		//		cerr << "Unstable square" << endl;
 				
 				if(matchVal == 0){//down and right
-					cerr << "Down and right" << endl;
+		//			cerr << "Down and right" << endl;
 					explode(x, y, 'b');
 					explode(x+1, y, 'D');
 					explode(x+2, y, 'D');
 					explode(x, y+1, 'D');
 					explode(x, y+2, 'D');
 				}else if(matchVal == 1){//up and right
-					cerr << "up and right" << endl;
+			//		cerr << "up and right" << endl;
 					explode(x, y, 'D');
 					explode(x+1, y, 'D');
 					explode(x+2, y, 'b');
@@ -639,7 +644,7 @@ bool Board::checkMatch(int chain) {
 					explode(x+1, y+2, 'D');
 					
 				}else if(matchVal == 2){//down and left
-					cerr << "down and left" << endl;
+			//		cerr << "down and left" << endl;
 					explode(x, y, 'D');
 					explode(x, y+1, 'D');
 					explode(x, y+2, 'b');
@@ -647,7 +652,7 @@ bool Board::checkMatch(int chain) {
 					explode(x+2, y+2, 'D');
 					
 				}else if(matchVal == 3){//up and left
-					cerr << "up and left" << endl;
+			//		cerr << "up and left" << endl;
 
 					explode(x, y, 'D');
 					explode(x+1, y, 'D');
@@ -665,17 +670,17 @@ bool Board::checkMatch(int chain) {
 			matchVal = checkBasic(x, y, matchingColour);//basic
 			
 			if(/*theBoard[x][y].getType() == '_' &&*/ matchVal != -1){
-				cerr << "Basic match" << endl;
+		//		cerr << "Basic match" << endl;
 				
 				if(matchVal == 0){
-					cerr << "vertical" << endl;
+			//		cerr << "vertical" << endl;
 					explode(x,y,'D');
 					explode(x+1, y,'D');
 					explode(x+2,y,'D');
 					
 					
 				}else if(matchVal == 1){
-					cerr << "horizontal" << endl;
+		//			cerr << "horizontal" << endl;
 					explode(x,y,'D');
 					explode(x,y+1,'D');
 					explode(x,y+2,'D');
@@ -684,6 +689,16 @@ bool Board::checkMatch(int chain) {
 				match = true;
 			}
 		}
+	}
+
+	if (this->destroyed == 3) {
+		Game::increaseScore(3 * 2^chain);
+	} else if (this->destroyed == 4) {
+		Game::increaseScore(2 * 4 * 2^chain);
+	} else if (this->destroyed == 5) {
+		Game::increaseScore(3 * 5 * 2^chain);
+	} else {
+		Game::increaseScore(4 * this->destroyed * 2^chain);
 	}
 
 	return match;

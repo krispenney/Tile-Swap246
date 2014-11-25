@@ -99,7 +99,7 @@ bool Game::hint(bool print){
 		
 		if(match){
 			if(print){
-				cout << x << " " << y << " " << dir << endl;//prints if match found and print set
+				cout << x << " " << y << " " << dir << endl;  //prints if match found and print set
 			}
 			return true;
 		}
@@ -228,6 +228,11 @@ bool Game::checkMatch(int chain) {
 //decrement moves
 void Game::decMoves(){
 	moves--;
+}
+
+
+void Game::increaseScore(int x) {
+	score += x;
 }
 
 //overload operator<< called to board

@@ -34,7 +34,7 @@ void Square::moveDown(char c){
 		//Generate new stuff for that square
 
 		if (c == '\0' && level == 1) {
-			std::cerr << "generating for level 1" << std::endl;
+		//	std::cerr << "generating for level 1" << std::endl;
 			randColour = rand()%6;
 			if(randColour == 0 || randColour == 1){//1/3 for white
 				colour = '0';
@@ -45,7 +45,7 @@ void Square::moveDown(char c){
 			}else if(randColour == 5){//1/6 for blue
 				colour = '3';
 			}
-			std::cerr << "colour: " << colour << std::endl;
+	//		std::cerr << "colour: " << colour << std::endl;
 		}else if(c == '\0' && level == 2){
 		//	std::cerr << "generating for level 2" << std::endl;
 			randColour = rand()%4;
