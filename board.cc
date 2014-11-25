@@ -8,7 +8,7 @@
 using namespace std;
 
 
-Board::Board(): td(NULL), theBoard(NULL){}
+Board::Board(): level(0), td(NULL), theBoard(NULL){}
 
 Board::~Board(){
 	delete td;
@@ -20,6 +20,10 @@ Board::~Board(){
 	}
 	
 	delete [] theBoard;
+}
+
+void Board::setLevel(int level){
+	this->level = level;
 }
 
 //reads in a valid board from a file
@@ -96,6 +100,8 @@ void Board::init(int level, int seed, std::ifstream *fin, bool customScript){
 	if(fin == NULL){
 		source = new ifstream(zeroFName.c_str());
 	}
+	
+	setLevel(level);
 	
 	theBoard = new Square *[10];
 	td = new TextDisplay();
@@ -384,7 +390,6 @@ void Board::swap(Square * s1, Square * s2){
 	
 	int tmpColour = s1->getColour();
 	int tmpType = s1->getType();
-	
 	/*cout << tmpColour <<endl;
 	cout << tmpType << endl;*/
 	
@@ -393,6 +398,8 @@ void Board::swap(Square * s1, Square * s2){
 	
 	s2->setColour(tmpColour);
 	s2->setType(tmpType);
+	
+	
 }
 
 
@@ -588,6 +595,13 @@ bool Board::checkMatch(int chain) {
 					explode(x+3, y, 'D');
 					explode(x+4, y, 'D');
 					
+					if(level == 2){
+						for(int i = x; i < x+5; i++){
+							if(theBoard[i][y].getLocked()){
+								theBoard[i][y].unlock();
+							}
+						}
+					}
 				}else if(matchVal == 2){//horizontal
 			//		cerr << "horizontal" << endl;
 					explode(x, y, 'D');
@@ -595,6 +609,14 @@ bool Board::checkMatch(int chain) {
 					explode(x, y+2, 'p');
 					explode(x, y+3, 'D');
 					explode(x, y+4, 'D');
+					
+					if(level == 2){
+						for(int i = y; i < y+5; i++){
+							if(theBoard[x][i].getLocked()){
+								theBoard[x][i].unlock();
+							}
+						}
+					}
 				}
 				
 				match = true;
@@ -607,6 +629,14 @@ bool Board::checkMatch(int chain) {
 				explode(x, y+2, 'D');
 				explode(x, y+3, 'D');
 				
+				if(level == 2){
+					for(int i = y; i < y+4; i++){
+						if(theBoard[x][i].getLocked()){
+							theBoard[x][i].unlock();
+						}
+					}
+				}
+				
 				match = true;
 				continue;
 				
@@ -618,6 +648,14 @@ bool Board::checkMatch(int chain) {
 				explode(x+2, y, 'D');
 				explode(x+3, y, 'D');
 				
+				if(level == 2){
+					for(int i = x; i < x+4; i++){
+						if(theBoard[i][y].getLocked()){
+							theBoard[i][y].unlock();
+						}
+					}
+				}
+				
 				match = true;
 				continue;
 			}
@@ -628,6 +666,12 @@ bool Board::checkMatch(int chain) {
 			if(matchVal != -1){
 		//		cerr << "Unstable square" << endl;
 				
+				if(level == 2){
+					if(theBoard[x][y].getLocked()){
+						theBoard[x][y].unlock();
+					}
+				}
+				
 				if(matchVal == 0){//down and right
 		//			cerr << "Down and right" << endl;
 					explode(x, y, 'b');
@@ -635,6 +679,21 @@ bool Board::checkMatch(int chain) {
 					explode(x+2, y, 'D');
 					explode(x, y+1, 'D');
 					explode(x, y+2, 'D');
+					
+					if(level == 2){
+						if(theBoard[x+1][y].getLocked()){
+							theBoard[x+1][y].unlock();
+						}
+						if(theBoard[x+2][y].getLocked()){
+							theBoard[x+2][y].unlock();
+						}
+						if(theBoard[x][y+1].getLocked()){
+							theBoard[x][y+1].unlock();
+						}
+						if(theBoard[x][y+2].getLocked()){
+							theBoard[x][y+2].unlock();
+						}
+					}
 				}else if(matchVal == 1){//up and right
 			//		cerr << "up and right" << endl;
 					explode(x, y, 'D');
@@ -643,6 +702,21 @@ bool Board::checkMatch(int chain) {
 					explode(x+2, y+1, 'D');
 					explode(x+1, y+2, 'D');
 					
+					if(level == 2){
+						if(theBoard[x+1][y].getLocked()){
+							theBoard[x+1][y].unlock();
+						}
+						if(theBoard[x+2][y].getLocked()){
+							theBoard[x+2][y].unlock();
+						}
+						if(theBoard[x+2][y+1].getLocked()){
+							theBoard[x+2][y+1].unlock();
+						}
+						if(theBoard[x+1][y+2].getLocked()){
+							theBoard[x+1][y+2].unlock();
+						}
+					}
+					
 				}else if(matchVal == 2){//down and left
 			//		cerr << "down and left" << endl;
 					explode(x, y, 'D');
@@ -650,6 +724,21 @@ bool Board::checkMatch(int chain) {
 					explode(x, y+2, 'b');
 					explode(x+1, y+2, 'D');
 					explode(x+2, y+2, 'D');
+					
+					if(level == 2){
+						if(theBoard[x+1][y+2].getLocked()){
+							theBoard[x+1][y+2].unlock();
+						}
+						if(theBoard[x+2][y+2].getLocked()){
+							theBoard[x+2][y+2].unlock();
+						}
+						if(theBoard[x][y+1].getLocked()){
+							theBoard[x][y+1].unlock();
+						}
+						if(theBoard[x][y+2].getLocked()){
+							theBoard[x][y+2].unlock();
+						}
+					}
 					
 				}else if(matchVal == 3){//up and left
 			//		cerr << "up and left" << endl;
@@ -660,12 +749,26 @@ bool Board::checkMatch(int chain) {
 					explode(x+2, y-1, 'D');
 					explode(x+2, y-2, 'D');
 					
+					if(level == 2){
+						if(theBoard[x+1][y].getLocked()){
+							theBoard[x+1][y].unlock();
+						}
+						if(theBoard[x+2][y].getLocked()){
+							theBoard[x+2][y].unlock();
+						}
+						if(theBoard[x+2][y-1].getLocked()){
+							theBoard[x+2][y-1].unlock();
+						}
+						if(theBoard[x+2][y-2].getLocked()){
+							theBoard[x+2][y-2].unlock();
+						}
+					}
+					
 				}
 				
 				match = true;
 				continue;
 			}
-			
 			
 			matchVal = checkBasic(x, y, matchingColour);//basic
 			
@@ -678,6 +781,13 @@ bool Board::checkMatch(int chain) {
 					explode(x+1, y,'D');
 					explode(x+2,y,'D');
 					
+					if(level == 2){
+						for(int i = x; i < x+3; i++){
+							if(theBoard[i][y].getLocked()){
+								theBoard[i][y].unlock();
+							}
+						}
+					}
 					
 				}else if(matchVal == 1){
 		//			cerr << "horizontal" << endl;
@@ -685,6 +795,13 @@ bool Board::checkMatch(int chain) {
 					explode(x,y+1,'D');
 					explode(x,y+2,'D');
 					
+					if(level == 2){
+						for(int i = y; i < y+3; i++){
+							if(theBoard[x][i].getLocked()){
+								theBoard[x][i].unlock();
+							}
+						}
+					}
 				}
 				match = true;
 			}

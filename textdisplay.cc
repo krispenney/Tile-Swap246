@@ -34,6 +34,11 @@ void TextDisplay::update(int x, int y, int colour, char ch, bool locked) {
 	theDisplay[x][(y*3) + 2] = colour;
 }
 
+//updates the display, unlocks tile
+void TextDisplay::unlockUpdate(int x, int y){
+	theDisplay[x][y*3] = '_';
+}
+
 ostream &operator<<(ostream &out, const TextDisplay &td) {
 	// cerr << "td.cc" << endl;
 	for (int x = 0; x < 10; x++) {

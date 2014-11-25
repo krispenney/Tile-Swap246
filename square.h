@@ -21,7 +21,7 @@ public:
 	void draw();
 	
 	void setAbove(Square * above);
-
+	
 	void setColour(int colour);
 	int getColour();
 	
@@ -29,6 +29,9 @@ public:
 	char getType();
 
 	void setLevel(int l);
+	
+	bool getLocked();
+	void unlock();
 	
 };
 

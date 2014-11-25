@@ -9,7 +9,7 @@
 
 class Board { 
 	int destroyed;
-
+	int level;
 	TextDisplay * td;
 	Square **theBoard;
 	
@@ -19,6 +19,7 @@ class Board {
 	
 	void readFromFile(int level);
 	bool checkNeighbours(int x, int y, char colour);
+	void setLevel(int level);
 public:
 	Board();
 	void init(int level, int seed, std::ifstream *fin, bool customScript = false);

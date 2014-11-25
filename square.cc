@@ -94,3 +94,13 @@ char Square::getType(){
 void Square::setLevel(int level) {
 	this->level = level;
 }
+
+bool Square::getLocked(){
+	return locked;
+}
+
+void Square::unlock(){
+	locked = false;
+	td->unlockUpdate(x, y);
+	
+}

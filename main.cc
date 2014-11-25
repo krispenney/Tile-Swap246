@@ -47,7 +47,6 @@ int main(int argc, char *argv[]) {
 		}
 	}
 	
-	//need to implement custom scriptfile and graphics(later)
 	
 	/*cerr <<"------------" << endl;
 	cerr << graphics << endl;
