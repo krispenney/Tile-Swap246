@@ -1,4 +1,5 @@
 #include "square.h"
+#include "board.h"
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
@@ -102,6 +103,7 @@ bool Square::getLocked(){
 
 void Square::unlock(){
 	// std::cerr << "unlocking" << std::endl;
+	Board::lockedTiles--;
 	locked = false;
 	td->unlockUpdate(x, y);
 	

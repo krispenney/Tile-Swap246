@@ -87,7 +87,7 @@ int main(int argc, char *argv[]) {
 					// cout << *theGame << endl;
 					match = theGame->checkMatch(chain);
 					// match = false;
-					cerr << "I HAVE A LOOPING MATCH~~~" << endl;
+					// cerr << "I HAVE A LOOPING MATCH~~~" << endl;
 				}
 			} else {
 				cerr << "No match made - Please try again" << endl;
@@ -125,8 +125,24 @@ int main(int argc, char *argv[]) {
 		}else if(cmd == "reset"){
 			theGame->reset();
 		}
-		cout << *theGame << endl;
 		
+
+		if (theGame->levelWon()) {
+			cout << "LEVEL UP!!" << endl;
+			if(theGame->getLevel() != MAXLEVELS){
+				theGame->changeLevel(true);
+				
+			} else {
+				cout << endl << endl;
+				cout << "CONGRATULATIONS" << endl;
+				cout << "YOU WON!" << endl;
+				break;
+			}
+		}
+
+		cout << *theGame << endl;
+
+
 	}
 	delete theGame;
 	// std::cerr << "done" << std::endl;

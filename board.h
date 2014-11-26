@@ -21,6 +21,9 @@ class Board {
 	bool checkNeighbours(int x, int y, char colour);
 	void setLevel(int level);
 public:
+
+	static int lockedTiles;
+
 	Board();
 	void init(int level, int seed, std::ifstream *fin, bool customScript = false);
 	
@@ -34,11 +37,11 @@ public:
 	void swap(Square * s1, Square * s2);
 	bool valid(int x, int y);
 	
-	int checkL(int x, int y, int matchingColour);
+	int  checkL(int x, int y, int matchingColour);
 	bool checkH(int x, int y, int matchingColour);
 	bool checkU(int x, int y, int matchingColour);
-	int checkPsy(int x, int y, int matchingColour);
-	int checkBasic(int x, int y, int matchingColour);
+	int  checkPsy(int x, int y, int matchingColour);
+	int  checkBasic(int x, int y, int matchingColour);
 	
 	bool checkMatch(int chain);
 

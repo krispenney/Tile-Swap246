@@ -147,6 +147,8 @@ void Game::changeLevel(bool up){
 		return;
 	}
 	
+	prevScore = score;
+
 	if(up){//level up
 		level++;
 	}else{//down
@@ -216,9 +218,23 @@ int Game::getLevel(){
 }
 
 bool Game::levelWon(){
-	//add other conditions
+	bool won = false;
+
+	if (level == 0) {
+		if (score >= prevScore + 200) {
+			won = true;
+		}
+	} else if (level == 1) {
+		if (score >= prevScore + 300) {
+			won = true;
+		}
+	} else if (level == 2) {
+		if (score >= prevScore + 500 && Board::lockedTiles <= 0) {
+			won = true;
+		}
+	}
 	
-	return false;
+	return won;
 }
 
 bool Game::checkMatch(int chain) {

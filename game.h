@@ -6,6 +6,7 @@
 class Game {
 	int level;
 	static int score;
+	int prevScore;
 	int moves;
 	Board * theBoard;
 	bool checkAll(int x, int y, int matchingColour);
@@ -18,6 +19,7 @@ public:
 	
 	Game(int moves, int level, int seed, std::ifstream *fin, bool graphics, bool customScript): // Default params need to go at the end
 		level(level), moves(moves), graphics(graphics),seed(seed){
+			prevScore = 0;
 			theBoard = new Board();
 			theBoard->init(level, seed, fin, customScript);
 		}
@@ -27,7 +29,7 @@ public:
 	bool checkSwap(int x, int y, int dir);
 	void swap(int x1, int y1, int x2, int y2);
 	
-	int getLevel();
+	int  getLevel();
 	bool hint(bool print);
 	void changeLevel(bool up);// replaces level up and down
 	void scramble();
