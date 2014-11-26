@@ -9,7 +9,7 @@
 using namespace std;
 
 
-Board::Board(): level(0), td(NULL), theBoard(NULL){}
+Board::Board(): td(NULL), theBoard(NULL){}
 
 Board::~Board(){
 	delete td;
@@ -21,10 +21,6 @@ Board::~Board(){
 	}
 	
 	delete [] theBoard;
-}
-
-void Board::setLevel(int level){
-	this->level = level;
 }
 
 //reads in a valid board from a file
@@ -55,7 +51,7 @@ void Board::readFromFile(int level){
 			}
 			
 			sq->setLevel(level);
-			
+
 			theBoard[i][j] = *sq;
 			
 			update(i, j, colour, type, locked);
@@ -85,6 +81,7 @@ bool Board::checkNeighbours(int x, int y, char colour){
 
 //initialize the current board at a level
 void Board::init(int level, int seed, std::ifstream *fin, bool customScript){
+	this->level = level;
 	
 	string zeroFName = "sequence.txt";
 	bool locked = false;
@@ -102,8 +99,6 @@ void Board::init(int level, int seed, std::ifstream *fin, bool customScript){
 		source = new ifstream(zeroFName.c_str());
 	}
 	
-	setLevel(level);
-	
 	theBoard = new Square *[10];
 	td = new TextDisplay();
 	
@@ -113,9 +108,9 @@ void Board::init(int level, int seed, std::ifstream *fin, bool customScript){
 		while(!source->eof()){
 			*source >> extra;
 		}
-		extras = new istringstream(extra);//set colours line
+		extras = new istringstream(extra);
 		delete source;
-		source = new ifstream(zeroFName.c_str());//set back to default
+		source = new ifstream(zeroFName.c_str());
 	}else if(level == 1){
 		
 		if(!customScript){
@@ -195,12 +190,11 @@ void Board::init(int level, int seed, std::ifstream *fin, bool customScript){
 	}else if(level == 2){
 		
 		if(!customScript){
-			cerr << "enter random level 2" << endl;
+	//		cerr << "enter random level 2" << endl;
 			int totalLocked = 20;//20% locked
 			srand(seed);
 			type = '_';
-			extras = NULL;
-			
+	
 			for(int i = 0; i < 10; i++){
 				theBoard[i] = new Square[10];
 				int randColour = 0;
@@ -211,7 +205,8 @@ void Board::init(int level, int seed, std::ifstream *fin, bool customScript){
 					if(lock && totalLocked > 0){
 				//		cerr << "locked:" << i << " " << j << endl;
 				//		cerr << totalLocked << endl;
-				
+
+
 						totalLocked--;
 					}else{
 						lock = false;
@@ -245,7 +240,7 @@ void Board::init(int level, int seed, std::ifstream *fin, bool customScript){
 				}
 			}
 		}else{
-		//	cerr << "enter scripted level: " << level << endl;
+			cerr << "enter scripted level 2" << endl;
 			readFromFile(level);
 			while(!source->eof()){
 				*source >> extra;
@@ -267,40 +262,31 @@ void Board::init(int level, int seed, std::ifstream *fin, bool customScript){
 // Unstable: b
 // Psychedelic: p
 void Board::explode(int x, int y, char type, int size) {
-	//cerr << "In explode, with x: " << x << " and y: " << y << " and type: " << type << endl;
+	cerr << "In explode, with x: " << x << " and y: " << y << " and type: " << type << endl;
+	char oldType = theBoard[x][y].getType();
 
-	char oldType;
-	if(valid(x, y)){
-		oldType = theBoard[x][y].getType();
-	}else{
-		return;
-	}
-	
-	// cerr << "oldtype: " << oldType << endl;
-	// cerr << *this;
+
 	this->destroyed++; //increases the number of tiles this match destroyed for scoring purposes
 
 	if (oldType == '_') {
 		theBoard[x][y].setType('D');
-	} else if (oldType == 'v') {
+	} else if (oldType == 'h') {
 		theBoard[x][y].setType('D');
 
 		for (int i = 0; i < 10; i++) {
 			if (i != x) {
 				if (valid(i,y)) {
-			//		cerr << "calling explode: " << i << " " << y << " " << oldType << endl;
 					explode(i, y, 'D');
 				}
 			}
 		}
-	} else if (oldType == 'h') {
+	} else if (oldType == 'v') {
 		// upright
-
 		theBoard[x][y].setType('D');
+
 		for (int i = 0; i < 10; i++) {
 			if (i != y) {
 				if (valid(x,i)) {
-				//	cerr << "calling explode: " << x << " " << i << " " << oldType << endl;
 					explode(x, i, 'D');
 				}
 			}
@@ -316,7 +302,6 @@ void Board::explode(int x, int y, char type, int size) {
 				for (int j = -1; j < 2; j++) {
 					if (i != x and j != y) {
 						if (valid(x + i, y + j)) {
-					//		cerr << "calling explode: " << x+i << " " << y+j << " " << oldType << endl;
 							explode(x + i, y + j, 'D');
 						}
 					}
@@ -327,7 +312,6 @@ void Board::explode(int x, int y, char type, int size) {
 				for (int j = -2; j < 3; j++) {
 					if (i != x and j != y) {
 						if (valid(x + i, y + j)) {
-				//			cerr << "calling explode: " << x+i << " " << y+j << " " << oldType << endl;
 							explode(x + i, y + j, 'D');
 						}
 					}
@@ -343,7 +327,6 @@ void Board::explode(int x, int y, char type, int size) {
 			for (int j = 0; j < 10; j++) {
 				if (x != i and y != j and valid(i,j)) {
 					if (theBoard[i][j].getColour() == psyCol) {
-					//	cerr << "calling explode: " << i << " " << j << " " << oldType << endl;
 						explode(i,j,'D');
 					}
 				}
@@ -376,6 +359,7 @@ void Board::swap(Square * s1, Square * s2){
 	
 	int tmpColour = s1->getColour();
 	int tmpType = s1->getType();
+	
 	/*cout << tmpColour <<endl;
 	cout << tmpType << endl;*/
 	
@@ -384,8 +368,6 @@ void Board::swap(Square * s1, Square * s2){
 	
 	s2->setColour(tmpColour);
 	s2->setType(tmpType);
-	
-	
 }
 
 
@@ -426,22 +408,10 @@ int Board::checkL(int x, int y, int matchingColour){
 
 //Lateral Square
 bool Board::checkH(int x, int y, int matchingColour){
-	if((valid(x, y+1) && valid(x, y+2) && valid(x, y+3) &&//left
+	if(valid(x, y+1) && valid(x, y+2) && valid(x, y+3) &&
 	   theBoard[x][y+1].getColour() == matchingColour &&
 	   theBoard[x][y+2].getColour() == matchingColour &&
-	   theBoard[x][y+3].getColour() == matchingColour) ||
-	   (valid(x, y-1) && valid(x, y+1) && valid(x, y+2) &&//2nd
-		theBoard[x][y-1].getColour() == matchingColour &&
-		theBoard[x][y+1].getColour() == matchingColour &&
-		theBoard[x][y+2].getColour() == matchingColour) ||
-	   (valid(x, y-2) && valid(x, y-1) && valid(x, y+1) &&//3rd
-		theBoard[x][y-2].getColour() == matchingColour &&
-		theBoard[x][y-1].getColour() == matchingColour &&
-		theBoard[x][y+1].getColour() == matchingColour) ||
-	   (valid(x, y-3) && valid(x, y-2) && valid(x, y-1) &&//right
-		theBoard[x][y-3].getColour() == matchingColour &&
-		theBoard[x][y-2].getColour() == matchingColour &&
-		theBoard[x][y-1].getColour() == matchingColour)){
+	   theBoard[x][y+3].getColour() == matchingColour){
 		return true;
 	}
 	return false;
@@ -450,22 +420,10 @@ bool Board::checkH(int x, int y, int matchingColour){
 
 //upright square
 bool Board::checkU(int x, int y, int matchingColour){
-	if((valid(x+1, y) && valid(x+2, y) && valid(x+3, y) &&//top
+	if(valid(x+1, y) && valid(x+2, y) && valid(x+3, y) &&
 	   theBoard[x+1][y].getColour() == matchingColour &&
 	   theBoard[x+2][y].getColour() == matchingColour &&
-	   theBoard[x+3][y].getColour() == matchingColour) ||
-	   (valid(x-1, y) && valid(x+1, y) && valid(x+2, y) &&//2nd
-		theBoard[x-1][y].getColour() == matchingColour &&
-		theBoard[x+1][y].getColour() == matchingColour &&
-		theBoard[x+2][y].getColour() == matchingColour) ||
-	   (valid(x-2, y) && valid(x-1, y) && valid(x+1, y) &&//3rd
-		theBoard[x-2][y].getColour() == matchingColour &&
-		theBoard[x-1][y].getColour() == matchingColour &&
-		theBoard[x+1][y].getColour() == matchingColour) ||
-	   (valid(x-3, y) && valid(x-2, y) && valid(x-1, y) &&//bottom
-		theBoard[x-1][y].getColour() == matchingColour &&
-		theBoard[x-2][y].getColour() == matchingColour &&
-		theBoard[x-3][y].getColour() == matchingColour)){
+	   theBoard[x+3][y].getColour() == matchingColour){
 		return true;
 	}
 	
@@ -474,57 +432,17 @@ bool Board::checkU(int x, int y, int matchingColour){
 
 //psychadelic
 int Board::checkPsy(int x, int y, int matchingColour){
-	if((valid(x+1, y) && valid(x+2, y) && valid(x+3, y) && valid(x+4, y) &&
+	if(valid(x+1, y) && valid(x+2, y) && valid(x+3, y) && valid(x+4, y) &&
 	   theBoard[x+1][y].getColour() == matchingColour &&
 	   theBoard[x+2][y].getColour() == matchingColour &&
 	   theBoard[x+3][y].getColour() == matchingColour &&
-	   theBoard[x+4][y].getColour() == matchingColour) ||
-	   (valid(x-1, y) && valid(x+1, y) && valid(x+2, y) && valid(x+3, y) &&
-		theBoard[x-1][y].getColour() == matchingColour &&
-		theBoard[x+1][y].getColour() == matchingColour &&
-		theBoard[x+2][y].getColour() == matchingColour &&
-		theBoard[x+3][y].getColour() == matchingColour) ||
-	   (valid(x-2, y) && valid(x-1, y) && valid(x+1, y) && valid(x+2, y) &&
-		theBoard[x-2][y].getColour() == matchingColour &&
-		theBoard[x-1][y].getColour() == matchingColour &&
-		theBoard[x+1][y].getColour() == matchingColour &&
-		theBoard[x+2][y].getColour() == matchingColour) ||
-	   (valid(x-3, y) && valid(x-2, y) && valid(x-1, y) && valid(x+1, y) &&
-		theBoard[x-3][y].getColour() == matchingColour &&
-		theBoard[x-2][y].getColour() == matchingColour &&
-		theBoard[x-1][y].getColour() == matchingColour &&
-		theBoard[x+1][y].getColour() == matchingColour) ||
-	   (valid(x-4, y) && valid(x-3, y) && valid(x-2, y) && valid(x-1, y) &&
-		theBoard[x-4][y].getColour() == matchingColour &&
-		theBoard[x-3][y].getColour() == matchingColour &&
-		theBoard[x-2][y].getColour() == matchingColour &&
-		theBoard[x-1][y].getColour() == matchingColour)){//vertical
+	   theBoard[x+4][y].getColour() == matchingColour){//vertical
 		return 1;
-	}else if((valid(x, y+1) && valid(x, y+2) && valid(x, y+3) && valid(x, y+4) &&
+	}else if(valid(x, y+1) && valid(x, y+2) && valid(x, y+3) && valid(x, y+4) &&
 			 theBoard[x][y+1].getColour() == matchingColour &&
 			 theBoard[x][y+2].getColour() == matchingColour &&
 			 theBoard[x][y+3].getColour() == matchingColour &&
-			 theBoard[x][y+4].getColour() == matchingColour) ||
-			 (valid(x, y-1) && valid(x, y+1) && valid(x, y+2) && valid(x, y+3) &&
-			  theBoard[x][y-1].getColour() == matchingColour &&
-			  theBoard[x][y+1].getColour() == matchingColour &&
-			  theBoard[x][y+2].getColour() == matchingColour &&
-			  theBoard[x][y+3].getColour() == matchingColour) ||
-			 (valid(x, y-2) && valid(x, y-1) && valid(x, y+1) && valid(x, y+2) &&
-			  theBoard[x][y-2].getColour() == matchingColour &&
-			  theBoard[x][y-1].getColour() == matchingColour &&
-			  theBoard[x][y+1].getColour() == matchingColour &&
-			  theBoard[x][y+2].getColour() == matchingColour) ||
-			 (valid(x, y-3) && valid(x, y-2) && valid(x, y-1) && valid(x, y+1) &&
-			  theBoard[x][y-3].getColour() == matchingColour &&
-			  theBoard[x][y-2].getColour() == matchingColour &&
-			  theBoard[x][y-1].getColour() == matchingColour &&
-			  theBoard[x][y+1].getColour() == matchingColour) ||
-			 (valid(x, y-4) && valid(x, y-3) && valid(x, y-2) && valid(x, y-1) &&
-			  theBoard[x][y-1].getColour() == matchingColour &&
-			  theBoard[x][y-2].getColour() == matchingColour &&
-			  theBoard[x][y-3].getColour() == matchingColour &&
-			  theBoard[x][y-4].getColour() == matchingColour)){//horizontal
+			 theBoard[x][y+4].getColour() == matchingColour){//horizontal
 		return 2;
 	}
 	return -1;
@@ -532,25 +450,13 @@ int Board::checkPsy(int x, int y, int matchingColour){
 
 //basic
 int Board::checkBasic(int x, int y, int matchingColour){
-	if((valid(x+1, y) && valid(x+2, y) &&//top
+	if(valid(x+1, y) && valid(x+2, y) &&
 	   theBoard[x+1][y].getColour() == matchingColour &&
-	   theBoard[x+2][y].getColour() == matchingColour) ||
-	   (valid(x+1, y) && valid(x-1, y) &&//middle
-		theBoard[x+1][y].getColour() == matchingColour &&
-		theBoard[x-1][y].getColour() == matchingColour) ||
-	   (valid(x-2, y) && valid(x-1, y) &&//bottom
-		theBoard[x-1][y].getColour() == matchingColour &&
-		theBoard[x-2][y].getColour() == matchingColour)){//vertical
+	   theBoard[x+2][y].getColour() == matchingColour){//vertical
 		return 0;
-	}else if((valid(x, y+1) && valid(x, y+2) &&
-			 theBoard[x][y+1].getColour() == matchingColour &&//left
-			 theBoard[x][y+2].getColour() == matchingColour) ||
-			 (valid(x, y+1) && valid(x, y-1) &&//middle
-			  theBoard[x][y+1].getColour() == matchingColour &&
-			  theBoard[x][y-1].getColour() == matchingColour) ||
-			 (valid(x, y-1) && valid(x, y-2) &&//right
-			  theBoard[x][y-1].getColour() == matchingColour &&
-			  theBoard[x][y-2].getColour() == matchingColour)){//horizontal
+	}else if(valid(x, y+1) && valid(x, y+2) &&
+			 theBoard[x][y+1].getColour() == matchingColour &&
+			 theBoard[x][y+2].getColour() == matchingColour){//horizontal
 		return 1;
 	}
 	
@@ -570,17 +476,17 @@ bool Board::checkMatch(int chain) {
 			int matchingColour = theBoard[x][y].getColour();
 			int matchVal = checkPsy(x, y, matchingColour);
 			
-			if (matchVal != -1) {//psychadelic
-			//	cerr << "psychadelic square" << endl;
+			if(matchVal != -1){//psychadelic
+				cerr << "psychadelic square" << endl;
 				
 				if(matchVal == 1){//vertical
-					// cerr << "vertical" << endl;
+					cerr << "vertical" << endl;
 					if (theBoard[x][y].getType() != 'D') explode(x, y, 'D');
 					if (theBoard[x + 1][y].getType() != 'D') explode(x+1, y, 'D');
 					if (theBoard[x + 2][y].getType() != 'D') explode(x+2, y, 'p');
 					if (theBoard[x + 3][y].getType() != 'D') explode(x+3, y, 'D');
 					if (theBoard[x + 4][y].getType() != 'D') explode(x+4, y, 'D');
-					
+
 					if(level == 2){
 						for(int i = x; i < x+5; i++){
 							if(theBoard[i][y].getLocked()){
@@ -589,7 +495,7 @@ bool Board::checkMatch(int chain) {
 						}
 					}
 				}else if(matchVal == 2){//horizontal
-					// cerr << "horizontal" << endl;
+					cerr << "horizontal" << endl;
 					if (theBoard[x][y].getType() != 'D') explode(x, y, 'D');
 					if (theBoard[x][y+1].getType() != 'D') explode(x, y+1, 'D');
 					if (theBoard[x][y+2].getType() != 'D') explode(x, y+2, 'p');
@@ -607,14 +513,14 @@ bool Board::checkMatch(int chain) {
 				
 				match = true;
 				continue;
-			} else if (checkH(x, y, matchingColour)){//lateral
-				//		cerr << "lateral square" << endl;
+			}else if(checkH(x, y, matchingColour)){//lateral
+				cerr << "lateral square" << endl;
 				
 				if (theBoard[x][y].getType() != 'D') explode(x, y, 'D');
 				if (theBoard[x][y+1].getType() != 'D') explode(x, y+1, 'h');//could add random to select x+1 or x+2
 				if (theBoard[x][y+3].getType() != 'D') explode(x, y+2, 'D');
 				if (theBoard[x][y+4].getType() != 'D') explode(x, y+3, 'D');
-				
+
 				if(level == 2){
 					for(int i = y; i < y+4; i++){
 						if(theBoard[x][i].getLocked()){
@@ -626,14 +532,14 @@ bool Board::checkMatch(int chain) {
 				match = true;
 				continue;
 				
-			} else if (checkU(x, y, matchingColour)) {//Upright
-				//		cerr << "upright square" << endl;
+			}else if(checkU(x, y, matchingColour)){//Upright
+				cerr << "upright square" << endl;
 				
 				if (theBoard[x][y].getType() != 'D') explode(x, y, 'D');
 				if (theBoard[x+1][y].getType() != 'D') explode(x+1, y, 'v');//could add random to select x+1 or x+2
 				if (theBoard[x+2][y].getType() != 'D') explode(x+2, y, 'D');
 				if (theBoard[x+3][y].getType() != 'D') explode(x+3, y, 'D');
-				
+
 				if(level == 2){
 					for(int i = x; i < x+4; i++){
 						if(theBoard[i][y].getLocked()){
@@ -650,22 +556,22 @@ bool Board::checkMatch(int chain) {
 			matchVal = checkL(x, y, matchingColour);//L
 			
 			if(matchVal != -1){
-		//		cerr << "Unstable square" << endl;
+				cerr << "Unstable square" << endl;
 				
 				if(level == 2){
 					if(theBoard[x][y].getLocked()){
 						theBoard[x][y].unlock();
 					}
 				}
-				
+
 				if(matchVal == 0){//down and right
-		//			cerr << "Down and right" << endl;
+					cerr << "Down and right" << endl;
 					if (theBoard[x][y].getType() != 'D') explode(x, y, 'b');
 					if (theBoard[x+1][y].getType() != 'D') explode(x+1, y, 'D');
 					if (theBoard[x+2][y].getType() != 'D') explode(x+2, y, 'D');
 					if (theBoard[x][y+1].getType() != 'D') explode(x, y+1, 'D');
 					if (theBoard[x][y+2].getType() != 'D') explode(x, y+2, 'D');
-					
+
 					if(level == 2){
 						if(theBoard[x+1][y].getLocked()){
 							theBoard[x+1][y].unlock();
@@ -687,7 +593,7 @@ bool Board::checkMatch(int chain) {
 					if (theBoard[x+2][y].getType() != 'D') explode(x+2, y, 'b');
 					if (theBoard[x+2][y+1].getType() != 'D') explode(x+2, y+1, 'D');
 					if (theBoard[x+1][y+2].getType() != 'D') explode(x+1, y+2, 'D');
-					
+
 					if(level == 2){
 						if(theBoard[x+1][y].getLocked()){
 							theBoard[x+1][y].unlock();
@@ -704,13 +610,13 @@ bool Board::checkMatch(int chain) {
 					}
 					
 				}else if(matchVal == 2){//down and left
-					// cerr << "down and left" << endl;
+					cerr << "down and left" << endl;
 					if (theBoard[x][y].getType() != 'D') explode(x, y, 'D');
 					if (theBoard[x][y+1].getType() != 'D') explode(x, y+1, 'D');
 					if (theBoard[x][y+2].getType() != 'D') explode(x, y+2, 'b');
 					if (theBoard[x+1][y+2].getType() != 'D') explode(x+1, y+2, 'D');
 					if (theBoard[x+2][y+2].getType() != 'D') explode(x+2, y+2, 'D');
-					
+
 					if(level == 2){
 						if(theBoard[x+1][y+2].getLocked()){
 							theBoard[x+1][y+2].unlock();
@@ -727,14 +633,14 @@ bool Board::checkMatch(int chain) {
 					}
 					
 				}else if(matchVal == 3){//up and left
-				// cerr << "up and left" << endl;
+					cerr << "up and left" << endl;
 
 					if (theBoard[x][y].getType() != 'D') explode(x, y, 'D');
 					if (theBoard[x+1][y].getType() != 'D') explode(x+1, y, 'D');
 					if (theBoard[x+2][y].getType() != 'D') explode(x+2, y, 'b');
 					if (theBoard[x+2][y-1].getType() != 'D') explode(x+2, y-1, 'D');
 					if (theBoard[x+2][y-2].getType() != 'D') explode(x+2, y-2, 'D');
-					
+
 					if(level == 2){
 						if(theBoard[x+1][y].getLocked()){
 							theBoard[x+1][y].unlock();
@@ -756,16 +662,17 @@ bool Board::checkMatch(int chain) {
 				continue;
 			}
 			
+			
 			matchVal = checkBasic(x, y, matchingColour);//basic
 			
-			if(matchVal != -1){
+			if(theBoard[x][y].getType() == '_' && matchVal != -1){
 				cerr << "Basic match" << endl;
-				cerr << "x: " << x << " y: " << y << endl;
+				
 				if(matchVal == 0){
 					cerr << "vertical" << endl;
 					if (theBoard[x][y].getType() != 'D') explode(x,y,'D');
 					if (theBoard[x+1][y].getType() != 'D') explode(x+1, y,'D');
-					if (theBoard[x+2][y].getType() != 'D') explode(x+2, y,'D');
+					if (theBoard[x+2][y].getType() != 'D') explode(x+2,y,'D');
 					
 					if(level == 2){
 						for(int i = x; i < x+3; i++){
@@ -774,13 +681,12 @@ bool Board::checkMatch(int chain) {
 							}
 						}
 					}
-					
-				} else if(matchVal == 1) {
+				}else if(matchVal == 1){
 					cerr << "horizontal" << endl;
 					if (theBoard[x][y].getType() != 'D') explode(x,y,'D');
 					if (theBoard[x][y+1].getType() != 'D') explode(x,y+1,'D');
 					if (theBoard[x][y+2].getType() != 'D') explode(x,y+2,'D');
-
+					
 					if(level == 2){
 						for(int i = y; i < y+3; i++){
 							if(theBoard[x][i].getLocked()){
@@ -792,23 +698,17 @@ bool Board::checkMatch(int chain) {
 				match = true;
 			}
 
-			// cerr << this->destroyed << endl;
-
-			if (this->destroyed >= 3) {
-				if (this->destroyed == 3) {
-					Game::increaseScore(3 * pow(2,chain));
-					cerr << "this" << endl;
-				} else if (this->destroyed == 4) {
-					Game::increaseScore(2 * 4 * pow(2,chain));
-					cerr << "this x2" << endl;
-				} else if (this->destroyed == 5) {
-					Game::increaseScore(3 * 5 * pow(2,chain));
-					cerr << "this x3" << endl;
-				} else {
-					Game::increaseScore(4 * this->destroyed * pow(2,chain));
-					cerr << "this x4" << endl;
-				}
+			if (this->destroyed == 3) {
+				Game::increaseScore(3 * pow(2,chain));
+				// cerr << pow(2,chain) << endl;
+			} else if (this->destroyed == 4) {
+				Game::increaseScore(2 * 4 * pow(2,chain));
+			} else if (this->destroyed == 5) {
+				Game::increaseScore(3 * 5 * pow(2,chain));
+			} else {
+				Game::increaseScore(4 * this->destroyed * pow(2,chain));
 			}
+
 		}
 	}
 
@@ -817,12 +717,11 @@ bool Board::checkMatch(int chain) {
 			if (theBoard[x][y].getType() == 'D') {
 				char c = '\0';
 				if(extra != ""){
-					*extras >> c;
 					if(extras->eof()){
 						delete extras;
 						extras = new istringstream(extra);
-						*extras >> c;
 					}
+					*extras >> c;
 				}
 				theBoard[x][y].moveDown(c);
 			}

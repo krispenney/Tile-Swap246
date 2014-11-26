@@ -1,5 +1,5 @@
 #include "square.h"
-
+#include <iostream>
 #include <cstdlib>
 #include <ctime>
 
@@ -96,10 +96,12 @@ void Square::setLevel(int level) {
 }
 
 bool Square::getLocked(){
+	// std::cerr << "LOCKED: " << locked << std::endl;
 	return locked;
 }
 
 void Square::unlock(){
+	// std::cerr << "unlocking" << std::endl;
 	locked = false;
 	td->unlockUpdate(x, y);
 	
