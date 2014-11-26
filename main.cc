@@ -84,7 +84,9 @@ int main(int argc, char *argv[]) {
 				theGame->decMoves();
 				while (match) {
 					chain++;
+					cout << *theGame << endl;
 					match = theGame->checkMatch(chain);
+					// match = false;
 					cerr << "I HAVE A LOOPING MATCH~~~" << endl;
 				}
 			} else {

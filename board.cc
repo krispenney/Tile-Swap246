@@ -281,7 +281,7 @@ void Board::explode(int x, int y, char type, int size) {
 	this->destroyed++; //increases the number of tiles this match destroyed for scoring purposes
 
 	if (oldType == '_') {
-		theBoard[x][y].setType('_');
+		theBoard[x][y].setType('D');
 	} else if (oldType == 'v') {
 		theBoard[x][y].setType('D');
 
@@ -570,7 +570,7 @@ bool Board::checkMatch(int chain) {
 			int matchingColour = theBoard[x][y].getColour();
 			int matchVal = checkPsy(x, y, matchingColour);
 			
-			if(matchVal != -1){//psychadelic
+			if (matchVal != -1) {//psychadelic
 			//	cerr << "psychadelic square" << endl;
 				
 				if(matchVal == 1){//vertical
@@ -607,8 +607,8 @@ bool Board::checkMatch(int chain) {
 				
 				match = true;
 				continue;
-			}else if(checkH(x, y, matchingColour)){//lateral
-		//		cerr << "lateral square" << endl;
+			} else if (checkH(x, y, matchingColour)){//lateral
+				//		cerr << "lateral square" << endl;
 				
 				if (theBoard[x][y].getType() != 'D') explode(x, y, 'D');
 				if (theBoard[x][y+1].getType() != 'D') explode(x, y+1, 'h');//could add random to select x+1 or x+2
@@ -626,8 +626,8 @@ bool Board::checkMatch(int chain) {
 				match = true;
 				continue;
 				
-			}else if(checkU(x, y, matchingColour)){//Upright
-		//		cerr << "upright square" << endl;
+			} else if (checkU(x, y, matchingColour)) {//Upright
+				//		cerr << "upright square" << endl;
 				
 				if (theBoard[x][y].getType() != 'D') explode(x, y, 'D');
 				if (theBoard[x+1][y].getType() != 'D') explode(x+1, y, 'v');//could add random to select x+1 or x+2
@@ -686,7 +686,7 @@ bool Board::checkMatch(int chain) {
 					if (theBoard[x+1][y].getType() != 'D') explode(x+1, y, 'D');
 					if (theBoard[x+2][y].getType() != 'D') explode(x+2, y, 'b');
 					if (theBoard[x+2][y+1].getType() != 'D') explode(x+2, y+1, 'D');
-					if (theBoard[x+1][y+2].getType() != 'D') explode(x+1, y+2, 'D');g
+					if (theBoard[x+1][y+2].getType() != 'D') explode(x+1, y+2, 'D');
 					
 					if(level == 2){
 						if(theBoard[x+1][y].getLocked()){
@@ -758,14 +758,14 @@ bool Board::checkMatch(int chain) {
 			
 			matchVal = checkBasic(x, y, matchingColour);//basic
 			
-			if(/*theBoard[x][y].getType() == '_' &&*/ matchVal != -1){
-		//		cerr << "Basic match" << endl;
-				
+			if(matchVal != -1){
+				cerr << "Basic match" << endl;
+				cerr << "x: " << x << " y: " << y << endl;
 				if(matchVal == 0){
 					cerr << "vertical" << endl;
 					if (theBoard[x][y].getType() != 'D') explode(x,y,'D');
 					if (theBoard[x+1][y].getType() != 'D') explode(x+1, y,'D');
-					if (theBoard[x+2][y].getType() != 'D') explode(x+2,y,'D');
+					if (theBoard[x+2][y].getType() != 'D') explode(x+2, y,'D');
 					
 					if(level == 2){
 						for(int i = x; i < x+3; i++){
@@ -775,7 +775,7 @@ bool Board::checkMatch(int chain) {
 						}
 					}
 					
-				}else if(matchVal == 1){
+				} else if(matchVal == 1) {
 					cerr << "horizontal" << endl;
 					if (theBoard[x][y].getType() != 'D') explode(x,y,'D');
 					if (theBoard[x][y+1].getType() != 'D') explode(x,y+1,'D');
@@ -792,17 +792,23 @@ bool Board::checkMatch(int chain) {
 				match = true;
 			}
 
-			if (this->destroyed == 3) {
-				Game::increaseScore(3 * pow(2,chain));
-				// cerr << pow(2,chain) << endl;
-			} else if (this->destroyed == 4) {
-				Game::increaseScore(2 * 4 * pow(2,chain));
-			} else if (this->destroyed == 5) {
-				Game::increaseScore(3 * 5 * pow(2,chain));
-			} else {
-				Game::increaseScore(4 * this->destroyed * pow(2,chain));
-			}
+			// cerr << this->destroyed << endl;
 
+			if (this->destroyed >= 3) {
+				if (this->destroyed == 3) {
+					Game::increaseScore(3 * pow(2,chain));
+					cerr << "this" << endl;
+				} else if (this->destroyed == 4) {
+					Game::increaseScore(2 * 4 * pow(2,chain));
+					cerr << "this x2" << endl;
+				} else if (this->destroyed == 5) {
+					Game::increaseScore(3 * 5 * pow(2,chain));
+					cerr << "this x3" << endl;
+				} else {
+					Game::increaseScore(4 * this->destroyed * pow(2,chain));
+					cerr << "this x4" << endl;
+				}
+			}
 		}
 	}
 
@@ -811,11 +817,12 @@ bool Board::checkMatch(int chain) {
 			if (theBoard[x][y].getType() == 'D') {
 				char c = '\0';
 				if(extra != ""){
+					*extras >> c;
 					if(extras->eof()){
 						delete extras;
 						extras = new istringstream(extra);
+						*extras >> c;
 					}
-					*extras >> c;
 				}
 				theBoard[x][y].moveDown(c);
 			}
