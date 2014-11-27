@@ -10,12 +10,13 @@
 class Board { 
 	int destroyed;
 	int level;
+	bool graphics;
 	TextDisplay * td;
 	Square **theBoard;
 	
 	std::ifstream *source;
 	std::string extra;
-	std::istringstream *extras;
+	std::istringstream *extraColours;
 	
 	void readFromFile(int level);
 	bool checkNeighbours(int x, int y, char colour);
@@ -24,7 +25,7 @@ public:
 
 	static int lockedTiles;
 
-	Board();
+	Board(bool graphics);
 	void init(int level, int seed, std::ifstream *fin, bool customScript = false);
 	
 	Square *getSquare(int x, int y);
@@ -44,7 +45,8 @@ public:
 	int  checkBasic(int x, int y, int matchingColour);
 	
 	bool checkMatch(int chain);
-
+	
+	void setTDGraphics(bool graphics);
 	~Board();
 
 	friend std::ostream &operator<<(std::ostream &out, const Board &b);

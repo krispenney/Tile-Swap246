@@ -2,10 +2,13 @@
 
 using namespace std;
 
-TextDisplay::TextDisplay() {
+TextDisplay::TextDisplay(bool graphics) {
 	theDisplay = new char *[10];
-	theWindow = new Xwindow;
+	this->graphics = graphics;
 	
+	if(graphics){
+		theWindow = new Xwindow;
+	}
 	for (int i = 0; i < 10; ++i) {
 		theDisplay[i] = new char[30];
 	}
@@ -28,21 +31,43 @@ TextDisplay::~TextDisplay() {
 	delete theWindow;
 }
 
-void TextDisplay::update(int x, int y, int colour, char ch, bool locked) {
+void TextDisplay::update(int x, int y, int colour, char type, bool locked) {
 
 	//	cerr << "updating window" << endl;
-	if(colour == '0'){
-		theWindow->fillRectangle(y*50, x*50, 50, 50, colour - '0');
-	}else{
-		theWindow->fillRectangle(y*50, x*50, 50, 50, colour - '0' + 1);
+	if(graphics){
+		if(colour == '0'){
+			theWindow->fillRectangle(y*50, x*50, 50, 50, colour - '0');
+			theWindow->fillRectangle(y*50, x*50, 1, 50, 1);
+			theWindow->fillRectangle(y*50, x*50+49, 50, 1, 1);
+			theWindow->fillRectangle(y*50, x*50, 50, 1, 1);
+			theWindow->fillRectangle(y*50+49, x*50, 1, 50, 1);
+			
+		}else{
+			theWindow->fillRectangle(y*50, x*50, 50, 50, colour - '0' + 1);
+		}
+		
+		if(type == 'h'){//special tiles
+			theWindow->fillRectangle(y*50, x*50, 20,50, 5);
+		}else if(type == 'v'){
+			theWindow->fillRectangle(y*50, x*50, 20,50, 6);
+		}else if(type == 'b'){
+			theWindow->fillRectangle(y*50, x*50, 20,50, 7);
+		}else if(type == 'p'){
+			theWindow->fillRectangle(y*50, x*50, 20,50, 8);
+		}
+
 	}
 	
+	
 	if(locked){//set locked bit
-		cerr << "locking " << x << " " << y << endl;
-		theWindow->fillRectangle(y*50+20, x*50+20, 10, 10, 1);
+	//	cerr << "locking " << x << " " << y << endl;
 		theDisplay[x][y*3] = 'l';
+		
+		if(graphics){
+			theWindow->fillRectangle(y*50+20, x*50+20, 10, 10, 1);
+		}
 	}
-	theDisplay[x][(y*3) + 1] = ch;
+	theDisplay[x][(y*3) + 1] = type;
 	theDisplay[x][(y*3) + 2] = colour;
 	
 
@@ -57,6 +82,9 @@ void TextDisplay::unlockUpdate(int x, int y){
 	
 }
 
+void TextDisplay::setGraphics(bool graphics){
+	this->graphics = graphics;
+}
 ostream &operator<<(ostream &out, const TextDisplay &td) {
 	// cerr << "td.cc" << endl;
 	for (int x = 0; x < 10; x++) {

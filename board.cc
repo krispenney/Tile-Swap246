@@ -10,12 +10,12 @@ using namespace std;
 
 int Board::lockedTiles = 0;
 
-Board::Board(): td(NULL), theBoard(NULL){}
+Board::Board(bool graphics): graphics(graphics), td(NULL), theBoard(NULL){}
 
 Board::~Board(){
 	delete td;
 	delete source;
-	delete extras;
+	delete extraColours;
 	
 	for(int i = 0; i < 10; i++){
 		delete theBoard[i];
@@ -101,7 +101,7 @@ void Board::init(int level, int seed, std::ifstream *fin, bool customScript){
 	}
 	
 	theBoard = new Square *[10];
-	td = new TextDisplay();
+	td = new TextDisplay(graphics);
 	
 	if(level == 0){
 	    
@@ -109,7 +109,7 @@ void Board::init(int level, int seed, std::ifstream *fin, bool customScript){
 		while(!source->eof()){
 			*source >> extra;
 		}
-		extras = new istringstream(extra);
+		extraColours = new istringstream(extra);
 		delete source;
 		source = new ifstream(zeroFName.c_str());
 	}else if(level == 1){
@@ -119,7 +119,7 @@ void Board::init(int level, int seed, std::ifstream *fin, bool customScript){
 			int specialCount = 1;
 			locked = false;
 			srand(seed);
-			extras = NULL;
+			extraColours = NULL;
 			for(int i = 0; i < 10; i++){
 				theBoard[i] = new Square[10];
 				int randColour = 0;
@@ -178,14 +178,14 @@ void Board::init(int level, int seed, std::ifstream *fin, bool customScript){
 		}else{
 	//		cerr << "scripted level 1" << endl;
 			readFromFile(level);
-			while(!source->eof()){
+			while(!source->eof()){//load with extra colours
 				*source >> extra;
 			}
-			if(extra != ""){
-				extras = new istringstream(extra);
+			if(extra != ""){//store extra colours
+				extraColours = new istringstream(extra);
 			}
 			delete source;
-			source = new ifstream(zeroFName.c_str());
+			source = new ifstream(zeroFName.c_str());//reset source to default
 		}
 		
 	}else if(level == 2){
@@ -244,11 +244,11 @@ void Board::init(int level, int seed, std::ifstream *fin, bool customScript){
 		}else{
 			cerr << "enter scripted level 2" << endl;
 			readFromFile(level);
-			while(!source->eof()){
+			while(!source->eof()){//load with extra colours
 				*source >> extra;
 			}
-			if(extra != ""){
-				extras = new istringstream(extra);
+			if(extra != ""){//colours to be used
+				extraColours = new istringstream(extra);
 			}
 			delete source;
 			source = new ifstream(zeroFName.c_str());
@@ -670,7 +670,7 @@ bool Board::checkMatch(int chain) {
 			
 			matchVal = checkBasic(x, y, matchingColour);//basic
 			
-			if(theBoard[x][y].getType() == '_' && matchVal != -1){
+			if(/*theBoard[x][y].getType() == '_' && */matchVal != -1){
 				// cerr << "Basic match" << endl;
 				
 				if(matchVal == 0){
@@ -722,11 +722,11 @@ bool Board::checkMatch(int chain) {
 			if (theBoard[x][y].getType() == 'D') {
 				char c = '\0';
 				if(extra != ""){
-					if(extras->eof()){
-						delete extras;
-						extras = new istringstream(extra);
+					if(extraColours->eof()){//reload colours
+						delete extraColours;
+						extraColours = new istringstream(extra);
 					}
-					*extras >> c;
+					*extraColours >> c;
 				}
 				theBoard[x][y].moveDown(c);
 			}
@@ -736,6 +736,9 @@ bool Board::checkMatch(int chain) {
 	return match;
 }
 
+void Board::setTDGraphics(bool graphics){
+	td->setGraphics(graphics);
+}
 
 ostream &operator<<(ostream &out, const Board &b){
 	// std::cerr << "here in board.cc" << std::endl;

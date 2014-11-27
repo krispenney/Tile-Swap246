@@ -7,11 +7,13 @@
 class TextDisplay {
 	char **theDisplay;
 	Xwindow *theWindow;
+	bool graphics;
 public:
-	TextDisplay();
+	TextDisplay(bool graphics);
 	
 	void update(int x, int y, int colour, char ch, bool locked);
 	void unlockUpdate(int x, int y);
+	void setGraphics(bool graphics);
 	
 	~TextDisplay();
 

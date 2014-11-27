@@ -10,7 +10,7 @@ class Game {
 	int moves;
 	Board * theBoard;
 	bool checkAll(int x, int y, int matchingColour);
-
+	
 	//command line fields
 	bool graphics;
 	int seed;
@@ -20,7 +20,7 @@ public:
 	Game(int moves, int level, int seed, std::ifstream *fin, bool graphics, bool customScript): // Default params need to go at the end
 		level(level), moves(moves), graphics(graphics),seed(seed){
 			prevScore = 0;
-			theBoard = new Board();
+			theBoard = new Board(graphics);
 			theBoard->init(level, seed, fin, customScript);
 		}
 	
