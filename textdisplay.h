@@ -2,10 +2,11 @@
 #define __TEXTDISPLAY_H__
 
 #include <iostream>
+#include "window.h"
 
 class TextDisplay {
 	char **theDisplay;
-
+	Xwindow *theWindow;
 public:
 	TextDisplay();
 	

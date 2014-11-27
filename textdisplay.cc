@@ -4,7 +4,8 @@ using namespace std;
 
 TextDisplay::TextDisplay() {
 	theDisplay = new char *[10];
-
+	theWindow = new Xwindow;
+	
 	for (int i = 0; i < 10; ++i) {
 		theDisplay[i] = new char[30];
 	}
@@ -14,6 +15,8 @@ TextDisplay::TextDisplay() {
 			theDisplay[x][y] = '_';
 		}
 	}
+	
+	
 
 }
 
@@ -22,6 +25,7 @@ TextDisplay::~TextDisplay() {
 		delete theDisplay[i];
 	}
 	delete [] theDisplay;
+	delete theWindow;
 }
 
 void TextDisplay::update(int x, int y, int colour, char ch, bool locked) {
@@ -32,11 +36,21 @@ void TextDisplay::update(int x, int y, int colour, char ch, bool locked) {
 	}
 	theDisplay[x][(y*3) + 1] = ch;
 	theDisplay[x][(y*3) + 2] = colour;
+	
+//	std::cerr << "updating window" << std::endl;
+	if(colour == '0'){
+		theWindow->fillRectangle(y*50, x*50, 50, 50, colour - '0');
+	}else{
+		theWindow->fillRectangle(y*50, x*50, 50, 50, colour - '0' + 1);
+	}
+	
+	//add things for locked and special tiles
 }
 
 //updates the display, unlocks tile
 void TextDisplay::unlockUpdate(int x, int y){
 	theDisplay[x][y*3] = '_';
+	//remove display border
 }
 
 ostream &operator<<(ostream &out, const TextDisplay &td) {

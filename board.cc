@@ -352,7 +352,10 @@ Square *Board::getSquare(int x, int y){
 
 //update the board
 void Board::update(int x, int y, int colour, char ch, bool lock){
-	td->update(x, y, colour, ch, lock);
+	
+	td->update(x, y, colour, ch, lock);//TextDisplay update
+	
+	
 }
 
 //swaps the colour and type of s1 and s2, need to check for match and account for moves
