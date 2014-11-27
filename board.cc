@@ -201,17 +201,18 @@ void Board::init(int level, int seed, std::ifstream *fin, bool customScript){
 				int randColour = 0;
 				
 				for(int j = 0; j < 10; j++){
-					bool lock = rand()%2;
+					bool lock = false;
+					int ranLock = rand()%4;
 					
-					if(lock && totalLocked > 0){
+					if(ranLock == 0 && totalLocked > 0){
 				//		cerr << "locked:" << i << " " << j << endl;
 				//		cerr << totalLocked << endl;
 
 						Board::lockedTiles++;
 						totalLocked--;
-					}else{
-						lock = false;
+						lock = true;
 					}
+					
 					//generate colour
 					do{
 						randColour = rand()%4;//generate for colour

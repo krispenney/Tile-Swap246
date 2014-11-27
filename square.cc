@@ -12,7 +12,7 @@ Square::Square(int x, int y, int colour, char type, bool locked, TextDisplay * t
  locked(locked),  td(td) {}
 
 void Square::updateTD(int x, int y, int colour, char type){
-	td->update(x, y, colour, type, false);
+	td->update(x, y, colour, type, locked);
 }
 
 void Square::moveDown(char c){

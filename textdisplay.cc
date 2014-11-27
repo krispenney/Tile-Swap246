@@ -29,20 +29,24 @@ TextDisplay::~TextDisplay() {
 }
 
 void TextDisplay::update(int x, int y, int colour, char ch, bool locked) {
-//	cerr << "locked: " << locked << endl;
-	if(locked){//set locked bit
-//		cerr << "locking " << x << " " << y << endl;
-		theDisplay[x][y*3] = 'l';
-	}
-	theDisplay[x][(y*3) + 1] = ch;
-	theDisplay[x][(y*3) + 2] = colour;
-	
-//	std::cerr << "updating window" << std::endl;
+
+	//	cerr << "updating window" << endl;
 	if(colour == '0'){
 		theWindow->fillRectangle(y*50, x*50, 50, 50, colour - '0');
 	}else{
 		theWindow->fillRectangle(y*50, x*50, 50, 50, colour - '0' + 1);
 	}
+	
+	if(locked){//set locked bit
+		cerr << "locking " << x << " " << y << endl;
+		theWindow->fillRectangle(y*50+20, x*50+20, 10, 10, 1);
+		theDisplay[x][y*3] = 'l';
+	}
+	theDisplay[x][(y*3) + 1] = ch;
+	theDisplay[x][(y*3) + 2] = colour;
+	
+
+
 	
 	//add things for locked and special tiles
 }
@@ -50,7 +54,7 @@ void TextDisplay::update(int x, int y, int colour, char ch, bool locked) {
 //updates the display, unlocks tile
 void TextDisplay::unlockUpdate(int x, int y){
 	theDisplay[x][y*3] = '_';
-	//remove display border
+	
 }
 
 ostream &operator<<(ostream &out, const TextDisplay &td) {
