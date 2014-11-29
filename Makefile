@@ -5,7 +5,7 @@ OBJECTS = main.o board.o square.o game.o window.o textdisplay.o
 DEPENDS = ${OBJECTS:.o=.d}
 
 ${EXEC}: ${OBJECTS}
-	${CXX} ${CXXFLAGS} ${OBJECTS} -o ${EXEC}
+	${CXX} ${CXXFLAGS} ${OBJECTS} -o ${EXEC} -lX11
 -include ${DEPENDS}
 
 .PHONY: clean

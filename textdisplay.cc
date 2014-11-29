@@ -48,12 +48,16 @@ void TextDisplay::update(int x, int y, int colour, char type, bool locked) {
 		
 		if(type == 'h'){//special tiles
 			theWindow->fillRectangle(y*50, x*50, 20,50, 5);
+			theWindow->drawString((y*50) + 10,(x*50 )+ 30, "H");
 		}else if(type == 'v'){
 			theWindow->fillRectangle(y*50, x*50, 20,50, 6);
+			theWindow->drawString((y*50) + 10,(x*50) + 30, "V");
 		}else if(type == 'b'){
 			theWindow->fillRectangle(y*50, x*50, 20,50, 7);
+			theWindow->drawString((y*50) + 10,(x*50) + 30, "B");
 		}else if(type == 'p'){
 			theWindow->fillRectangle(y*50, x*50, 20,50, 8);
+			theWindow->drawString((y*50) + 10,(x*50) + 30, "P");
 		}
 
 	}
