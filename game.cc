@@ -32,6 +32,8 @@ bool Game::hint(bool print){
 	int dir = 0;
 	bool match = false;
 	
+	theBoard->setTDGraphics(false);
+	
 	for(int i = 0; i < 10; i++){
 		for(int j = 0; j < 10; j++){
 			
@@ -99,12 +101,13 @@ bool Game::hint(bool print){
 		
 		if(match){
 			if(print){
-		//		cout << x << " " << y << " " << dir << endl;//prints if match found and print set
+				cout << x << " " << y << " " << dir << endl;  //prints if match found and print set
 			}
+			theBoard->setTDGraphics(graphics);
 			return true;
 		}
 	}
-	
+	theBoard->setTDGraphics(graphics);
 	return false;//will return false if no hint
 }
 
@@ -134,7 +137,7 @@ void Game::scramble(){
 void Game::reset(){
 	delete theBoard;
 	
-	theBoard = new Board();
+	theBoard = new Board(graphics);
 	theBoard->init(level, seed, NULL);
 }
 
@@ -147,6 +150,8 @@ void Game::changeLevel(bool up){
 		return;
 	}
 	
+	prevScore = score;
+
 	if(up){//level up
 		level++;
 	}else{//down
@@ -154,7 +159,7 @@ void Game::changeLevel(bool up){
 	}
 	
 	delete theBoard;
-	theBoard = new Board();
+	theBoard = new Board(graphics);
 	theBoard->init(level, seed, NULL);
 }
 
@@ -168,8 +173,8 @@ void Game::swap(int x1, int y1, int x2, int y2){
 	int colour2 = theBoard->getSquare(x2, y2)->getColour();
 	int type2 = theBoard->getSquare(x2, y2)->getType();
 	
-	theBoard->update(x1, y1, colour1, type1, false);//doesn't affect locked state
-	theBoard->update(x2, y2, colour2, type2, false);
+	theBoard->update(x1, y1, colour1, type1, theBoard->getSquare(x1, y1)->getLocked());//doesn't affect locked state
+	theBoard->update(x2, y2, colour2, type2, theBoard->getSquare(x2, y2)->getLocked());
 	
 	
 }
@@ -216,9 +221,23 @@ int Game::getLevel(){
 }
 
 bool Game::levelWon(){
-	//add other conditions
+	bool won = false;
+
+	if (level == 0) {
+		if (score >= prevScore + 200) {
+			won = true;
+		}
+	} else if (level == 1) {
+		if (score >= prevScore + 300) {
+			won = true;
+		}
+	} else if (level == 2) {
+		if (score >= prevScore + 500 && Board::lockedTiles <= 0) {
+			won = true;
+		}
+	}
 	
-	return false;
+	return won;
 }
 
 bool Game::checkMatch(int chain) {
@@ -228,6 +247,11 @@ bool Game::checkMatch(int chain) {
 //decrement moves
 void Game::decMoves(){
 	moves--;
+}
+
+
+void Game::increaseScore(int x) {
+	score += x;
 }
 
 //overload operator<< called to board

@@ -7,18 +7,25 @@
 #include <sstream>
 #include <fstream>
 
-class Board {
+class Board { 
+	int destroyed;
+	int level;
+	bool graphics;
 	TextDisplay * td;
 	Square **theBoard;
 	
 	std::ifstream *source;
 	std::string extra;
-	std::istringstream *extras;
+	std::istringstream *extraColours;
 	
-	void readFromFile();
+	void readFromFile(int level);
 	bool checkNeighbours(int x, int y, char colour);
+	void setLevel(int level);
 public:
-	Board();
+
+	static int lockedTiles;
+
+	Board(bool graphics);
 	void init(int level, int seed, std::ifstream *fin, bool customScript = false);
 	
 	Square *getSquare(int x, int y);
@@ -31,14 +38,15 @@ public:
 	void swap(Square * s1, Square * s2);
 	bool valid(int x, int y);
 	
-	int checkL(int x, int y, int matchingColour);
+	int  checkL(int x, int y, int matchingColour);
 	bool checkH(int x, int y, int matchingColour);
 	bool checkU(int x, int y, int matchingColour);
-	int checkPsy(int x, int y, int matchingColour);
-	int checkBasic(int x, int y, int matchingColour);
+	int  checkPsy(int x, int y, int matchingColour);
+	int  checkBasic(int x, int y, int matchingColour);
 	
 	bool checkMatch(int chain);
-
+	
+	void setTDGraphics(bool graphics);
 	~Board();
 
 	friend std::ostream &operator<<(std::ostream &out, const Board &b);

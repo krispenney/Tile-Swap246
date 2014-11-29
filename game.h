@@ -6,10 +6,11 @@
 class Game {
 	int level;
 	static int score;
+	int prevScore;
 	int moves;
 	Board * theBoard;
 	bool checkAll(int x, int y, int matchingColour);
-
+	
 	//command line fields
 	bool graphics;
 	int seed;
@@ -18,7 +19,8 @@ public:
 	
 	Game(int moves, int level, int seed, std::ifstream *fin, bool graphics, bool customScript): // Default params need to go at the end
 		level(level), moves(moves), graphics(graphics),seed(seed){
-			theBoard = new Board();
+			prevScore = 0;
+			theBoard = new Board(graphics);
 			theBoard->init(level, seed, fin, customScript);
 		}
 	
@@ -27,16 +29,16 @@ public:
 	bool checkSwap(int x, int y, int dir);
 	void swap(int x1, int y1, int x2, int y2);
 	
-	int getLevel();
+	int  getLevel();
 	bool hint(bool print);
 	void changeLevel(bool up);// replaces level up and down
 	void scramble();
 	void decMoves();
 	void reset();
-	static void increaseScore(int x);
 	bool levelWon();
 	bool checkMatch(int chain);
 
+	static void increaseScore(int x);
 
 	friend std::ostream &operator<<(std::ostream &out, const Game &g);
 

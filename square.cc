@@ -1,5 +1,6 @@
 #include "square.h"
-
+#include "board.h"
+#include <iostream>
 #include <cstdlib>
 #include <ctime>
 
@@ -11,14 +12,14 @@ Square::Square(int x, int y, int colour, char type, bool locked, TextDisplay * t
  locked(locked),  td(td) {}
 
 void Square::updateTD(int x, int y, int colour, char type){
-	td->update(x, y, colour, type, false);
+	td->update(x, y, colour, type, locked);
 }
 
 void Square::moveDown(char c){
 //		std::cerr << "In Movedown" << std::endl;
-//	std::cerr<< "Char c: " << c << std::endl;
+	//std::cerr<< "Char c: " << (c == '\0') << std::endl;
 	if (above != NULL) {
-	//=	 std::cerr << "x: " << x << " y: " << y << std::endl;
+//		 std::cerr << "x: " << x << " y: " << y << std::endl;
 		int aboveType = above->getType();
 		int aboveColour = above->getColour();
 
@@ -45,7 +46,9 @@ void Square::moveDown(char c){
 			}else if(randColour == 5){//1/6 for blue
 				colour = '3';
 			}
+	//		std::cerr << "colour: " << colour << std::endl;
 		}else if(c == '\0' && level == 2){
+		//	std::cerr << "generating for level 2" << std::endl;
 			randColour = rand()%4;
 			if(randColour == 0){
 				colour = '0';
@@ -91,4 +94,17 @@ char Square::getType(){
 
 void Square::setLevel(int level) {
 	this->level = level;
+}
+
+bool Square::getLocked(){
+	// std::cerr << "LOCKED: " << locked << std::endl;
+	return locked;
+}
+
+void Square::unlock(){
+	// std::cerr << "unlocking" << std::endl;
+	Board::lockedTiles--;
+	locked = false;
+	td->unlockUpdate(x, y);
+	
 }

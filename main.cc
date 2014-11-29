@@ -31,6 +31,7 @@ int main(int argc, char *argv[]) {
 	const char *sFile = "-scriptfile";
 	const char *sLevel = "-startlevel";
 	
+	//read cmd line args
 	for(int i = 1; i < argc; i++){
 		if(strcmp(argv[i], text) == 0){//graphics
 			graphics = false;
@@ -47,7 +48,6 @@ int main(int argc, char *argv[]) {
 		}
 	}
 	
-	//need to implement custom scriptfile and graphics(later)
 	
 	/*cerr <<"------------" << endl;
 	cerr << graphics << endl;
@@ -72,28 +72,29 @@ int main(int argc, char *argv[]) {
 		cin >> cmd;
 		if(cin.eof()){
 			break;
-		}else if(cmd == "switch"){//needs to check for match
+		}else if(cmd == "switch"){  //needs to check for match
 			cin >> x >> y >> dir;
 			bool match = false;
-			int chain = 1;
+			int chain = 0;
 			
-			if(theGame->checkSwap(x, y, dir)){
+			if(theGame->checkSwap(x, y, dir)){//checks for match
 				match = theGame->checkMatch(chain);
 			}
 			
 			if (match) {
+				theGame->decMoves();
 				while (match) {
-					cerr << "I HAVE A LOOPING MATCH~~~" << endl;
-					match = theGame->checkMatch(chain);
 					chain++;
+					// cout << *theGame << endl;
+					match = theGame->checkMatch(chain);
+					// match = false;
+					// cerr << "I HAVE A LOOPING MATCH~~~" << endl;
 				}
-				
 			} else {
-				// cerr << "no match made plz" << endl;
-				// NO MATCH MADE, revert last move
+				cerr << "No match made - Please try again" << endl;//no match - swap back
+				theGame->checkSwap(x, y, dir);
 			}
-			theGame->decMoves();
-		}else if(cmd == "levelup"){
+		}else if(cmd == "levelup"){//level up
 			if(theGame->getLevel() != MAXLEVELS){
 				theGame->changeLevel(true);
 				
@@ -102,7 +103,7 @@ int main(int argc, char *argv[]) {
 			}
 			cout << "Playing level: " << theGame->getLevel() << endl;
 			
-		}else if(cmd == "leveldown"){
+		}else if(cmd == "leveldown"){//level down
 			if(theGame->getLevel() > 0){
 				theGame->changeLevel(false);
 				
@@ -112,7 +113,7 @@ int main(int argc, char *argv[]) {
 			cout << "Playing level: " << theGame->getLevel() << endl;
 			
 		}else if(cmd == "hint"){
-			if(!theGame->hint(true)){
+			if(!theGame->hint(true)){//no hint avaliable
 				cout << "no moves possible" << endl;
 			}
 		}else if(cmd == "scramble"){
@@ -120,13 +121,29 @@ int main(int argc, char *argv[]) {
 			if(!theGame->hint(false)){
 				theGame->scramble();
 			}else{
-				cout << "There are still moves avaliable" << endl;
+				cout << "There are still moves avaliable" << endl;//can't scramble
 			}
 		}else if(cmd == "reset"){
 			theGame->reset();
 		}
-		cout << *theGame << endl;
 		
+
+		if (theGame->levelWon()) {
+			cout << "LEVEL UP!!" << endl;
+			if(theGame->getLevel() != MAXLEVELS){
+				theGame->changeLevel(true);
+				
+			} else {
+				cout << endl << endl;
+				cout << "CONGRATULATIONS" << endl;
+				cout << "YOU WON!" << endl;
+				break;
+			}
+		}
+
+		cout << *theGame << endl;
+
+
 	}
 	delete theGame;
 	// std::cerr << "done" << std::endl;
