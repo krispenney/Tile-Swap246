@@ -256,26 +256,16 @@ void Game::increaseScore(int x) {
 
 //overload operator<< called to board
 ostream &operator<<(ostream &out, const Game &g){
-	int high_score = 0;
+	
 	//write header output
 	out << setw(18) << left << "Level:" << right << g.level << endl;
 	out << setw(18) << left << "Score:" << right << g.score << endl;
 	out << setw(18) << left << "Moves Remaining:" << right << g.moves << endl;
-	
-	ifstream getScore("high_score.txt");
-	
-	getScore >> high_score;//get old high score
-	
-	if (high_score < g.score){//update to file
-		ofstream hScore("high_score.txt");
-		high_score = g.score;
-		hScore << g.score;
-	}
-	
-	
-	out << setw(18) << left << "High Score:" << right << high_score << endl;
+	out << setw(18) << left << "High Score:" << right << 0 << endl;//change to high score
 	out << "------------------" << endl << endl;
-
+	
+	
+	// std::cerr << "here in game.cc" << std::endl;
 	out << *g.theBoard;
 	return out;
 }
