@@ -125,6 +125,22 @@ int main(int argc, char *argv[]) {
 			}
 		}else if(cmd == "reset"){
 			theGame->reset();
+		}else if (cmd == "help" or cmd == "?") {
+			cout << endl;
+			cout << "Welcome to SS5K!" << endl;
+			cout << "Availiable commands:" << endl;
+			cout << "Switch" << endl;
+			cout << "Usage: Switch <row> <column> <direction>" << endl;
+			cout << "Note that for directions, 0 is north, 1 is south, 2 is west, and 3 is east." << endl;
+			cout << "levelup" << endl;
+			cout << "Increase difficulty to the next level" << endl;
+			cout << "leveldown" << endl;
+			cout << "Decrease difficulty to the previous level" << endl;
+			cout << "hint" << endl;
+			cout << "Provides a possible next move" << endl;
+			cout << "scramble" << endl;
+			cout << "Scrambles the board. Only avaliable when no possible moves" << endl;
+			cout << endl;
 		}
 		
 
