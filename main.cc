@@ -31,6 +31,14 @@ int main(int argc, char *argv[]) {
 	const char *sFile = "-scriptfile";
 	const char *sLevel = "-startlevel";
 	
+	//command names
+	string switchSquare = "switch";
+	string levelup = "levelup";
+	string leveldown = "leveldown";
+	string hint = "hint";
+	string scramble = "scramble";
+	string reset = "reset";
+	
 	//read cmd line args
 	for(int i = 1; i < argc; i++){
 		if(strcmp(argv[i], text) == 0){//graphics
@@ -72,7 +80,41 @@ int main(int argc, char *argv[]) {
 		cin >> cmd;
 		if(cin.eof()){
 			break;
-		}else if(cmd == "switch"){  //needs to check for match
+		}else if(cmd == "rename"){
+			string old;
+			string newName;
+			bool success = false;
+			
+			cin >> old >> newName;
+			
+			if ((newName != old) &&//prevent same names
+				(newName != switchSquare) &&
+				(newName != levelup) &&
+				(newName != leveldown) &&
+				(newName != hint) &&
+				(newName != scramble) &&
+				(newName != reset)) {
+				if (old == switchSquare) {
+					switchSquare = newName;
+				}else if (old == levelup) {
+					levelup = newName;
+				}else if (old == leveldown) {
+					leveldown = newName;
+				}else if (old == hint) {
+					hint = newName;
+				}else if (old == scramble) {
+					scramble = newName;
+				}else if (old == reset) {
+					reset = newName;
+				}
+				cout << old << " has been renamed to " << newName << endl;
+				success = true;
+			}
+			
+			if (!success) {
+				cout << "rename unsuccessful" << endl;
+			}
+		}else if(cmd == switchSquare){  //needs to check for match
 			cin >> x >> y >> dir;
 			bool match = false;
 			int chain = 0;
@@ -94,7 +136,7 @@ int main(int argc, char *argv[]) {
 				cerr << "No match made - Please try again" << endl;//no match - swap back
 				theGame->checkSwap(x, y, dir);
 			}
-		}else if(cmd == "levelup"){//level up
+		}else if(cmd == levelup){//level up
 			if(theGame->getLevel() != MAXLEVELS){
 				theGame->changeLevel(true);
 				
@@ -103,7 +145,7 @@ int main(int argc, char *argv[]) {
 			}
 			cout << "Playing level: " << theGame->getLevel() << endl;
 			
-		}else if(cmd == "leveldown"){//level down
+		}else if(cmd == leveldown){//level down
 			if(theGame->getLevel() > 0){
 				theGame->changeLevel(false);
 				
@@ -112,35 +154,40 @@ int main(int argc, char *argv[]) {
 			}
 			cout << "Playing level: " << theGame->getLevel() << endl;
 			
-		}else if(cmd == "hint"){
+		}else if(cmd == hint){
 			if(!theGame->hint()){//no hint avaliable
 				cout << "no moves possible" << endl;
 			}
-		}else if(cmd == "scramble"){
+		}else if(cmd == scramble){
 			//check for no moves
 			if(!theGame->hint()){
 				theGame->scramble();
 			}else{
 				cout << "There are still moves avaliable" << endl;//can't scramble
 			}
-		}else if(cmd == "reset"){
+		}else if(cmd == reset){
 			theGame->reset();
 		}else if (cmd == "help" or cmd == "?") {
 			cout << endl;
 			cout << "Welcome to SS5K!" << endl;
 			cout << "Availiable commands:" << endl;
-			cout << "Switch" << endl;
-			cout << "Usage: Switch <row> <column> <direction>" << endl;
+			cout << switchSquare << endl;
+			cout << "Usage: " << switchSquare << " <row> <column> <direction>" << endl;
 			cout << "Note that for directions, 0 is north, 1 is south, 2 is west, and 3 is east." << endl;
-			cout << "levelup" << endl;
+			cout << levelup << endl;
 			cout << "Increase difficulty to the next level" << endl;
-			cout << "leveldown" << endl;
+			cout << leveldown << endl;
 			cout << "Decrease difficulty to the previous level" << endl;
-			cout << "hint" << endl;
+			cout << hint << endl;
 			cout << "Provides a possible next move" << endl;
-			cout << "scramble" << endl;
+			cout << scramble << endl;
 			cout << "Scrambles the board. Only avaliable when no possible moves" << endl;
+			cout << "rename" << endl;
+			cout << "Usage: rename <oldName> <newName" << endl;
+			cout << "Renames the given command" << endl;
 			cout << endl;
+		}else{
+			cout << "Not a valid move" << endl;
 		}
 		
 
