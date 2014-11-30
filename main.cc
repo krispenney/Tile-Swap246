@@ -113,12 +113,12 @@ int main(int argc, char *argv[]) {
 			cout << "Playing level: " << theGame->getLevel() << endl;
 			
 		}else if(cmd == "hint"){
-			if(!theGame->hint(true)){//no hint avaliable
+			if(!theGame->hint()){//no hint avaliable
 				cout << "no moves possible" << endl;
 			}
 		}else if(cmd == "scramble"){
 			//check for no moves
-			if(!theGame->hint(false)){
+			if(!theGame->hint()){
 				theGame->scramble();
 			}else{
 				cout << "There are still moves avaliable" << endl;//can't scramble

@@ -30,7 +30,7 @@ public:
 	void swap(int x1, int y1, int x2, int y2);
 	
 	int  getLevel();
-	bool hint(bool print);
+	bool hint();
 	void changeLevel(bool up);// replaces level up and down
 	void scramble();
 	void decMoves();

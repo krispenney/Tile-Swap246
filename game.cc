@@ -25,7 +25,7 @@ bool Game::checkAll(int x, int y, int matchingColour){//checks for a match
 }
 
 //displays the first match
-bool Game::hint(bool print){
+bool Game::hint(){
 	
 	int x = 0;
 	int y = 0;
@@ -100,9 +100,8 @@ bool Game::hint(bool print){
 		}
 		
 		if(match){
-			if(print){
-				cout << x << " " << y << " " << dir << endl;  //prints if match found and print set
-			}
+			
+			cout << x << " " << y << " " << dir << endl;  //prints if match found and print set
 			theBoard->setTDGraphics(graphics);
 			return true;
 		}
