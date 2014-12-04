@@ -70,10 +70,6 @@ void Square::moveDown(char c){
 	}
 }
 
-void Square::draw(){
-	
-}
-
 void Square::setAbove(Square * above) {
 	this->above = above;
 }

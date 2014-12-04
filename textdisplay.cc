@@ -18,9 +18,6 @@ TextDisplay::TextDisplay(bool graphics) {
 			theDisplay[x][y] = '_';
 		}
 	}
-	
-	
-
 }
 
 TextDisplay::~TextDisplay() {

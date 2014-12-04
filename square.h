@@ -18,7 +18,6 @@ public:
 	Square(int x, int y, int colour, char type, bool locked, TextDisplay *);
 	void updateTD(int x, int y, int colour, char type);
 	void moveDown(char c);
-	void draw();
 	
 	void setAbove(Square * above);
 	

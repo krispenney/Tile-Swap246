@@ -25,7 +25,7 @@ bool Game::checkAll(int x, int y, int matchingColour){//checks for a match
 }
 
 //displays the first match
-bool Game::hint(bool print){
+bool Game::hint(){
 	
 	int x = 0;
 	int y = 0;
@@ -100,9 +100,8 @@ bool Game::hint(bool print){
 		}
 		
 		if(match){
-			if(print){
-				cout << x << " " << y << " " << dir << endl;  //prints if match found and print set
-			}
+			
+			cout << x << " " << y << " " << dir << endl;  //prints if match found and print set
 			theBoard->setTDGraphics(graphics);
 			return true;
 		}
@@ -256,16 +255,26 @@ void Game::increaseScore(int x) {
 
 //overload operator<< called to board
 ostream &operator<<(ostream &out, const Game &g){
-	
+	int high_score = 0;
 	//write header output
 	out << setw(18) << left << "Level:" << right << g.level << endl;
 	out << setw(18) << left << "Score:" << right << g.score << endl;
 	out << setw(18) << left << "Moves Remaining:" << right << g.moves << endl;
-	out << setw(18) << left << "High Score:" << right << 0 << endl;//change to high score
+	
+	ifstream getScore("high_score.txt");
+	
+	getScore >> high_score;//get old high score
+	
+	if (high_score < g.score){//update to file
+		ofstream hScore("high_score.txt");
+		high_score = g.score;
+		hScore << g.score;
+	}
+	
+	
+	out << setw(18) << left << "High Score:" << right << high_score << endl;
 	out << "------------------" << endl << endl;
-	
-	
-	// std::cerr << "here in game.cc" << std::endl;
+
 	out << *g.theBoard;
 	return out;
 }
